@@ -23,10 +23,27 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getShooterCommand() {
+    System.out.println("Shooter shooting");
     return this.startEnd(
       () -> {
+        System.out.println("Shooter shootingInside");
         shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
         shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
+        
+      },
+
+      () -> {
+        shooterIO.stop();
+      });
+  }
+    public Command getIntakeCommand() {
+    System.out.println("intake intaking");
+    return this.startEnd(
+      () -> {
+        System.out.println("intake intakingInside");
+        shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
+        shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+        
       },
 
       () -> {

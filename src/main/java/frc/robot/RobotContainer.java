@@ -56,6 +56,7 @@ public class RobotContainer {
       new InstantCommand(m_gyro::resetYaw)
     );
     driverController.a().whileTrue(m_shooter.getShooterCommand());
+    driverController.b().whileTrue(m_shooter.getIntakeCommand());
   }
 
   public static RobotContainer getInstance() {
