@@ -16,21 +16,21 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drivetrain.DrivetrainSwerve;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterReal;
 import frc.robot.subsystems.shooter.ShooterSim;
 public class RobotContainer {
   private static final RobotContainer m_RobotContainer = new RobotContainer();
-  private static Drivetrain m_drivetrain;
+  private static DrivetrainSwerve m_drivetrain;
   private static Gyro m_gyro;
   private static PowerDistribution m_pdp;
   private final CommandXboxController driverController = new CommandXboxController(0);
   private static Shooter m_shooter;
   private boolean fieldOrientedDrive = true;
   public RobotContainer() {
-    m_drivetrain = new Drivetrain();
+    m_drivetrain = new DrivetrainSwerve();
     m_gyro = new Gyro();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
 
