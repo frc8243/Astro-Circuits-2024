@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterReal;
 import frc.robot.subsystems.shooter.ShooterSim;
+
 public class RobotContainer {
   private static final RobotContainer m_RobotContainer = new RobotContainer();
   private static DrivetrainSwerve m_drivetrain;
@@ -29,6 +30,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private static Shooter m_shooter;
   private boolean fieldOrientedDrive = true;
+
   public RobotContainer() {
     m_drivetrain = new DrivetrainSwerve();
     m_gyro = new Gyro();
@@ -39,22 +41,20 @@ public class RobotContainer {
     createSubsystems();
     configureBindings();
     m_drivetrain.setDefaultCommand(new RunCommand(
-            () -> m_drivetrain.drive(
-                -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
-                fieldOrientedDrive, true),
-            m_drivetrain));
+        () -> m_drivetrain.drive(
+            -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
+            fieldOrientedDrive, true),
+        m_drivetrain));
   }
 
   private void configureBindings() {
     driverController.x().whileTrue(
-      new RunCommand(m_drivetrain::setX)
-    );
+        new RunCommand(m_drivetrain::setX));
 
     driverController.start().onTrue(
-      new InstantCommand(m_gyro::resetYaw)
-    );
+        new InstantCommand(m_gyro::resetYaw));
     driverController.a().whileTrue(m_shooter.getShooterCommand());
     driverController.b().whileTrue(m_shooter.getIntakeCommand());
   }

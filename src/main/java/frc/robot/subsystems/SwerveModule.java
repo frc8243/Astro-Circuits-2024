@@ -17,22 +17,21 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ModuleConstants;
 
-
 /** Swerve Module Object */
 public class SwerveModule {
-    private final CANSparkMax m_drivingSparkMax;
-    private final CANSparkMax m_turningSparkMax;
-    
-    private final RelativeEncoder m_drivingEncoder;
-    private final AbsoluteEncoder m_turningEncoder;
-  
-    private final SparkPIDController m_drivingPIDController;
-    private final SparkPIDController m_turningPIDController;
-  
-    private double m_chassisAngularOffset = 0;
-    private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+  private final CANSparkMax m_drivingSparkMax;
+  private final CANSparkMax m_turningSparkMax;
 
-    /**
+  private final RelativeEncoder m_drivingEncoder;
+  private final AbsoluteEncoder m_turningEncoder;
+
+  private final SparkPIDController m_drivingPIDController;
+  private final SparkPIDController m_turningPIDController;
+
+  private double m_chassisAngularOffset = 0;
+  private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+
+  /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
    * encoder, and PID controller. This configuration is specific to the REV
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
@@ -67,7 +66,8 @@ public class SwerveModule {
     m_turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
     m_turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
 
-    // Invert the turning encoder, since the output shaft rotates in the opposite direction of
+    // Invert the turning encoder, since the output shaft rotates in the opposite
+    // direction of
     // the steering motor in the MAXSwerve Module.
     m_turningEncoder.setInverted(ModuleConstants.kTurningEncoderInverted);
 
@@ -79,7 +79,8 @@ public class SwerveModule {
     m_turningPIDController.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
     m_turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
 
-    // Set the PID gains for the driving motor. Note these are example gains, and you
+    // Set the PID gains for the driving motor. Note these are example gains, and
+    // you
     // may need to tune them for your own robot!
     m_drivingPIDController.setP(ModuleConstants.kDrivingP);
     m_drivingPIDController.setI(ModuleConstants.kDrivingI);
@@ -88,7 +89,8 @@ public class SwerveModule {
     m_drivingPIDController.setOutputRange(ModuleConstants.kDrivingMinOutput,
         ModuleConstants.kDrivingMaxOutput);
 
-    // Set the PID gains for the turning motor. Note these are example gains, and you
+    // Set the PID gains for the turning motor. Note these are example gains, and
+    // you
     // may need to tune them for your own robot!
     m_turningPIDController.setP(ModuleConstants.kTurningP);
     m_turningPIDController.setI(ModuleConstants.kTurningI);

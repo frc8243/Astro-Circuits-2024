@@ -17,6 +17,7 @@ public class Gyro extends SubsystemBase {
   static double yawAccel;
   static double pitchAccel;
   static double rollAccel;
+
   /** Creates a new Gyro. */
 
   public Gyro() {
@@ -42,7 +43,12 @@ public class Gyro extends SubsystemBase {
     SmartDashboard.putNumber("Gyro/Yaw Acceleration", yawAccel);
     SmartDashboard.putNumber("Gyro/Pitch Acceleration", pitchAccel);
     SmartDashboard.putNumber("Gyro/Roll Acceleration", rollAccel);
-    SmartDashboard.putString("Gyro/Yaw Units", gyro.getYaw().getUnits()); /* These next 3 lines are just for testing, documentation for the pigeon is less than ideal, dunno what units it gives. The code is expecting degrees */
+    SmartDashboard.putString("Gyro/Yaw Units", gyro.getYaw().getUnits()); /*
+                                                                           * These next 3 lines are just for testing,
+                                                                           * documentation for the pigeon is less than
+                                                                           * ideal, dunno what units it gives. The code
+                                                                           * is expecting degrees
+                                                                           */
     SmartDashboard.putString("Gyro/Pitch Units", gyro.getPitch().getUnits());
     SmartDashboard.putString("Gyro/Roll Units", gyro.getRoll().getUnits());
   }

@@ -11,10 +11,11 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   private ShooterIO shooterIO;
+
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
     shooterIO = io;
-  } 
+  }
 
   @Override
   public void periodic() {
@@ -25,31 +26,31 @@ public class Shooter extends SubsystemBase {
   public Command getShooterCommand() {
     System.out.println("Shooter shooting");
     return this.startEnd(
-      () -> {
-        System.out.println("Shooter shootingInside");
-        shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
-        shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
-        
-      },
+        () -> {
+          System.out.println("Shooter shootingInside");
+          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
+          shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
 
-      () -> {
-        shooterIO.stop();
-      });
+        },
+
+        () -> {
+          shooterIO.stop();
+        });
   }
-    public Command getIntakeCommand() {
+
+  public Command getIntakeCommand() {
     System.out.println("intake intaking");
     return this.startEnd(
-      () -> {
-        System.out.println("intake intakingInside");
-        shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
-        shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
-        
-      },
+        () -> {
+          System.out.println("intake intakingInside");
+          shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
+          shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
 
-      () -> {
-        shooterIO.stop();
-      });
+        },
+
+        () -> {
+          shooterIO.stop();
+        });
   }
 
-  
 }

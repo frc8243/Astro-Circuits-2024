@@ -35,7 +35,6 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.RobotContainer;
 
-
 @SuppressWarnings("unused")
 public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
@@ -56,12 +55,12 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
   private final SwerveModule m_rearRight = new SwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
-      DriveConstants.kRearRightChassisAngularOffset); 
+      DriveConstants.kRearRightChassisAngularOffset);
 
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
-  
+
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
@@ -76,40 +75,33 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
           m_rearRight.getPosition()
       });
 
-  
   /** Creates a new Drivetrain. */
   public DrivetrainSwerve() {
     AutoBuilder.configureHolonomic(
-       this::getPose,
-       this::resetOdometry,
-       this::getRobotRelativeSpeeds,
-       this::driveRobotRelative,
-       new HolonomicPathFollowerConfig(
-         new PIDConstants(2.9, 0, 0.1), // Translation 
-         new PIDConstants(0.975, 0, 0), // Rotation
-         AutoConstants.kMaxModuleSpeedMetersPerSecond,
-         0.385, // METERS
-         new ReplanningConfig()
-       ),
+        this::getPose,
+        this::resetOdometry,
+        this::getRobotRelativeSpeeds,
+        this::driveRobotRelative,
+        new HolonomicPathFollowerConfig(
+            new PIDConstants(2.9, 0, 0.1), // Translation
+            new PIDConstants(0.975, 0, 0), // Rotation
+            AutoConstants.kMaxModuleSpeedMetersPerSecond,
+            0.385, // METERS
+            new ReplanningConfig()),
 
-       () -> {
-          //Basically flips the path for path planner depending on alliance(Origin is Blue Alliance)
+        () -> {
+          // Basically flips the path for path planner depending on alliance(Origin is
+          // Blue Alliance)
 
-         var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-          
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
 
-
-
-       this
-     );
+        this);
   }
-
-
 
   @Override
   public void periodic() {
@@ -122,7 +114,7 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    
+
     SmartDashboard.putNumber("Drivetrain/Front Right Drive Encoder", m_frontRight.getDriveEncoderReading());
     SmartDashboard.putNumber("Drivetrain/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading());
     SmartDashboard.putNumber("Drivetrain/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading());
@@ -135,13 +127,14 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
    *
    * @return The pose.
    */
-  public  Pose2d getPose() {
+  public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
-
   /**
-   * Method to drive the robot relative to itself - not relative to the field. Used for Pathplanner
+   * Method to drive the robot relative to itself - not relative to the field.
+   * Used for Pathplanner
+   * 
    * @param speeds ChassisSpeeds provided by Pathplanner.
    */
   public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -150,14 +143,17 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
 
   /**
    * Method to get the speed of the robot relative to itself. Used for Pathplanner
-   * @return ChassisSpeeds 
+   * 
+   * @return ChassisSpeeds
    */
   public ChassisSpeeds getRobotRelativeSpeeds() {
-    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
+        m_rearLeft.getState(), m_rearRight.getState());
   }
 
   /**
    * Resets the odometry to the specified pose.
+   * 
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
@@ -171,9 +167,9 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
         },
         pose);
   }
-  //  public void resetTrajectoryFromPath(){
+  // public void resetTrajectoryFromPath(){
 
-  //  }
+  // }
 
   /**
    * Method to drive the robot using joystick info.
@@ -186,7 +182,7 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-    
+
     double xSpeedCommanded;
     double ySpeedCommanded;
 
@@ -195,42 +191,40 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
       double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
-      // Calculate the direction slew rate based on an estimate of the lateral acceleration
+      // Calculate the direction slew rate based on an estimate of the lateral
+      // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
         directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
       } else {
-        directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
+        directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
       }
-      
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
-      if (angleDif < 0.45*Math.PI) {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+      if (angleDif < 0.45 * Math.PI) {
+        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+            directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-      }
-      else if (angleDif > 0.85*Math.PI) {
-        if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
+      } else if (angleDif > 0.85 * Math.PI) {
+        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
-        }
-        else {
+        } else {
           m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
-      }
-      else {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+      } else {
+        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+            directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
       m_prevTime = currentTime;
-      
+
       xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
-
 
     } else {
       xSpeedCommanded = xSpeed;
@@ -245,7 +239,8 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(Gyro.getYaw()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                Rotation2d.fromDegrees(Gyro.getYaw()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -282,9 +277,9 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
     m_rearRight.setDesiredState(desiredStates[3]);
   }
 
-  /** 
-   * Resets the drive encoders to currently read a position of 0. 
-   * */
+  /**
+   * Resets the drive encoders to currently read a position of 0.
+   */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
     m_rearLeft.resetEncoders();
@@ -292,9 +287,9 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
     m_rearRight.resetEncoders();
     System.out.println("Encoders Reset");
   }
-  public void print(){
+
+  public void print() {
     System.out.println("InstantsWork");
   }
 
 }
-

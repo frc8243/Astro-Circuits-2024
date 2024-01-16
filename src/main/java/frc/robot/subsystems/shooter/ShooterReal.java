@@ -20,7 +20,7 @@ public class ShooterReal implements ShooterIO {
     public void setFeedMotor(double speed) {
         feedMotor.set(speed);
     }
-    
+
     @Override
     public void setShootMotor(double speed) {
         shootMotor.set(speed);

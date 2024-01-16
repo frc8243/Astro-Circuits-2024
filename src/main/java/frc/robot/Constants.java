@@ -9,8 +9,8 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
     public static final class DriveConstants {
         /**
-     * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
-     */
+         * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
+         */
         public static final double kMaxSpeedMetersPerSecond = 4;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // Radians per Second
 
@@ -55,6 +55,7 @@ public class Constants {
 
         public static final boolean kGyroReversed = false;
     }
+
     /**
      * Constants for the swerve module - stuff that's the same for all 4
      */
@@ -119,12 +120,12 @@ public class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxModuleSpeedMetersPerSecond = 3.00; //THIS IS FOR THE MODULES
+        public static final double kMaxModuleSpeedMetersPerSecond = 3.00; // THIS IS FOR THE MODULES
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = 3 * Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 3 * Math.PI;
 
-        public static final double kPXController = 1; 
+        public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1; /* Controls the Rotation of the Robot during Auton */
 
