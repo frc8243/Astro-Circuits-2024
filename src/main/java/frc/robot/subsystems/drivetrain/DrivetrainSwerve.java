@@ -236,4 +236,11 @@ public class DrivetrainSwerve implements DrivetrainIO {
     System.out.println("Encoders Reset");
   }
 
+  public void updateTelemetry() {
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Right Drive Encoder", m_frontRight.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading());
+  }
+
 }
