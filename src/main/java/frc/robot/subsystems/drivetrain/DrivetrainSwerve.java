@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,20 +19,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.RobotContainer;
 
-@SuppressWarnings("unused")
-public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
+public class DrivetrainSwerve implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
@@ -75,51 +68,8 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
           m_rearRight.getPosition()
       });
 
-  /** Creates a new Drivetrain. */
   public DrivetrainSwerve() {
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::resetOdometry,
-        this::getRobotRelativeSpeeds,
-        this::driveRobotRelative,
-        new HolonomicPathFollowerConfig(
-            new PIDConstants(2.9, 0, 0.1), // Translation
-            new PIDConstants(0.975, 0, 0), // Rotation
-            AutoConstants.kMaxModuleSpeedMetersPerSecond,
-            0.385, // METERS
-            new ReplanningConfig()),
 
-        () -> {
-          // Basically flips the path for path planner depending on alliance(Origin is
-          // Blue Alliance)
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-
-        this);
-  }
-
-  @Override
-  public void periodic() {
-    // Update the odometry in the periodic block
-    m_odometry.update(
-        Rotation2d.fromDegrees(Gyro.getYaw()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
-
-    SmartDashboard.putNumber("Drivetrain/Front Right Drive Encoder", m_frontRight.getDriveEncoderReading());
-    SmartDashboard.putNumber("Drivetrain/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading());
-    SmartDashboard.putNumber("Drivetrain/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading());
-    SmartDashboard.putNumber("Drivetrain/RearR Left Drive Encoder", m_rearLeft.getDriveEncoderReading());
-    // This method will be called once per scheduler run
   }
 
   /**
@@ -167,9 +117,6 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
         },
         pose);
   }
-  // public void resetTrajectoryFromPath(){
-
-  // }
 
   /**
    * Method to drive the robot using joystick info.
@@ -208,7 +155,8 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
             directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
       } else if (angleDif > 0.85 * Math.PI) {
-        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality checking
+        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality
+                                              // checking
           // keep currentTranslationDir unchanged
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
         } else {
@@ -288,8 +236,11 @@ public class DrivetrainSwerve extends SubsystemBase implements DrivetrainIO {
     System.out.println("Encoders Reset");
   }
 
-  public void print() {
-    System.out.println("InstantsWork");
+  public void updateTelemetry() {
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Right Drive Encoder", m_frontRight.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading());
+    SmartDashboard.putNumber("Drivetrain/Modules/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading());
   }
 
 }

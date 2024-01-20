@@ -144,4 +144,9 @@ public class Constants {
         public static final double kFeedSpeed = 1;
         public static final double kShootSpeed = 1;
     }
+
+    public class VisionConstants {
+        public static final double kFrontCamHeight = Units.inchesToMeters(5.75);
+        public static final double kTurningP = 0.01;
+    }
 }
