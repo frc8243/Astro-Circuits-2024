@@ -7,6 +7,7 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -28,13 +29,27 @@ public class Shooter extends SubsystemBase {
     return this.startEnd(
         () -> {
           System.out.println("Shooter shootingInside");
-          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
           shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
+
+          // try {
+          // wait(500);
+          // } catch (InterruptedException e) {
+          // e.printStackTrace();
+          // }
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+
+            e.printStackTrace();
+          }
+          System.out.println("Past the wait point");
+          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
 
         },
 
         () -> {
-          shooterIO.stop();
+          shooterIO.setFeedMotor(0);
+          shooterIO.setShootMotor(0);
         });
   }
 
