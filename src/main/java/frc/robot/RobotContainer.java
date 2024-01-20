@@ -16,12 +16,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.TrackTarget;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.DrivetrainIO;
 import frc.robot.subsystems.drivetrain.DrivetrainSim;
 import frc.robot.subsystems.drivetrain.DrivetrainSwerve;
+import frc.robot.subsystems.rollerclaw.RollerClaw;
+import frc.robot.subsystems.rollerclaw.RollerClawIO;
+import frc.robot.subsystems.rollerclaw.RollerClawReal;
+import frc.robot.subsystems.rollerclaw.RollerClawSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterReal;
@@ -35,13 +40,11 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private static Shooter m_shooter;
   private static Vision m_vision;
+  private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
 
   public RobotContainer() {
-    m_gyro = new Gyro();
-    m_pdp = new PowerDistribution(1, ModuleType.kRev);
     createSubsystems();
-    m_vision = new Vision(m_drivetrain);
 
     SmartDashboard.putData(m_pdp);
     SmartDashboard.putData(m_drivetrain);
@@ -62,11 +65,12 @@ public class RobotContainer {
 
     driverController.start().onTrue(
         new InstantCommand(m_gyro::resetYaw));
-    driverController.leftBumper().whileTrue(
-        new RunCommand(() -> m_vision.turnToTarget(1)));
+    driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
 
     driverController.a().whileTrue(m_shooter.getShooterCommand());
     driverController.b().whileTrue(m_shooter.getIntakeCommand());
+    driverController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
+    driverController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
 
   }
 
@@ -81,16 +85,23 @@ public class RobotContainer {
   public void createSubsystems() {
     ShooterIO shooterIO;
     DrivetrainIO drivetrainIO;
+    RollerClawIO rollerClawIO;
     if (RobotBase.isSimulation()) {
       shooterIO = new ShooterSim();
       drivetrainIO = new DrivetrainSim();
+      rollerClawIO = new RollerClawSim();
 
     } else {
       shooterIO = new ShooterReal();
       drivetrainIO = new DrivetrainSwerve();
+      rollerClawIO = new RollerClawReal();
     }
 
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
+    m_rollerClaw = new RollerClaw(rollerClawIO);
+    m_vision = new Vision(m_drivetrain);
+    m_pdp = new PowerDistribution(1, ModuleType.kRev);
+    m_gyro = new Gyro();
   }
 }

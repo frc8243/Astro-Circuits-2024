@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +35,9 @@ public class Vision extends SubsystemBase {
         m_drivetrain.drive(0, 0, rotationSpeed, false, false);
       }
     }
+  }
 
+  public PhotonPipelineResult getFrontCameraResult() {
+    return frontCamera.getLatestResult();
   }
 }

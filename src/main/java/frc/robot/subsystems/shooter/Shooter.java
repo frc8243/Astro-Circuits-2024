@@ -48,8 +48,7 @@ public class Shooter extends SubsystemBase {
         },
 
         () -> {
-          shooterIO.setFeedMotor(0);
-          shooterIO.setShootMotor(0);
+          shooterIO.stop();
         });
   }
 
