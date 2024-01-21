@@ -144,7 +144,7 @@ public class Constants {
         public static final int kRollerClawMotorID = 4;
         public static final double kFeedSpeed = 1;
         public static final double kShootSpeed = 1;
-        public static final double kRollerClawSpeed = 0.25;
+        public static final double kRollerClawSpeed = 0.5;
     }
 
     public class VisionConstants {
