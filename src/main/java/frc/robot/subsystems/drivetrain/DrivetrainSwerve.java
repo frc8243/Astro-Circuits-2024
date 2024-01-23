@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,7 +19,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -27,7 +31,12 @@ import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.Vision;
 import frc.robot.RobotContainer;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 public class DrivetrainSwerve implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
@@ -58,7 +67,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(Gyro.getYaw()),
       new SwerveModulePosition[] {
@@ -66,10 +75,13 @@ public class DrivetrainSwerve implements DrivetrainIO {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      });
+      }, new Pose2d());
+
+  private final StructArrayPublisher<SwerveModuleState> publisher;
 
   public DrivetrainSwerve() {
-
+    publisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveState", SwerveModuleState.struct)
+        .publish();
   }
 
   /**
@@ -78,7 +90,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   /**
@@ -107,7 +119,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
+    m_poseEstimator.resetPosition(
         Rotation2d.fromDegrees(Gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -241,6 +253,21 @@ public class DrivetrainSwerve implements DrivetrainIO {
     SmartDashboard.putNumber("Drivetrain/Modules/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading());
     SmartDashboard.putNumber("Drivetrain/Modules/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading());
     SmartDashboard.putNumber("Drivetrain/Modules/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading());
+    publisher.set(new SwerveModuleState[] {
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
+    });
+    m_poseEstimator.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(Gyro.getYaw()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        });
+    Optional<EstimatedRobotPose> estimatedFrontPose = Vision.getFrontCamEstimatedPose(getPose());
+
   }
 
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -33,7 +34,7 @@ import frc.robot.subsystems.shooter.ShooterReal;
 import frc.robot.subsystems.shooter.ShooterSim;
 
 public class RobotContainer {
-  private static final RobotContainer m_RobotContainer = new RobotContainer();
+  private static final RobotContainer m_robotContainer = new RobotContainer();
   private static Drivetrain m_drivetrain;
   private static Gyro m_gyro;
   private static PowerDistribution m_pdp;
@@ -41,6 +42,7 @@ public class RobotContainer {
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
+  private static Field2d m_field;
   private boolean fieldOrientedDrive = true;
 
   public RobotContainer() {
@@ -48,6 +50,7 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_pdp);
     SmartDashboard.putData(m_drivetrain);
+    SmartDashboard.putData(m_field);
 
     configureBindings();
     m_drivetrain.setDefaultCommand(new RunCommand(
@@ -57,6 +60,7 @@ public class RobotContainer {
             -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
             fieldOrientedDrive, true),
         m_drivetrain));
+    m_field.setRobotPose(m_drivetrain.getPose());
   }
 
   private void configureBindings() {
@@ -65,6 +69,9 @@ public class RobotContainer {
 
     driverController.start().onTrue(
         new InstantCommand(m_gyro::resetYaw));
+    driverController.back().onTrue(
+        new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
+
     driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
 
     driverController.a().whileTrue(m_shooter.getShooterCommand());
@@ -75,7 +82,7 @@ public class RobotContainer {
   }
 
   public static RobotContainer getInstance() {
-    return m_RobotContainer;
+    return m_robotContainer;
   }
 
   public Command getAutonomousCommand() {
@@ -100,8 +107,9 @@ public class RobotContainer {
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
-    m_vision = new Vision(m_drivetrain);
+    m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_gyro = new Gyro();
+    m_field = new Field2d();
   }
 }
