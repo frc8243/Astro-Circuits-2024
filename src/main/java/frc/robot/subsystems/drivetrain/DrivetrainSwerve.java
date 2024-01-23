@@ -266,7 +266,6 @@ public class DrivetrainSwerve implements DrivetrainIO {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    Optional<EstimatedRobotPose> estimatedFrontPose = Vision.getFrontCamEstimatedPose(getPose());
 
   }
 

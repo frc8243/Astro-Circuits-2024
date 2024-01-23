@@ -60,7 +60,6 @@ public class RobotContainer {
             -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
             fieldOrientedDrive, true),
         m_drivetrain));
-    m_field.setRobotPose(m_drivetrain.getPose());
   }
 
   private void configureBindings() {

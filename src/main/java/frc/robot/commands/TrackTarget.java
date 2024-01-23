@@ -42,9 +42,11 @@ public class TrackTarget extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    PhotonPipelineResult result = m_vision.getFrontCameraResult();
-    if (result.hasTargets()) {
-      List<PhotonTrackedTarget> targets = result.getTargets();
+    PhotonPipelineResult resultFront = m_vision.getFrontCameraResult();
+    PhotonPipelineResult resultLeft = m_vision.getLeftCameraResult();
+    PhotonPipelineResult resultRight = m_vision.getRightCameraResult();
+    if (resultFront.hasTargets()) {
+      List<PhotonTrackedTarget> targets = resultFront.getTargets();
       for (PhotonTrackedTarget target : targets) {
         if (target.getFiducialId() == targetTag) {
           double rotSpeed = -(target.getYaw()) * VisionConstants.kTurningP;
