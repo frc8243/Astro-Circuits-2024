@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.ext.OptionalHandlerFactory;
 
 public class Vision extends SubsystemBase {
   private static PhotonCamera frontCamera;
+  private static PhotonCamera leftCamera;
+  private static PhotonCamera rightCamera;
   private static PhotonPoseEstimator frontCameraPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -36,6 +38,8 @@ public class Vision extends SubsystemBase {
       e.printStackTrace();
     }
     frontCamera = new PhotonCamera("frontCamera");
+    leftCamera = new PhotonCamera("leftCamera");
+    rightCamera = new PhotonCamera("rightCamera");
     frontCameraPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
         frontCamera, VisionConstants.kFrontCamtoRobot);
     frontCameraPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -43,11 +47,21 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Vision/Raspi1 Connected", frontCamera.isConnected());
+    SmartDashboard.putBoolean("Vision/FrontCam Connected", frontCamera.isConnected());
+    SmartDashboard.putBoolean("Vision/LeftCam Connected", leftCamera.isConnected());
+    SmartDashboard.putBoolean("Vision/RightCam Connected", rightCamera.isConnected());
   }
 
   public PhotonPipelineResult getFrontCameraResult() {
     return frontCamera.getLatestResult();
+  }
+
+  public PhotonPipelineResult getLeftCameraResult() {
+    return leftCamera.getLatestResult();
+  }
+
+  public PhotonPipelineResult getRightCameraResult() {
+    return rightCamera.getLatestResult();
   }
 
   public static Optional<EstimatedRobotPose> getFrontCamEstimatedPose(Pose2d previousEstimatedPose) {

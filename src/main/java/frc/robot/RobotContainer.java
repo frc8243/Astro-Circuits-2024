@@ -65,10 +65,6 @@ public class RobotContainer {
             -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
             fieldOrientedDrive, true),
         m_drivetrain));
-    if (!RobotBase.isSimulation()) {
-      m_field.setRobotPose(m_drivetrain.getPose());
-
-    }
   }
 
   private void configureBindings() {
