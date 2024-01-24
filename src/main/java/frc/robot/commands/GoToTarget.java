@@ -11,6 +11,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
@@ -48,9 +49,9 @@ public class GoToTarget extends Command {
       List<PhotonTrackedTarget> targets = result.getTargets();
       for (PhotonTrackedTarget target : targets) {
         if (target.getFiducialId() == targetTag) {
-          double xSpeed;
-          double ySpeed;
-          double rotSpeed;
+          double xSpeed = target.getBestCameraToTarget().getX() * VisionConstants.kTranslateP;
+          double ySpeed = target.getBestCameraToTarget().getY() * VisionConstants.kTranslateP;
+          double rotSpeed = -(target.getYaw()) * VisionConstants.kTurningP;
         }
       }
     }

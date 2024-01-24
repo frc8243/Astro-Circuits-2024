@@ -27,7 +27,6 @@ public class Vision extends SubsystemBase {
   private static PhotonCamera frontCamera;
   private static PhotonCamera leftCamera;
   private static PhotonCamera rightCamera;
-  private static PhotonPoseEstimator frontCameraPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
   /** Creates a new Vision. */
@@ -40,9 +39,6 @@ public class Vision extends SubsystemBase {
     frontCamera = new PhotonCamera("frontCamera");
     leftCamera = new PhotonCamera("leftCamera");
     rightCamera = new PhotonCamera("rightCamera");
-    frontCameraPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        frontCamera, VisionConstants.kFrontCamtoRobot);
-    frontCameraPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
   }
 
   @Override
@@ -62,10 +58,5 @@ public class Vision extends SubsystemBase {
 
   public PhotonPipelineResult getRightCameraResult() {
     return rightCamera.getLatestResult();
-  }
-
-  public static Optional<EstimatedRobotPose> getFrontCamEstimatedPose(Pose2d previousEstimatedPose) {
-    frontCameraPoseEstimator.setReferencePose(previousEstimatedPose);
-    return frontCameraPoseEstimator.update();
   }
 }

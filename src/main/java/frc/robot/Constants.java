@@ -163,5 +163,6 @@ public class Constants {
                 Units.inchesToMeters(13.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.75)),
                 new Rotation3d(0.0, 0.0, 0.0));
         public static final double kTurningP = 0.01;
+        public static final double kTranslateP = 0.01;
     }
 }
