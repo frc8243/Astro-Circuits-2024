@@ -20,18 +20,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class ClimberSim implements ClimberIO {
-    public void setFeedMotor(double speed) {
+    @Override
+    public void setClimbMotor(double speed) {
     }
 
-    public void setShootMotor(double speed) {
-    }
-
-    public double getFeedSpeed() {
-        return 0;
-    }
-
-    public double getShootSpeed() {
-        return 0;
+    @Override
+    public double getClimbSpeed() {
+        return 0.0;
     }
 
     // This gearbox represents a gearbox containing 4 Vex 775pro motors.

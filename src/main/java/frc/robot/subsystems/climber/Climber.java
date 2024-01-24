@@ -20,51 +20,50 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter/Feed Speed", shooterIO.getFeedSpeed());
-    SmartDashboard.putNumber("Shooter/Shoot Speed", shooterIO.getShootSpeed());
+    SmartDashboard.putNumber("Climb Speed", shooterIO.getClimbSpeed());
   }
 
-  public Command getShooterCommand() {
-    System.out.println("Shooter shooting");
-    return this.startEnd(
-        () -> {
-          System.out.println("Shooter shootingInside");
-          shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
+  // public Command getShooterCommand() {
+  // System.out.println("Shooter shooting");
+  // return this.startEnd(
+  // () -> {
+  // System.out.println("Shooter shootingInside");
+  // shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
 
-          // try {
-          // wait(500);
-          // } catch (InterruptedException e) {
-          // e.printStackTrace();
-          // }
-          try {
-            Thread.sleep(500);
-          } catch (InterruptedException e) {
+  // // try {
+  // // wait(500);
+  // // } catch (InterruptedException e) {
+  // // e.printStackTrace();
+  // // }
+  // try {
+  // Thread.sleep(500);
+  // } catch (InterruptedException e) {
 
-            e.printStackTrace();
-          }
-          System.out.println("Past the wait point");
-          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
+  // e.printStackTrace();
+  // }
+  // System.out.println("Past the wait point");
+  // shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
 
-        },
+  // },
 
-        () -> {
-          shooterIO.stop();
-        });
-  }
+  // () -> {
+  // shooterIO.stop();
+  // });
+  // }
 
-  public Command getIntakeCommand() {
-    System.out.println("intake intaking");
-    return this.startEnd(
-        () -> {
-          System.out.println("intake intakingInside");
-          shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
-          shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+  // public Command getIntakeCommand() {
+  // System.out.println("intake intaking");
+  // return this.startEnd(
+  // () -> {
+  // System.out.println("intake intakingInside");
+  // shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
+  // shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
 
-        },
+  // },
 
-        () -> {
-          shooterIO.stop();
-        });
-  }
+  // () -> {
+  // shooterIO.stop();
+  // });
+  // }
 
 }

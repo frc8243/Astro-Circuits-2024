@@ -153,6 +153,10 @@ public class Constants {
         public static final double kRollerClawSpeed = 0.5;
     }
 
+    public class ClimberConstants {
+        public static final int kClimbMotorID = 50; // TODO set to the real climber motor id
+    }
+
     public class VisionConstants {
         public static final double kFrontCamHeight = Units.inchesToMeters(5.75);
         /*

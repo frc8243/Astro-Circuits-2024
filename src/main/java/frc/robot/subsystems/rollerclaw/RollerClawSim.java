@@ -15,7 +15,7 @@ public class RollerClawSim implements RollerClawIO {
     private static EncoderSim rollerClawEncoder;
 
     public RollerClawSim() {
-        rollerClawEncoder = new EncoderSim(new Encoder(1, 2));
+        rollerClawEncoder = new EncoderSim(new Encoder(2, 3));
 
     }
 
