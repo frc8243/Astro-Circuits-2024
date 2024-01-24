@@ -50,14 +50,16 @@ public class TrackTarget extends Command {
       List<PhotonTrackedTarget> targets = resultFront.getTargets();
       for (PhotonTrackedTarget target : targets) {
         if (target.getFiducialId() == targetTag) {
-          double rotSpeed = -(target.getYaw()) * VisionConstants.kTurningP;
+          double rotSpeed = -(target.getYaw()) * VisionConstants.kRotateP;
           m_drivetrain.drive(
               -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
               rotSpeed,
               true, true);
-          if (Math.abs(target.getYaw()) >= 10) {
+          if (Math.abs(target.getYaw()) <= 10) {
             driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+          } else {
+            driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
           }
         }
       }
@@ -67,6 +69,7 @@ public class TrackTarget extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
 
   // Returns true when the command should end.

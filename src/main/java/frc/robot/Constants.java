@@ -166,8 +166,9 @@ public class Constants {
         public static final Transform3d kFrontCamtoRobot = new Transform3d(new Translation3d(
                 Units.inchesToMeters(13.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.75)),
                 new Rotation3d(0.0, 0.0, 0.0));
-        public static final double kTurningP = 0.01;
-        public static final double kTranslateP = 0.01;
+        public static final double kRotateP = 0.001;
+        public static final double kXTranslateP = 0.5;
+        public static final double kYTranslateP = 0.25;
     }
 
     public static final int kMotorPort = 0;

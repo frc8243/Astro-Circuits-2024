@@ -9,6 +9,7 @@ import java.util.List;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.VisionConstants;
@@ -20,8 +21,10 @@ public class GoToTarget extends Command {
   private Drivetrain m_drivetrain;
   private CommandXboxController driverController;
   private int targetTag;
-  private double targetDistance;
-  private double currentDistance;
+  private double targetXDistance;
+  private double currentXDistance;
+  private double currentYaw;
+  private double currentYDistance;
 
   /** Creates a new GoToTarget. */
   public GoToTarget(Vision vision, Drivetrain drivetrain, CommandXboxController controller, int targetTag,
@@ -30,7 +33,7 @@ public class GoToTarget extends Command {
     this.m_drivetrain = drivetrain;
     this.driverController = controller;
     this.targetTag = targetTag;
-    this.targetDistance = targetDistance;
+    this.targetXDistance = targetDistance;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_vision, m_drivetrain);
   }
@@ -49,9 +52,13 @@ public class GoToTarget extends Command {
       List<PhotonTrackedTarget> targets = result.getTargets();
       for (PhotonTrackedTarget target : targets) {
         if (target.getFiducialId() == targetTag) {
-          double xSpeed = target.getBestCameraToTarget().getX() * VisionConstants.kTranslateP;
-          double ySpeed = target.getBestCameraToTarget().getY() * VisionConstants.kTranslateP;
-          double rotSpeed = -(target.getYaw()) * VisionConstants.kTurningP;
+          double xSpeed = -(targetXDistance - target.getBestCameraToTarget().getX()) * VisionConstants.kXTranslateP;
+          double ySpeed = -(0 - target.getBestCameraToTarget().getY()) * VisionConstants.kYTranslateP;
+          double rotSpeed = (target.getYaw()) * VisionConstants.kRotateP;
+          m_drivetrain.drive(xSpeed, ySpeed, rotSpeed, false, false);
+          currentXDistance = target.getBestCameraToTarget().getX();
+          currentYDistance = target.getBestCameraToTarget().getY();
+          currentYaw = target.getYaw();
         }
       }
     }
@@ -65,6 +72,6 @@ public class GoToTarget extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return currentDistance <= targetDistance;
+    return (currentXDistance <= targetXDistance) && (Math.abs(currentYDistance) <= 0.25);
   }
 }

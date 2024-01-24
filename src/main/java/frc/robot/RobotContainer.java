@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Vision;
@@ -46,7 +47,6 @@ public class RobotContainer {
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
-  private static Field2d m_field;
   private boolean fieldOrientedDrive = true;
   private static Climber m_climber;
 
@@ -55,7 +55,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_pdp);
     SmartDashboard.putData(m_drivetrain);
-    SmartDashboard.putData(m_field);
 
     configureBindings();
     m_drivetrain.setDefaultCommand(new RunCommand(
@@ -65,6 +64,7 @@ public class RobotContainer {
             -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
             fieldOrientedDrive, true),
         m_drivetrain));
+
   }
 
   private void configureBindings() {
@@ -77,6 +77,7 @@ public class RobotContainer {
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
     driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
+    driverController.rightBumper().whileTrue(new GoToTarget(m_vision, m_drivetrain, driverController, 8, 1));
 
     driverController.a().whileTrue(m_shooter.getShooterCommand());
     driverController.b().whileTrue(m_shooter.getIntakeCommand());
@@ -117,6 +118,5 @@ public class RobotContainer {
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_gyro = new Gyro();
-    m_field = new Field2d();
   }
 }
