@@ -10,6 +10,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
@@ -55,6 +56,9 @@ public class TrackTarget extends Command {
               -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
               rotSpeed,
               true, true);
+          if (Math.abs(target.getYaw()) >= 10) {
+            driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+          }
         }
       }
     }

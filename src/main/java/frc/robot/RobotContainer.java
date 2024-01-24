@@ -20,6 +20,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TrackTarget;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberReal;
+import frc.robot.subsystems.climber.ClimberSim;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.DrivetrainIO;
 import frc.robot.subsystems.drivetrain.DrivetrainSim;
@@ -44,6 +48,7 @@ public class RobotContainer {
   private static RollerClaw m_rollerClaw;
   private static Field2d m_field;
   private boolean fieldOrientedDrive = true;
+  private static Climber m_climber;
 
   public RobotContainer() {
     createSubsystems();
@@ -92,17 +97,20 @@ public class RobotContainer {
     ShooterIO shooterIO;
     DrivetrainIO drivetrainIO;
     RollerClawIO rollerClawIO;
+    ClimberIO climberIO;
     if (RobotBase.isSimulation()) {
       shooterIO = new ShooterSim();
       drivetrainIO = new DrivetrainSim();
       rollerClawIO = new RollerClawSim();
+      climberIO = new ClimberSim();
 
     } else {
       shooterIO = new ShooterReal();
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
+      climberIO = new ClimberReal();
     }
-
+    m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
