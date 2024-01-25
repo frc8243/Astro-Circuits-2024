@@ -48,8 +48,9 @@ public class RobotContainer {
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
-  private boolean fieldOrientedDrive = true;
   private static Climber m_climber;
+  private boolean fieldOrientedDrive = true;
+
   private static SendableChooser<Command> m_autoChooser;
 
   public RobotContainer() {
