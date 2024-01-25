@@ -2,30 +2,57 @@ package frc.robot.subsystems.climber;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
-import com.revrobotics.CANSparkLowLevel.MotorType;;
+import frc.utils.MotorUtil;
 
 public class ClimberReal implements ClimberIO {
-    private static CANSparkMax climbMotor = new CANSparkMax(ClimberConstants.kClimbMotorID, MotorType.kBrushless);
-    private static RelativeEncoder climbEncoder = climbMotor.getEncoder();
+
+    public static CANSparkMax climberMotorController;
+    public static RelativeEncoder climberEncoder;
 
     public ClimberReal() {
+        climberMotorController = MotorUtil.createSparkMAX(ClimberConstants.CLIMBER_MOTOR_ID, MotorType.kBrushless,
+                Constants.NeoMotorConstants.NEO_CURRENT_LIMIT, false, true, 0.1);
 
+        climberEncoder = climberMotorController.getEncoder();
+        climberEncoder.setPositionConversionFactor(ClimberConstants.METERS_PER_REVOLUTION);
+        // dividng by 60 to convert meters per miniute to meters per seconds
+        climberEncoder.setVelocityConversionFactor(ClimberConstants.METERS_PER_REVOLUTION / 60);
     }
 
     @Override
-    public void setClimbMotor(double speed) {
-        climbMotor.set(speed);
+    public double getEncoderPosition() {
+        return climberEncoder.getPosition();
     }
 
     @Override
-    public void stop() {
-        climbMotor.set(0);
+    public double getEncoderSpeed() {
+        return climberEncoder.getVelocity();
     }
 
     @Override
-    public double getClimbSpeed() {
-        return climbEncoder.getVelocity();
+    public void setMotorSpeed(double speed) {
+        climberMotorController.set(speed);
     }
+
+    @Override
+    public void setEncoderPosition(double position) {
+        climberEncoder.setPosition(position);
+    }
+
+    @Override
+    public double getClimberCurrent() {
+        return climberMotorController.getOutputCurrent();
+    }
+
+    @Override
+    public void periodicUpdate() {
+        // Only code in here that relates a physical subsystem
+        SmartDashboard.putNumber("climber/Real motor temp (C)", climberMotorController.getMotorTemperature());
+    }
+
 }

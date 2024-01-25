@@ -1,14 +1,7 @@
 package frc.robot.subsystems.rollerclaw;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.Encoder;
-import frc.robot.Constants.ShooterConstants;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 
 public class RollerClawSim implements RollerClawIO {
 

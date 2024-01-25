@@ -1,9 +1,16 @@
 package frc.robot.subsystems.climber;
 
 public interface ClimberIO {
-    public void setClimbMotor(double speed);
 
-    public void stop();
+    public double getEncoderPosition();
 
-    public double getClimbSpeed();
+    public double getEncoderSpeed();
+
+    public void setMotorSpeed(double speed);
+
+    public void setEncoderPosition(double position);
+
+    public void periodicUpdate();
+
+    public double getClimberCurrent();
 }

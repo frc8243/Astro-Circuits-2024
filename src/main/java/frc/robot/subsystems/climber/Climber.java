@@ -1,69 +1,146 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.climber;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import frc.robot.Constants.ClimberConstants;
+import frc.utils.PIDUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 
-public class Climber extends SubsystemBase {
-  private ClimberIO climberIO;
+public class Climber extends ProfiledPIDSubsystem {
 
-  /** Creates a new Shooter. */
-  public Climber(ClimberIO io) {
-    climberIO = io;
-  }
+    private ClimberIO climberIO;
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Climb/Speed", climberIO.getClimbSpeed());
-  }
+    private static final Constraints constraints = new Constraints(ClimberConstants.max_vel,
+            ClimberConstants.max_accel);
 
-  // public Command getShooterCommand() {
-  // System.out.println("Shooter shooting");
-  // return this.startEnd(
-  // () -> {
-  // System.out.println("Shooter shootingInside");
-  // shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
+    private final ClimberVisualizer climberVisualizer = new ClimberVisualizer();
 
-  // // try {
-  // // wait(500);
-  // // } catch (InterruptedException e) {
-  // // e.printStackTrace();
-  // // }
-  // try {
-  // Thread.sleep(500);
-  // } catch (InterruptedException e) {
+    public Climber(ClimberIO io) {
+        super(new ProfiledPIDController(ClimberConstants.kpPos, ClimberConstants.kiPos, ClimberConstants.kdPos,
+                constraints));
 
-  // e.printStackTrace();
-  // }
-  // System.out.println("Past the wait point");
-  // shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
+        getController()
+                .setTolerance(ClimberConstants.HEIGHT_TOLERANCE, ClimberConstants.VELOCITY_TOLERANCE);
 
-  // },
+        climberIO = io;
+        climberIO.setEncoderPosition(0.0);
+    }
 
-  // () -> {
-  // shooterIO.stop();
-  // });
-  // }
+    @Override
+    public void periodic() {
+        // inside this next line, this is called
+        // useOutput(m_controller.calculate(getMeasurement()),
+        // m_controller.getSetpoint())
+        // So what is the output of calculate?
+        // SmartDashboard.putNumber("Climber/Profiled PID setpoint pos",
+        // getController().calculate(getMeasurement(), getController().getSetpoint()));
 
-  // public Command getIntakeCommand() {
-  // System.out.println("intake intaking");
-  // return this.startEnd(
-  // () -> {
-  // System.out.println("intake intakingInside");
-  // shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
-  // shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+        super.periodic();
+        climberIO.periodicUpdate();
+        double currentPos = getMeasurement();// A
+        double currentVel = getEncoderSpeed();
+        SmartDashboard.putNumber("Climber/Profiled goal (m)", getGoal());
+        SmartDashboard.putNumber("Climber/position (m)", currentPos);
+        SmartDashboard.putNumber("Climber/velocity (m per s)", currentVel);
+        SmartDashboard.putBoolean("Climber/Profiled subsytem enabled", this.isEnabled());
 
-  // },
+        SmartDashboard.putNumber("Climber/Profiled PID setpoint pos", getController().getSetpoint().position);
+        SmartDashboard.putNumber("Climber/Profiled PID position error", getController().getPositionError());
+        SmartDashboard.putNumber("Climber/Profiled PID velocity error", getController().getVelocityError());
+        SmartDashboard.putNumber("Climber/Profiled PID position tol", getController().getPositionTolerance());
+        SmartDashboard.putNumber("Climber/Profiled PID velocity tol", getController().getVelocityTolerance());
+        SmartDashboard.putNumber("Climber/Profiled PID goal pos", getController().getGoal().position);
+        SmartDashboard.putBoolean("Climber/Profiled PID position at Goal", getController().atGoal());
+        SmartDashboard.putBoolean("Climber/Profiled PID position at set point", getController().atSetpoint());
 
-  // () -> {
-  // shooterIO.stop();
-  // });
-  // }
+        climberVisualizer.update(currentPos);
+    }
+
+    // returns height the climber is at. Required to override this
+    @Override
+    public double getMeasurement() {
+        return climberIO.getEncoderPosition();
+    }
+
+    // returns speed of climber
+    public double getEncoderSpeed() {
+        return climberIO.getEncoderSpeed();
+    }
+
+    public void setMotorSpeed(double speed) {
+        SmartDashboard.putNumber("Climber/motor speed (-1 to 1)", speed);
+        climberIO.setMotorSpeed(speed);
+    }
+
+    public void setMotorSpeedGravityCompensation(double speed) {
+        climberIO.setMotorSpeed(speed + ClimberConstants.gravityCompensation);
+    }
+
+    public double getClimberCurrent() {
+        return climberIO.getClimberCurrent();
+    }
+
+    // required to override this
+    @Override
+    protected void useOutput(double output, State setpoint) {
+        SmartDashboard.putNumber("Climber/Profiled useOutput output var (-1 to 1)", output);
+        SmartDashboard.putNumber("Climber/Profiled setpoint position (m)", setpoint.position);
+        SmartDashboard.putNumber("Climber/Profiled setpoint velocity (m per s)", setpoint.velocity);
+        SmartDashboard.putNumber("Climber/Profiled setpoint position error (m)", setpoint.position - getMeasurement());
+        SmartDashboard.putNumber("Climber/Profiled setpoint velocity error (m)",
+                setpoint.velocity - getEncoderSpeed());
+
+        // not doing anything with the position error ??
+
+        // Calculate the feedforward from the setpoint
+        double speed = ClimberConstants.feedForward * setpoint.velocity;
+        // accounts for gravity in speed
+        speed += ClimberConstants.gravityCompensation;
+
+        speed += output;
+
+        climberIO.setMotorSpeed(speed);
+    }
+
+    // @Override
+    // protected double getMeasurement() {
+    // return climberIO.getEncoderPosition();
+    // }
+
+    public double getGoal() {
+        return m_controller.getGoal().position;
+    }
+
+    // Checks to see if climbers are within range of the setpoints
+    public boolean atGoal() {
+        return (PIDUtil.checkWithinRange(getGoal(), getMeasurement(), ClimberConstants.HEIGHT_TOLERANCE));
+    }
+
+    public void setEncoderPosition(double position) {
+        climberIO.setEncoderPosition(position);
+    }
+
+    // factory method to make a PIDCommand for setting the climber height
+    public Command toHeightInlinePIDOnlyCommand(double heightMeters) {
+        this.disable();
+        final Command command = new PIDCommand(
+                new PIDController(
+                        ClimberConstants.kpPos,
+                        ClimberConstants.kiPos,
+                        ClimberConstants.kdPos),
+                this::getMeasurement,
+                // Setpoint
+                heightMeters,
+                // Pipe the output to the turning controls
+                output -> this.setMotorSpeed(output),
+                // Require the robot drive
+                this);
+        return command;
+    }
 
 }
