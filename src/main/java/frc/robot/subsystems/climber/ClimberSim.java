@@ -30,7 +30,7 @@ public class ClimberSim implements ClimberIO {
     }
 
     // This gearbox represents a gearbox containing 4 Vex 775pro motors.
-    private final DCMotor m_elevatorGearbox = DCMotor.getVex775Pro(4);
+    private final DCMotor m_elevatorGearbox = DCMotor.getNEO(1);
 
     // Standard classes for controlling our elevator
     private final ProfiledPIDController m_controller = new ProfiledPIDController(
@@ -58,7 +58,6 @@ public class ClimberSim implements ClimberIO {
             0,
             VecBuilder.fill(0.01));
     private final EncoderSim m_encoderSim = new EncoderSim(m_encoder);
-    private final PWMSim m_motorSim = new PWMSim(m_motor);
 
     // Create a Mechanism2d visualization of the elevator
     private final Mechanism2d m_mech2d = new Mechanism2d(20, 50);
@@ -80,7 +79,7 @@ public class ClimberSim implements ClimberIO {
     public void simulationPeriodic() {
         // In this method, we update our simulation of what our elevator is doing
         // First, we set our "inputs" (voltages)
-        m_elevatorSim.setInput(m_motorSim.getSpeed() * RobotController.getBatteryVoltage());
+        m_elevatorSim.setInput(m_elevatorSim.getVelocityMetersPerSecond() * RobotController.getBatteryVoltage());
 
         // Next, we update it. The standard loop time is 20ms.
         m_elevatorSim.update(0.020);
