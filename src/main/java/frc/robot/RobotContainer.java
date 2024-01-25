@@ -55,16 +55,11 @@ public class RobotContainer {
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
   public static LEDs m_leds;
-
-  public RobotContainer() {
-    m_drivetrain = new Drivetrain();
-    m_gyro = new Gyro();
-    m_pdp = new PowerDistribution(1, ModuleType.kRev);
-    m_leds = new LEDs();
   private static Climber m_climber;
   private static SendableChooser<Command> m_autoChooser;
 
   public RobotContainer() {
+
     createSubsystems();
     m_autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -96,9 +91,16 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kLeftSource));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
-    operatorController.b().whileTrue(m_shooter.getIntakeCommand());
+    // operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.b().whileTrue(
+        new InstantCommand(() -> m_leds.allLEDS(100, 0, 100), m_leds));
+    System.out.println("leds testing");
+    operatorController.y().whileTrue(Commands.run(() -> {
+      m_leds.allLEDS(100, 0, 100);
+      System.out.println("y pressed ************");
+    }));
 
   }
 
@@ -134,5 +136,7 @@ public class RobotContainer {
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_gyro = new Gyro();
+    m_leds = new LEDs();
+
   }
 }
