@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -29,10 +30,13 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private static Shooter m_shooter;
   private boolean fieldOrientedDrive = true;
+  public static LEDs m_leds;
+
   public RobotContainer() {
     m_drivetrain = new Drivetrain();
     m_gyro = new Gyro();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
+    m_leds = new LEDs();
 
     SmartDashboard.putData(m_pdp);
     SmartDashboard.putData(m_drivetrain);
