@@ -11,16 +11,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-  private ClimberIO shooterIO;
+  private ClimberIO climberIO;
 
   /** Creates a new Shooter. */
   public Climber(ClimberIO io) {
-    shooterIO = io;
+    climberIO = io;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Climb Speed", shooterIO.getClimbSpeed());
+    SmartDashboard.putNumber("Climb/Speed", climberIO.getClimbSpeed());
   }
 
   // public Command getShooterCommand() {

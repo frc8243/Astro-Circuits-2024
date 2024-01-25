@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -126,7 +129,7 @@ public class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxModuleSpeedMetersPerSecond = 3.00; // THIS IS FOR THE MODULES
+        public static final double kMaxModuleSpeedMetersPerSecond = 3.00;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = 3 * Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 3 * Math.PI;
@@ -144,7 +147,7 @@ public class Constants {
         public static final double kFreeSpeedRpm = 5676;
     }
 
-    public class ShooterConstants {
+    public static final class ShooterConstants {
         public static final int kShootMotorID = 2;
         public static final int kFeedMotorID = 3;
         public static final int kRollerClawMotorID = 4;
@@ -153,22 +156,34 @@ public class Constants {
         public static final double kRollerClawSpeed = 0.5;
     }
 
-    public class ClimberConstants {
+    public static final class ClimberConstants {
         public static final int kClimbMotorID = 50; // TODO set to the real climber motor id
     }
 
-    public class VisionConstants {
-        public static final double kFrontCamHeight = Units.inchesToMeters(5.75);
+    public static final class VisionConstants {
+        public static final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         /*
          * Camera Transforms - These are mapped from center of robot to the middle of
          * the lens on the camera.
          */
-        public static final Transform3d kFrontCamtoRobot = new Transform3d(new Translation3d(
-                Units.inchesToMeters(13.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.75)),
+        public static final Transform3d kFrontCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(0.0), Units.inchesToMeters(20.75)),
                 new Rotation3d(0.0, 0.0, 0.0));
+        public static final Transform3d kLeftCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(12.5), Units.inchesToMeters(20.75)),
+                new Rotation3d(0.0, 0.0, 90));
+        public static final Transform3d kRightCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(-12.5),
+                        Units.inchesToMeters(20.75)),
+                new Rotation3d(0.0, 0.0, -90));
         public static final double kRotateP = 0.001;
         public static final double kXTranslateP = 0.5;
         public static final double kYTranslateP = 0.25;
+
+    }
+
+    public static final class ScoringConstants {
+        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.radiansToDegrees(-60)));
     }
 
     public static final int kMotorPort = 0;

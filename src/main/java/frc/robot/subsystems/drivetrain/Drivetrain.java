@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -12,15 +13,21 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 
 public class Drivetrain extends SubsystemBase {
   private DrivetrainIO drivetrainIO;
+  private Field2d m_field;
+  private PathConstraints constraints;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(DrivetrainIO io) {
     drivetrainIO = io;
+    m_field = new Field2d();
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetOdometry,
@@ -30,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
             new PIDConstants(2.9, 0, 0.1), // Translation
             new PIDConstants(0.975, 0, 0), // Rotation
             AutoConstants.kMaxModuleSpeedMetersPerSecond,
-            0.385, // METERS
+            0.385, /* Distance from furthest module to robot center in meters */
             new ReplanningConfig()),
 
         () -> {
@@ -45,10 +52,13 @@ public class Drivetrain extends SubsystemBase {
         },
 
         this);
+    constraints = new PathConstraints(1, 3, 540, 540);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putData("Robot/Field", m_field);
+    m_field.setRobotPose(getPose());
     drivetrainIO.updateTelemetry();
 
   }
@@ -79,5 +89,9 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetEncoders() {
     drivetrainIO.resetEncoders();
+  }
+
+  public Command pathFindtoPose(Pose2d targetPose) {
+    return AutoBuilder.pathfindToPose(targetPose, constraints);
   }
 }

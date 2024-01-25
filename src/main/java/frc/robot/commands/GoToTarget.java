@@ -54,7 +54,8 @@ public class GoToTarget extends Command {
         if (target.getFiducialId() == targetTag) {
           double xSpeed = -(targetXDistance - target.getBestCameraToTarget().getX()) * VisionConstants.kXTranslateP;
           double ySpeed = -(0 - target.getBestCameraToTarget().getY()) * VisionConstants.kYTranslateP;
-          double rotSpeed = (target.getYaw()) * VisionConstants.kRotateP;
+          double rotSpeed = (Math.copySign(180, target.getBestCameraToTarget().getZ())
+              - target.getBestCameraToTarget().getZ()) * VisionConstants.kRotateP;
           m_drivetrain.drive(xSpeed, ySpeed, rotSpeed, false, false);
           currentXDistance = target.getBestCameraToTarget().getX();
           currentYDistance = target.getBestCameraToTarget().getY();

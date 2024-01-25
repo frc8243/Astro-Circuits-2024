@@ -22,7 +22,7 @@ public class Gyro extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Drivetrain/Yaw", getYaw());
+    SmartDashboard.putNumber("Drivetrain/Yaw", getYaw() % 360);
     SmartDashboard.putNumber("Drivetrain/Pitch", getPitch());
     SmartDashboard.putNumber("Drivetrain/Roll", getRoll());
 

@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ScoringConstants;
 import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
 import frc.robot.subsystems.Gyro;
@@ -44,17 +48,21 @@ public class RobotContainer {
   private static Gyro m_gyro;
   private static PowerDistribution m_pdp;
   private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
   private static Climber m_climber;
+  private static SendableChooser<Command> m_autoChooser;
 
   public RobotContainer() {
     createSubsystems();
+    m_autoChooser = AutoBuilder.buildAutoChooser();
 
-    SmartDashboard.putData(m_pdp);
-    SmartDashboard.putData(m_drivetrain);
+    SmartDashboard.putData("Robot/PDH", m_pdp);
+    SmartDashboard.putData("Drivetrain/Drivetrain", m_drivetrain);
+    SmartDashboard.putData("Autos/Selector", m_autoChooser);
 
     configureBindings();
     m_drivetrain.setDefaultCommand(new RunCommand(
@@ -77,12 +85,12 @@ public class RobotContainer {
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
     driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
-    driverController.rightBumper().whileTrue(new GoToTarget(m_vision, m_drivetrain, driverController, 8, 1));
+    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kLeftSource));
 
-    driverController.a().whileTrue(m_shooter.getShooterCommand());
-    driverController.b().whileTrue(m_shooter.getIntakeCommand());
-    driverController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
-    driverController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.a().whileTrue(m_shooter.getShooterCommand());
+    operatorController.b().whileTrue(m_shooter.getIntakeCommand());
+    operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
+    operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
 
   }
 
@@ -91,7 +99,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return m_autoChooser.getSelected();
   }
 
   public void createSubsystems() {

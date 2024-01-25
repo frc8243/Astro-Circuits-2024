@@ -32,11 +32,6 @@ import frc.utils.SwerveUtils;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.Vision;
-import frc.robot.RobotContainer;
-
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
 
 public class DrivetrainSwerve implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
@@ -80,7 +75,8 @@ public class DrivetrainSwerve implements DrivetrainIO {
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
   public DrivetrainSwerve() {
-    publisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveState", SwerveModuleState.struct)
+    publisher = NetworkTableInstance.getDefault()
+        .getStructArrayTopic("Drivetrain/SwerveStates", SwerveModuleState.struct)
         .publish();
   }
 
@@ -209,8 +205,9 @@ public class DrivetrainSwerve implements DrivetrainIO {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-    SmartDashboard.putNumber("Drive/xSpeedDelivered", xSpeedDelivered);
-    SmartDashboard.putNumber("Drive/ySpeedDelivered", ySpeedDelivered);
+    SmartDashboard.putNumber("Drivetrain/xSpeedDelivered", xSpeedDelivered);
+    SmartDashboard.putNumber("Drivetrain/ySpeedDelivered", ySpeedDelivered);
+    SmartDashboard.putNumber("Drivetrain/rotDelivered", rotDelivered);
   }
 
   /**
@@ -249,11 +246,13 @@ public class DrivetrainSwerve implements DrivetrainIO {
   }
 
   public void updateTelemetry() {
-    SmartDashboard.putNumber("Drivetrain/Modules/Front Right Drive Encoder",
+    SmartDashboard.putNumber("Drivetrain/Encoders/Front Right Drive Encoder",
         m_frontRight.getDriveEncoderReading() % 360);
-    SmartDashboard.putNumber("Drivetrain/Modules/Front Left Drive Encoder", m_frontLeft.getDriveEncoderReading() % 360);
-    SmartDashboard.putNumber("Drivetrain/Modules/Rear Right Drive Encoder", m_rearRight.getDriveEncoderReading() % 360);
-    SmartDashboard.putNumber("Drivetrain/Modules/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading() % 360);
+    SmartDashboard.putNumber("Drivetrain/Encoders/Front Left Drive Encoder",
+        m_frontLeft.getDriveEncoderReading() % 360);
+    SmartDashboard.putNumber("Drivetrain/Encoders/Rear Right Drive Encoder",
+        m_rearRight.getDriveEncoderReading() % 360);
+    SmartDashboard.putNumber("Drivetrain/Encoders/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading() % 360);
     publisher.set(new SwerveModuleState[] {
         m_frontLeft.getState(),
         m_frontRight.getState(),
@@ -267,7 +266,24 @@ public class DrivetrainSwerve implements DrivetrainIO {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-
+    var frontCamEst = Vision.getFrontCamPoseEst();
+    var rightCamEst = Vision.getRightCamPoseEst();
+    var leftCamEst = Vision.getLeftCamPoseEst();
+    frontCamEst.ifPresent(
+        est -> {
+          var frontCamEstPose = est.estimatedPose.toPose2d();
+          m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds);
+        });
+    rightCamEst.ifPresent(
+        est -> {
+          var leftCamEstPose = est.estimatedPose.toPose2d();
+          m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds);
+        });
+    leftCamEst.ifPresent(
+        est -> {
+          var rightCamEstPose = est.estimatedPose.toPose2d();
+          m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds);
+        });
   }
 
 }
