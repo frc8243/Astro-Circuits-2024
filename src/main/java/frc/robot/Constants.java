@@ -1,16 +1,25 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 
 public class Constants {
     public static final class DriveConstants {
         /**
-     * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
-     */
+         * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
+         */
         public static final double kMaxSpeedMetersPerSecond = 4;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // Radians per Second
 
@@ -55,6 +64,7 @@ public class Constants {
 
         public static final boolean kGyroReversed = false;
     }
+
     /**
      * Constants for the swerve module - stuff that's the same for all 4
      */
@@ -119,12 +129,12 @@ public class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxModuleSpeedMetersPerSecond = 3.00; //THIS IS FOR THE MODULES
+        public static final double kMaxModuleSpeedMetersPerSecond = 3.00;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = 3 * Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 3 * Math.PI;
 
-        public static final double kPXController = 1; 
+        public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1; /* Controls the Rotation of the Robot during Auton */
 
@@ -137,10 +147,69 @@ public class Constants {
         public static final double kFreeSpeedRpm = 5676;
     }
 
-    public class ShooterConstants {
+    public static final class ShooterConstants {
         public static final int kShootMotorID = 2;
         public static final int kFeedMotorID = 3;
-        public static final double kFeedSpeed = 0.25;
-        public static final double kShootSpeed = 0.25;
+        public static final int kRollerClawMotorID = 4;
+        public static final double kFeedSpeed = 1;
+        public static final double kShootSpeed = 1;
+        public static final double kRollerClawSpeed = 0.5;
     }
+
+    public static final class ClimberConstants {
+        public static final int kClimbMotorID = 50; // TODO set to the real climber motor id
+    }
+
+    public static final class VisionConstants {
+        public static final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+        /*
+         * Camera Transforms - These are mapped from center of robot to the middle of
+         * the lens on the camera.
+         */
+        public static final Transform3d kFrontCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(0.0), Units.inchesToMeters(20.75)),
+                new Rotation3d(0.0, 0.0, 0.0));
+        public static final Transform3d kLeftCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(12.5), Units.inchesToMeters(20.75)),
+                new Rotation3d(0.0, 0.0, 90));
+        public static final Transform3d kRightCamtoRobot = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(-12.5),
+                        Units.inchesToMeters(20.75)),
+                new Rotation3d(0.0, 0.0, -90));
+        public static final double kRotateP = 0.001;
+        public static final double kXTranslateP = 0.5;
+        public static final double kYTranslateP = 0.25;
+
+    }
+
+    public static final class ScoringConstants {
+        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.radiansToDegrees(-60)));
+    }
+
+    public static final int kMotorPort = 0;
+    public static final int kEncoderAChannel = 0;
+    public static final int kEncoderBChannel = 1;
+    public static final int kJoystickPort = 0;
+
+    public static final double kElevatorKp = 5;
+    public static final double kElevatorKi = 0;
+    public static final double kElevatorKd = 0;
+
+    public static final double kElevatorkS = 0.0; // volts (V)
+    public static final double kElevatorkG = 0.762; // volts (V)
+    public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
+    public static final double kElevatorkA = 0.0; // volt per acceleration (V/(m/s²))
+
+    public static final double kElevatorGearing = 10.0;
+    public static final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
+    public static final double kCarriageMass = 4.0; // kg
+
+    public static final double kSetpointMeters = 0.75;
+    // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
+    public static final double kMinElevatorHeightMeters = 0.0;
+    public static final double kMaxElevatorHeightMeters = 1.25;
+
+    // distance per pulse = (distance per revolution) / (pulses per revolution)
+    // = (Pi * D) / ppr
+    public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 }

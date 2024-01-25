@@ -7,14 +7,16 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   private ShooterIO shooterIO;
+
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
     shooterIO = io;
-  } 
+  }
 
   @Override
   public void periodic() {
@@ -23,16 +25,46 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getShooterCommand() {
+    System.out.println("Shooter shooting");
     return this.startEnd(
-      () -> {
-        shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
-        shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
-      },
+        () -> {
+          System.out.println("Shooter shootingInside");
+          shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
 
-      () -> {
-        shooterIO.stop();
-      });
+          // try {
+          // wait(500);
+          // } catch (InterruptedException e) {
+          // e.printStackTrace();
+          // }
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+
+            e.printStackTrace();
+          }
+          System.out.println("Past the wait point");
+          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
+
+        },
+
+        () -> {
+          shooterIO.stop();
+        });
   }
 
-  
+  public Command getIntakeCommand() {
+    System.out.println("intake intaking");
+    return this.startEnd(
+        () -> {
+          System.out.println("intake intakingInside");
+          shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
+          shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+
+        },
+
+        () -> {
+          shooterIO.stop();
+        });
+  }
+
 }

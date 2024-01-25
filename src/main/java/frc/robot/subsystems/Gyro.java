@@ -11,12 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gyro extends SubsystemBase {
   private final static Pigeon2 gyro = new Pigeon2(2, "rio");
-  private static double yaw;
-  static double pitch;
-  static double roll;
-  static double yawAccel;
-  static double pitchAccel;
-  static double rollAccel;
+
   /** Creates a new Gyro. */
 
   public Gyro() {
@@ -27,24 +22,10 @@ public class Gyro extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    yaw = gyro.getYaw().getValue();
-    pitch = gyro.getPitch().getValue();
-    roll = gyro.getRoll().getValue();
+    SmartDashboard.putNumber("Drivetrain/Yaw", getYaw() % 360);
+    SmartDashboard.putNumber("Drivetrain/Pitch", getPitch());
+    SmartDashboard.putNumber("Drivetrain/Roll", getRoll());
 
-    yawAccel = gyro.getAccelerationY().getValue();
-    pitchAccel = gyro.getAccelerationX().getValue();
-    rollAccel = gyro.getAccelerationZ().getValue();
-
-    SmartDashboard.putNumber("Gyro/Yaw", yaw);
-    SmartDashboard.putNumber("Gyro/Pitch", pitch);
-    SmartDashboard.putNumber("Gyro/Roll", roll);
-    SmartDashboard.putNumber("Gyro/Yaw Acceleration", yawAccel);
-    SmartDashboard.putNumber("Gyro/Pitch Acceleration", pitchAccel);
-    SmartDashboard.putNumber("Gyro/Roll Acceleration", rollAccel);
-    SmartDashboard.putString("Gyro/Yaw Units", gyro.getYaw().getUnits()); /* These next 3 lines are just for testing, documentation for the pigeon is less than ideal, dunno what units it gives. The code is expecting degrees */
-    SmartDashboard.putString("Gyro/Pitch Units", gyro.getPitch().getUnits());
-    SmartDashboard.putString("Gyro/Roll Units", gyro.getRoll().getUnits());
   }
 
   public void resetYaw() {
@@ -53,6 +34,28 @@ public class Gyro extends SubsystemBase {
   }
 
   public static double getYaw() {
-    return yaw;
+    return gyro.getYaw().getValue();
   }
+
+  public static double getPitch() {
+    return gyro.getPitch().getValue();
+  }
+
+  public static double getRoll() {
+    return gyro.getRoll().getValue();
+  }
+
+  public static double getXAccel() {
+    return gyro.getAccelerationX().getValue();
+  }
+
+  public static double getYAccel() {
+    return gyro.getAccelerationY().getValue();
+
+  }
+
+  public static double getZAccel() {
+    return gyro.getAccelerationZ().getValue();
+  }
+
 }
