@@ -277,7 +277,8 @@ public class DrivetrainSwerve implements DrivetrainIO {
     rightCamEst.ifPresent(
         est -> {
           var leftCamEstPose = est.estimatedPose.toPose2d();
-          m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds);
+          var leftCamEstStdDevs = Vision.getLeftEstimationStdDevs(leftCamEstPose);
+          m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds, leftCamEstStdDevs);
         });
     leftCamEst.ifPresent(
         est -> {

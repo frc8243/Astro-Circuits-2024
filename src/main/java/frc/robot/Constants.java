@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +12,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.*;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -129,7 +133,7 @@ public class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxModuleSpeedMetersPerSecond = 3.00;
+        public static final double kMaxModuleSpeedMetersPerSecond = 4.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = 3 * Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 3 * Math.PI;
@@ -171,11 +175,13 @@ public class Constants {
                 new Rotation3d(0.0, 0.0, 0.0));
         public static final Transform3d kLeftCamtoRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(12.5), Units.inchesToMeters(20.75)),
-                new Rotation3d(0.0, 0.0, 90));
+                new Rotation3d(0.0, 0.0, Units.degreesToRadians(90)));
         public static final Transform3d kRightCamtoRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(-12.5),
                         Units.inchesToMeters(20.75)),
-                new Rotation3d(0.0, 0.0, -90));
+                new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
+        public static final Matrix<N3, N1> kLeftCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kLeftCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         public static final double kRotateP = 0.001;
         public static final double kXTranslateP = 0.5;
         public static final double kYTranslateP = 0.25;
@@ -183,7 +189,9 @@ public class Constants {
     }
 
     public static final class ScoringConstants {
-        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.radiansToDegrees(-60)));
+        public static final Pose2d kTestingPose = new Pose2d(5, 5, new Rotation2d(Units.degreesToRadians(180)));
+        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.degreesToRadians(-60)));
+        public static final Pose2d kSpeakerCenter = new Pose2d(1.67, 5.3, new Rotation2d(Units.degreesToRadians(180)));
     }
 
     public static final int kMotorPort = 0;

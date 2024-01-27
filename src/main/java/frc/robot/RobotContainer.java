@@ -88,7 +88,7 @@ public class RobotContainer {
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
     driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
-    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kLeftSource));
+    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kSpeakerCenter));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
     // operatorController.b().whileTrue(m_shooter.getIntakeCommand());

@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
         this::getRobotRelativeSpeeds,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(2.9, 0, 0.1), // Translation
+            new PIDConstants(5, 0, 0), // Translation
             new PIDConstants(0.975, 0, 0), // Rotation
             AutoConstants.kMaxModuleSpeedMetersPerSecond,
             0.385, /* Distance from furthest module to robot center in meters */
@@ -45,6 +45,7 @@ public class Drivetrain extends SubsystemBase {
           // Blue Alliance)
 
           var alliance = DriverStation.getAlliance();
+
           if (alliance.isPresent()) {
             return alliance.get() == DriverStation.Alliance.Red;
           }
@@ -52,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
         },
 
         this);
-    constraints = new PathConstraints(1, 3, 540, 540);
+    constraints = new PathConstraints(2.5, 5, 540, 720);
   }
 
   @Override
