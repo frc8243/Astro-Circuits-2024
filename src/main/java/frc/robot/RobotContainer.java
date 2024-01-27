@@ -54,7 +54,7 @@ public class RobotContainer {
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
-  public static LEDs m_leds;
+  public LEDs m_leds;
   private static Climber m_climber;
   private static SendableChooser<Command> m_autoChooser;
 
@@ -95,10 +95,10 @@ public class RobotContainer {
     operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.b().whileTrue(
-        new InstantCommand(() -> m_leds.allLEDS(100, 0, 100), m_leds));
+        new InstantCommand(() -> m_leds.allLEDS(0, 255, 0), m_leds));
     System.out.println("leds testing");
     operatorController.y().whileTrue(Commands.run(() -> {
-      m_leds.allLEDS(100, 0, 100);
+      m_leds.allLEDS(255, 0, 0);
       System.out.println("y pressed ************");
     }));
 
@@ -137,6 +137,7 @@ public class RobotContainer {
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_gyro = new Gyro();
     m_leds = new LEDs();
+    m_leds.allLEDS(100, 0, 200);
 
   }
 }
