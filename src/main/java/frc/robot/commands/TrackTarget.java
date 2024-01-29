@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
@@ -22,16 +23,18 @@ public class TrackTarget extends Command {
   private Vision m_vision;
   private Drivetrain m_drivetrain;
   private CommandXboxController driverController;
+  private LEDs m_leds;
   private int targetTag;
 
   /** Creates a new TrackTarget. */
-  public TrackTarget(Vision vision, Drivetrain drivetrain, CommandXboxController controller, int targetTag) {
+  public TrackTarget(Vision vision, Drivetrain drivetrain, CommandXboxController controller, LEDs leds, int targetTag) {
     this.m_vision = vision;
     this.m_drivetrain = drivetrain;
     this.driverController = controller;
     this.targetTag = targetTag;
+    this.m_leds = leds;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_vision, m_drivetrain);
+    addRequirements(m_vision, m_drivetrain, m_leds);
   }
 
   // Called when the command is initially scheduled.
@@ -58,8 +61,11 @@ public class TrackTarget extends Command {
               true, true);
           if (Math.abs(target.getYaw()) <= 10) {
             driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+            m_leds.allLEDS(0, 255, 0);
+
           } else {
             driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+            m_leds.allLEDS(255, 0, 0);
           }
         }
       }
@@ -70,6 +76,7 @@ public class TrackTarget extends Command {
   @Override
   public void end(boolean interrupted) {
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    m_leds.allLEDS(0, 0, 255);
   }
 
   // Returns true when the command should end.

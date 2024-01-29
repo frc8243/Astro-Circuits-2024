@@ -182,7 +182,7 @@ public class Constants {
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
         public static final Matrix<N3, N1> kLeftCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kLeftCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final double kRotateP = 0.001;
+        public static final double kRotateP = 0.005;
         public static final double kXTranslateP = 0.5;
         public static final double kYTranslateP = 0.25;
 
