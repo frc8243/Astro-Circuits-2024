@@ -19,11 +19,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ConfigConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ScoringConstants;
+import frc.robot.Constants.ConfigConstants.GyroType;
 import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
-import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.climber.Climber;
@@ -34,6 +35,11 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.DrivetrainIO;
 import frc.robot.subsystems.drivetrain.DrivetrainSim;
 import frc.robot.subsystems.drivetrain.DrivetrainSwerve;
+import frc.robot.subsystems.gyro.Gyro;
+import frc.robot.subsystems.gyro.GyroIO;
+import frc.robot.subsystems.gyro.GyroSim;
+import frc.robot.subsystems.gyro.NavX;
+import frc.robot.subsystems.gyro.Pigeon;
 import frc.robot.subsystems.rollerclaw.RollerClaw;
 import frc.robot.subsystems.rollerclaw.RollerClawIO;
 import frc.robot.subsystems.rollerclaw.RollerClawReal;
@@ -117,25 +123,31 @@ public class RobotContainer {
     DrivetrainIO drivetrainIO;
     RollerClawIO rollerClawIO;
     ClimberIO climberIO;
+    GyroIO gyroIO;
     if (RobotBase.isSimulation()) {
       shooterIO = new ShooterSim();
       drivetrainIO = new DrivetrainSim();
       rollerClawIO = new RollerClawSim();
       climberIO = new ClimberSim();
-
+      gyroIO = new GyroSim();
     } else {
       shooterIO = new ShooterReal();
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();
+      if (ConfigConstants.kRobotGyro == GyroType.Pigeon2) {
+        gyroIO = new Pigeon();
+      } else {
+        gyroIO = new NavX();
+      }
     }
     m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
+    m_gyro = new Gyro(gyroIO);
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
-    m_gyro = new Gyro();
     m_leds = new LEDs();
     m_leds.allLEDS(100, 0, 200);
 

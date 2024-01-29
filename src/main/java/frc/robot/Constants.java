@@ -20,6 +20,19 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 
 public class Constants {
+    /**
+     * This class contains constants that regard the robot's configuration, such as
+     * the hardware in it.
+     */
+    public static final class ConfigConstants {
+        enum GyroType {
+            NavX,
+            Pigeon2,
+        }
+
+        public static final GyroType kRobotGyro = GyroType.Pigeon2;
+    }
+
     public static final class DriveConstants {
         /**
          * Constants that effect how the robot drives - chassis size, offsets & CAN IDs

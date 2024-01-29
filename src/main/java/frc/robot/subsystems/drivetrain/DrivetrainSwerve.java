@@ -29,9 +29,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
-import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.gyro.Gyro;
 
 public class DrivetrainSwerve implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
