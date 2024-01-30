@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.rollerclaw;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +12,9 @@ import frc.robot.Constants.ShooterConstants;
 
 public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
+
+  // Limit switch on DIO 2
+  DigitalInput photoSensor = new DigitalInput(0);
 
   /** Creates a new RollerClaw. */
   public RollerClaw(RollerClawIO io) {
@@ -25,13 +29,15 @@ public class RollerClaw extends SubsystemBase {
 
   public Command getGrabCommand() {
     System.out.println("Grabbing Note");
-    return this.startEnd(
+    return this.run(
         () -> {
-          rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
-        },
+          // Runs the motor forwards while the photosensor sees nothing, stops otherwise
+          if (photoSensor.get() == false) {
+            rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
+          } else {
+            rollerClawIO.stop();
+          }
 
-        () -> {
-          rollerClawIO.stop();
         });
 
   }
