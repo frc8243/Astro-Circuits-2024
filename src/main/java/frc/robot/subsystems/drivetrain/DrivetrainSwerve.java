@@ -29,7 +29,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
-import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.gyro.Gyro;
 
@@ -272,7 +271,8 @@ public class DrivetrainSwerve implements DrivetrainIO {
     frontCamEst.ifPresent(
         est -> {
           var frontCamEstPose = est.estimatedPose.toPose2d();
-          m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds);
+          var frontCamEstStdDevs = Vision.getFrontEstimationStdDevs(frontCamEstPose);
+          m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds, frontCamEstStdDevs);
         });
     rightCamEst.ifPresent(
         est -> {
@@ -283,7 +283,8 @@ public class DrivetrainSwerve implements DrivetrainIO {
     leftCamEst.ifPresent(
         est -> {
           var rightCamEstPose = est.estimatedPose.toPose2d();
-          m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds);
+          var rightCamEstStdDevs = Vision.getRightEstimationStdDevs(rightCamEstPose);
+          m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds, rightCamEstStdDevs);
         });
   }
 

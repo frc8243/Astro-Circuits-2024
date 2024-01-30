@@ -124,6 +124,12 @@ public class RobotContainer {
     RollerClawIO rollerClawIO;
     ClimberIO climberIO;
     GyroIO gyroIO;
+    if (ConfigConstants.kRobotGyro == GyroType.Pigeon2) {
+      gyroIO = new Pigeon();
+    } else {
+      gyroIO = new NavX();
+    }
+    m_gyro = new Gyro(gyroIO);
     if (RobotBase.isSimulation()) {
       shooterIO = new ShooterSim();
       drivetrainIO = new DrivetrainSim();
@@ -135,17 +141,12 @@ public class RobotContainer {
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();
-      if (ConfigConstants.kRobotGyro == GyroType.Pigeon2) {
-        gyroIO = new Pigeon();
-      } else {
-        gyroIO = new NavX();
-      }
+
     }
     m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
-    m_gyro = new Gyro(gyroIO);
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_leds = new LEDs();

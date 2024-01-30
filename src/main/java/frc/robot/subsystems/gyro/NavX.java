@@ -15,12 +15,12 @@ public class NavX implements GyroIO {
 
     @Override
     public void resetYaw() {
-        navx.reset();
+        navx.zeroYaw();
     }
 
     @Override
     public double getYaw() {
-        return navx.getYaw();
+        return -navx.getAngle();
     }
 
     @Override
