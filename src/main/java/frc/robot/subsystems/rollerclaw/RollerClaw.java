@@ -32,7 +32,7 @@ public class RollerClaw extends SubsystemBase {
     return this.run(
         () -> {
           // Runs the motor forwards while the photosensor sees nothing, stops otherwise
-          if (photoSensor.get() == false) {
+          if (photoSensor.get() == true) {
             rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
           } else {
             rollerClawIO.stop();
