@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.*;
 import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 
 public class Constants {
     /**
@@ -30,7 +29,7 @@ public class Constants {
             Pigeon2,
         }
 
-        public static final GyroType kRobotGyro = GyroType.NavX;
+        public static final GyroType kRobotGyro = GyroType.Pigeon2;
     }
 
     public static final class DriveConstants {
