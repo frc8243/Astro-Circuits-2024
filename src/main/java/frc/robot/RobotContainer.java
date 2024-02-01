@@ -7,19 +7,25 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ConfigConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ScoringConstants;
+import frc.robot.Constants.ConfigConstants.GyroType;
+import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
-import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -29,6 +35,11 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.DrivetrainIO;
 import frc.robot.subsystems.drivetrain.DrivetrainSim;
 import frc.robot.subsystems.drivetrain.DrivetrainSwerve;
+import frc.robot.subsystems.gyro.Gyro;
+import frc.robot.subsystems.gyro.GyroIO;
+import frc.robot.subsystems.gyro.GyroSim;
+import frc.robot.subsystems.gyro.NavX;
+import frc.robot.subsystems.gyro.Pigeon;
 import frc.robot.subsystems.rollerclaw.RollerClaw;
 import frc.robot.subsystems.rollerclaw.RollerClawIO;
 import frc.robot.subsystems.rollerclaw.RollerClawReal;
@@ -49,10 +60,12 @@ public class RobotContainer {
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
+  public LEDs m_leds;
   private static Climber m_climber;
   private static SendableChooser<Command> m_autoChooser;
 
   public RobotContainer() {
+
     createSubsystems();
     m_autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -80,13 +93,20 @@ public class RobotContainer {
     driverController.back().onTrue(
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
-    driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, 8));
-    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kLeftSource));
+    driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
+    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kSpeakerCenter));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
-    operatorController.b().whileTrue(m_shooter.getIntakeCommand());
+    // operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.b().whileTrue(
+        new InstantCommand(() -> m_leds.allLEDS(0, 255, 0), m_leds));
+    System.out.println("leds testing");
+    operatorController.y().whileTrue(Commands.run(() -> {
+      m_leds.allLEDS(255, 0, 0);
+      System.out.println("y pressed ************");
+    }));
 
   }
 
@@ -103,17 +123,25 @@ public class RobotContainer {
     DrivetrainIO drivetrainIO;
     RollerClawIO rollerClawIO;
     ClimberIO climberIO;
+    GyroIO gyroIO;
+    if (ConfigConstants.kRobotGyro == GyroType.Pigeon2) {
+      gyroIO = new Pigeon();
+    } else {
+      gyroIO = new NavX();
+    }
+    m_gyro = new Gyro(gyroIO);
     if (RobotBase.isSimulation()) {
       shooterIO = new ShooterSim();
       drivetrainIO = new DrivetrainSim();
       rollerClawIO = new RollerClawSim();
       climberIO = new ClimberSim();
-
+      gyroIO = new GyroSim();
     } else {
       shooterIO = new ShooterReal();
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();
+
     }
     m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
@@ -121,6 +149,8 @@ public class RobotContainer {
     m_rollerClaw = new RollerClaw(rollerClawIO);
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
-    m_gyro = new Gyro();
+    m_leds = new LEDs();
+    m_leds.allLEDS(100, 0, 200);
+
   }
 }

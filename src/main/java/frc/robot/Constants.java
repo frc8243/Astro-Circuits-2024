@@ -1,20 +1,37 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.*;
+
+import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public class Constants {
+    /**
+     * This class contains constants that regard the robot's configuration, such as
+     * the hardware in it.
+     */
+    public static final class ConfigConstants {
+        enum GyroType {
+            NavX,
+            Pigeon2,
+        }
+
+        public static final GyroType kRobotGyro = GyroType.Pigeon2;
+    }
+
     public static final class DriveConstants {
         /**
          * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
@@ -128,7 +145,7 @@ public class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxModuleSpeedMetersPerSecond = 3.00;
+        public static final double kMaxModuleSpeedMetersPerSecond = 4.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = 3 * Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 3 * Math.PI;
@@ -144,7 +161,6 @@ public class Constants {
 
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
-        public static final int NEO_CURRENT_LIMIT = 60;
     }
 
     public static final class ShooterConstants {
@@ -154,6 +170,10 @@ public class Constants {
         public static final double kFeedSpeed = 1;
         public static final double kShootSpeed = 1;
         public static final double kRollerClawSpeed = 0.5;
+    }
+
+    public static final class ClimberConstants {
+        public static final int kClimbMotorID = 50; // TODO set to the real climber motor id
     }
 
     public static final class VisionConstants {
@@ -167,65 +187,53 @@ public class Constants {
                 new Rotation3d(0.0, 0.0, 0.0));
         public static final Transform3d kLeftCamtoRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(12.5), Units.inchesToMeters(20.75)),
-                new Rotation3d(0.0, 0.0, 90));
+                new Rotation3d(0.0, 0.0, Units.degreesToRadians(90)));
         public static final Transform3d kRightCamtoRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(-12.5),
                         Units.inchesToMeters(20.75)),
-                new Rotation3d(0.0, 0.0, -90));
-        public static final double kRotateP = 0.001;
+                new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
+        public static final Matrix<N3, N1> kLeftCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kLeftCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kFrontCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kFrontCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kRightCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kRightCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final double kRotateP = 0.005;
         public static final double kXTranslateP = 0.5;
         public static final double kYTranslateP = 0.25;
 
     }
 
     public static final class ScoringConstants {
-        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.radiansToDegrees(-60)));
+        public static final Pose2d kTestingPose = new Pose2d(5, 5, new Rotation2d(Units.degreesToRadians(180)));
+        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.degreesToRadians(-60)));
+        public static final Pose2d kSpeakerCenter = new Pose2d(1.67, 5.3, new Rotation2d(Units.degreesToRadians(180)));
     }
 
-    public static final class ClimberConstants {
+    public static final int kMotorPort = 0;
+    public static final int kEncoderAChannel = 0;
+    public static final int kEncoderBChannel = 1;
+    public static final int kJoystickPort = 0;
 
-        public static final double kpPos = 10.0;
-        public static final double kiPos = 0.0;
-        public static final double kdPos = 1.0;
-        public static final double feedForward = 0.617753;
-        public static final double gravityCompensation = 0.059;
-        public static final double max_vel = 0.25;
-        public static final double max_accel = 2.50;
-        public static final double simMeasurementStdDev = 0.0;
-        public static final int CLIMBER_MOTOR_ID = 7;
-        public static final double MIN_CLIMBER_HEIGHT = 0.0;
-        public static final double MAX_CLIMBER_HEIGHT = 0.75;
-        public static final double METERS_PER_REVOLUTION = Units.inchesToMeters(27) / 41.951946;
-        public static final double HEIGHT_TOLERANCE = Units.inchesToMeters(0.5);
-        public static final double VELOCITY_TOLERANCE = max_vel / 50.0;
+    public static final double kElevatorKp = 5;
+    public static final double kElevatorKi = 0;
+    public static final double kElevatorKd = 0;
 
-        // public static final int kMotorPort = 0;
-        // public static final int kEncoderAChannel = 0;
-        // public static final int kEncoderBChannel = 1;
-        // public static final int kJoystickPort = 0;
+    public static final double kElevatorkS = 0.0; // volts (V)
+    public static final double kElevatorkG = 0.762; // volts (V)
+    public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
+    public static final double kElevatorkA = 0.0; // volt per acceleration (V/(m/s²))
 
-        public static final double kClimberKp = 5;
-        public static final double kClimberKi = 0;
-        public static final double kClimberKd = 0;
+    public static final double kElevatorGearing = 10.0;
+    public static final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
+    public static final double kCarriageMass = 4.0; // kg
 
-        public static final double kClimberkS = 0.0; // volts (V)
-        public static final double kElevatorkG = 0.762; // volts (V)
-        public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
-        public static final double kElevatorkA = 0.0; // volt per acceleration (V/(m/s²))
+    public static final double kSetpointMeters = 0.75;
+    // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
+    public static final double kMinElevatorHeightMeters = 0.0;
+    public static final double kMaxElevatorHeightMeters = 1.25;
 
-        // public static final double kElevatorGearing = 10.0;
-        // public static final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
-        // public static final double kCarriageMass = 4.0; // kg
-
-        // public static final double kSetpointMeters = 0.75;
-        // // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-        // public static final double kMinElevatorHeightMeters = 0.0;
-        // public static final double kMaxElevatorHeightMeters = 1.25;
-
-        // // distance per pulse = (distance per revolution) / (pulses per revolution)
-        // // = (Pi * D) / ppr
-        // public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI *
-        // kElevatorDrumRadius / 4096;
-    }
-
+    // distance per pulse = (distance per revolution) / (pulses per revolution)
+    // = (Pi * D) / ppr
+    public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 }

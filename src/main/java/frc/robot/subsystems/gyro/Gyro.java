@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.gyro;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -10,14 +10,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gyro extends SubsystemBase {
-  private final static Pigeon2 gyro = new Pigeon2(2, "rio");
+  private static GyroIO gyroIO;
 
   /** Creates a new Gyro. */
 
-  public Gyro() {
-    gyro.setYaw(0);
-    gyro.getYaw().setUpdateFrequency(100);
-    gyro.getGravityVectorZ().setUpdateFrequency(100);
+  public Gyro(GyroIO io) {
+    gyroIO = io;
   }
 
   @Override
@@ -29,33 +27,28 @@ public class Gyro extends SubsystemBase {
   }
 
   public void resetYaw() {
-    gyro.setYaw(0);
+    gyroIO.resetYaw();
     System.out.println("Yaw Reset");
   }
 
   public static double getYaw() {
-    return gyro.getYaw().getValue();
+    return gyroIO.getYaw();
   }
 
   public static double getPitch() {
-    return gyro.getPitch().getValue();
+    return gyroIO.getPitch();
   }
 
   public static double getRoll() {
-    return gyro.getRoll().getValue();
+    return gyroIO.getRoll();
   }
 
   public static double getXAccel() {
-    return gyro.getAccelerationX().getValue();
+    return gyroIO.getXAccel();
   }
 
   public static double getYAccel() {
-    return gyro.getAccelerationY().getValue();
-
-  }
-
-  public static double getZAccel() {
-    return gyro.getAccelerationZ().getValue();
+    return gyroIO.getYAccel();
   }
 
 }
