@@ -15,7 +15,7 @@ public class DrivetrainSim implements DrivetrainIO {
 
     @Override
     public Pose2d getPose() {
-        return null;
+        return new Pose2d();
     }
 
     @Override

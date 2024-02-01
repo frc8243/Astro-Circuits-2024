@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 
 public class RollerClawSim implements RollerClawIO {
 
-    private static EncoderSim rollerClawEncoder;
+    public EncoderSim rollerClawEncoder;
 
     public RollerClawSim() {
         rollerClawEncoder = new EncoderSim(new Encoder(2, 3));

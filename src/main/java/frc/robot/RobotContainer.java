@@ -59,6 +59,7 @@ public class RobotContainer {
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
+  private static Climber m_climber;
   private boolean fieldOrientedDrive = true;
   public LEDs m_leds;
   private static Climber m_climber;
@@ -100,10 +101,11 @@ public class RobotContainer {
     // operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.y().whileTrue(m_climber.setClimberHeight(2));
     operatorController.b().whileTrue(
         new InstantCommand(() -> m_leds.allLEDS(0, 255, 0), m_leds));
     System.out.println("leds testing");
-    operatorController.y().whileTrue(Commands.run(() -> {
+    operatorController.leftBumper().whileTrue(Commands.run(() -> {
       m_leds.allLEDS(255, 0, 0);
       System.out.println("y pressed ************");
     }));

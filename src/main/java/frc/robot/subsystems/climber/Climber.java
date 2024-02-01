@@ -126,7 +126,7 @@ public class Climber extends ProfiledPIDSubsystem {
     }
 
     // factory method to make a PIDCommand for setting the climber height
-    public Command toHeightInlinePIDOnlyCommand(double heightMeters) {
+    public Command setClimberHeight(double heightMeters) {
         this.disable();
         final Command command = new PIDCommand(
                 new PIDController(
@@ -137,9 +137,14 @@ public class Climber extends ProfiledPIDSubsystem {
                 // Setpoint
                 heightMeters,
                 // Pipe the output to the turning controls
-                output -> this.setMotorSpeed(output),
+                output -> {
+                    this.setMotorSpeed(output);
+                    System.out.println("y button pressed" + output);
+                },
                 // Require the robot drive
+
                 this);
+
         return command;
     }
 
