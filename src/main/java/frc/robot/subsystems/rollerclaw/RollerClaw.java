@@ -24,6 +24,9 @@ public class RollerClaw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("RollerClaw/Speed", rollerClawIO.getRollerClawSpeed());
+    if (photoSensor.get() == true) {
+      System.out.println("Sensor Sensing Periodically");
+    }
     // This method will be called once per scheduler run
   }
 
@@ -34,6 +37,7 @@ public class RollerClaw extends SubsystemBase {
           // Runs the motor forwards while the photosensor sees nothing, stops otherwise
           if (photoSensor.get() == true) {
             rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
+            System.out.println("Sensor sensing");
           } else {
             rollerClawIO.stop();
           }
