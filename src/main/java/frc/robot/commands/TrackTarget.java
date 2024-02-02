@@ -61,11 +61,11 @@ public class TrackTarget extends Command {
               true, true);
           if (Math.abs(target.getYaw()) <= 10) {
             driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-            m_leds.allLEDS(0, 255, 0);
+            // m_leds.allLEDS(0, 255, 0);
 
           } else {
             driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-            m_leds.allLEDS(255, 0, 0);
+            // m_leds.allLEDS(255, 0, 0);
           }
         }
       }
@@ -76,7 +76,7 @@ public class TrackTarget extends Command {
   @Override
   public void end(boolean interrupted) {
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-    m_leds.allLEDS(0, 0, 255);
+    // m_leds.allLEDS(0, 0, 255);
   }
 
   // Returns true when the command should end.
