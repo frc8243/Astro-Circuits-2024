@@ -59,7 +59,6 @@ public class RobotContainer {
   private static Shooter m_shooter;
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
-  private static Climber m_climber;
   private boolean fieldOrientedDrive = true;
   public LEDs m_leds;
   private static Climber m_climber;
