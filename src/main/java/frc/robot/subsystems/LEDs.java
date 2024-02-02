@@ -8,12 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
 public class LEDs extends SubsystemBase {
-  private final static AddressableLED LED = new AddressableLED(1);
-  private final static AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(60);
-  Spark m_blinkin = new Spark(0);
+  // private final static AddressableLED LED = new AddressableLED(1);
+  // private final static AddressableLEDBuffer LEDBuffer = new
+  // AddressableLEDBuffer(60);
+  Spark m_blinkin = new Spark(2);
   double value = -1;
-
-  private static final LEDs leds = new LEDs();
 
   /** Creates a new LEDs. */
   public LEDs() {

@@ -101,13 +101,6 @@ public class RobotContainer {
     operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.y().whileTrue(m_climber.setClimberHeight(2));
-    operatorController.b().whileTrue(
-        new InstantCommand(() -> m_leds.allLEDS(0, 255, 0), m_leds));
-    System.out.println("leds testing");
-    operatorController.leftBumper().whileTrue(Commands.run(() -> {
-      m_leds.allLEDS(255, 0, 0);
-      System.out.println("y pressed ************");
-    }));
 
   }
 
@@ -151,7 +144,6 @@ public class RobotContainer {
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_leds = new LEDs();
-    m_leds.allLEDS(100, 0, 200);
 
   }
 }
