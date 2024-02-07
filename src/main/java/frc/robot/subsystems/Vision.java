@@ -31,6 +31,7 @@ public class Vision extends SubsystemBase {
   private static PhotonPoseEstimator frontCamEstimator;
   private static PhotonPoseEstimator leftCamEstimator;
   private static PhotonPoseEstimator rightCamEstimator;
+  private static boolean allCamsConnected;
 
   /** Creates a new Vision. */
   public Vision() {
@@ -54,6 +55,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putBoolean("Vision/FrontCam Connected", frontCamera.isConnected());
     SmartDashboard.putBoolean("Vision/LeftCam Connected", leftCamera.isConnected());
     SmartDashboard.putBoolean("Vision/RightCam Connected", rightCamera.isConnected());
+    allCamsConnected = (frontCamera.isConnected() && leftCamera.isConnected() && rightCamera.isConnected());
   }
 
   public PhotonPipelineResult getFrontCameraResult() {
@@ -163,5 +165,9 @@ public class Vision extends SubsystemBase {
       estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
     return estStdDevs;
+  }
+
+  public static boolean checkConnection() {
+    return allCamsConnected;
   }
 }
