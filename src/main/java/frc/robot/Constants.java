@@ -251,4 +251,8 @@ public class Constants {
     // distance per pulse = (distance per revolution) / (pulses per revolution)
     // = (Pi * D) / ppr
     public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
+
+    public static final class LEDConstants {
+        public static final int kOutLimitSwitch = 1;
+    }
 }
