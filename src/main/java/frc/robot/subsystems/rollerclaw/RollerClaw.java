@@ -14,7 +14,7 @@ public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
 
   // Limit switch on DIO 2
-  DigitalInput photoSensor = new DigitalInput(0);
+  // DigitalInput photoSensor = new DigitalInput(0);
 
   /** Creates a new RollerClaw. */
   public RollerClaw(RollerClawIO io) {
@@ -24,9 +24,9 @@ public class RollerClaw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("RollerClaw/Speed", rollerClawIO.getRollerClawSpeed());
-    if (photoSensor.get() == true) {
-      // System.out.println("Sensor Sensing Periodically");
-    }
+    // if (photoSensor.get() == true) {
+    // System.out.println("Sensor Sensing Periodically");
+    // }
     // This method will be called once per scheduler run
   }
 
@@ -35,12 +35,12 @@ public class RollerClaw extends SubsystemBase {
     return this.run(
         () -> {
           // Runs the motor forwards while the photosensor sees nothing, stops otherwise
-          if (photoSensor.get() == true) {
-            rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
-            System.out.println("Sensor sensing");
-          } else {
-            rollerClawIO.stop();
-          }
+          // if (photoSensor.get() == true) {
+          rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
+          System.out.println("Sensor sensing");
+          // } else {
+          rollerClawIO.stop();
+          // }
 
         });
 

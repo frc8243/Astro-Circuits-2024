@@ -148,4 +148,15 @@ public class Climber extends ProfiledPIDSubsystem {
         return command;
     }
 
+    public Command getClimberCommand(double speed) {
+        System.out.println("Movin");
+        return this.run(
+                () -> {
+                    System.out.println(speed);
+                    this.setMotorSpeed(speed);
+
+                });
+
+    }
+
 }
