@@ -12,6 +12,7 @@ public class LEDs extends SubsystemBase {
   // private final static AddressableLEDBuffer LEDBuffer = new
   // AddressableLEDBuffer(60);
   Spark m_blinkin = new Spark(2);
+  private String currentColor;
 
   /** Creates a new LEDs. */
   public LEDs() {

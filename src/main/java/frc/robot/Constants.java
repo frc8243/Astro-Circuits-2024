@@ -44,17 +44,8 @@ public class Constants {
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
         /* Chassis Configuration */
-        public static final double kTrackWidth = Units.inchesToMeters(25); /* Distance Between right & left wheels */
-        public static final double kWheelBase = Units.inchesToMeters(25); /* Distance between front & back wheels */ // TODO:
-                                                                                                                     // Measure
-                                                                                                                     // out
-                                                                                                                     // real
-                                                                                                                     // chassis
-                                                                                                                     // and
-                                                                                                                     // adjust
-                                                                                                                     // these
-                                                                                                                     // parameters
-
+        public static final double kTrackWidth = Units.inchesToMeters(26); /* Distance Between right & left wheels */
+        public static final double kWheelBase = Units.inchesToMeters(26); /* Distance between front & back wheels */
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2),
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
