@@ -265,27 +265,30 @@ public class DrivetrainSwerve implements DrivetrainIO {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    var frontCamEst = Vision.getFrontCamPoseEst();
-    var rightCamEst = Vision.getRightCamPoseEst();
-    var leftCamEst = Vision.getLeftCamPoseEst();
-    frontCamEst.ifPresent(
-        est -> {
-          var frontCamEstPose = est.estimatedPose.toPose2d();
-          var frontCamEstStdDevs = Vision.getFrontEstimationStdDevs(frontCamEstPose);
-          m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds, frontCamEstStdDevs);
-        });
-    rightCamEst.ifPresent(
-        est -> {
-          var leftCamEstPose = est.estimatedPose.toPose2d();
-          var leftCamEstStdDevs = Vision.getLeftEstimationStdDevs(leftCamEstPose);
-          m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds, leftCamEstStdDevs);
-        });
-    leftCamEst.ifPresent(
-        est -> {
-          var rightCamEstPose = est.estimatedPose.toPose2d();
-          var rightCamEstStdDevs = Vision.getRightEstimationStdDevs(rightCamEstPose);
-          m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds, rightCamEstStdDevs);
-        });
+    if (Vision.checkConnection()) {
+      var frontCamEst = Vision.getFrontCamPoseEst();
+      var rightCamEst = Vision.getRightCamPoseEst();
+      var leftCamEst = Vision.getLeftCamPoseEst();
+      frontCamEst.ifPresent(
+          est -> {
+            var frontCamEstPose = est.estimatedPose.toPose2d();
+            var frontCamEstStdDevs = Vision.getFrontEstimationStdDevs(frontCamEstPose);
+            m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds, frontCamEstStdDevs);
+          });
+      rightCamEst.ifPresent(
+          est -> {
+            var leftCamEstPose = est.estimatedPose.toPose2d();
+            var leftCamEstStdDevs = Vision.getLeftEstimationStdDevs(leftCamEstPose);
+            m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds, leftCamEstStdDevs);
+          });
+      leftCamEst.ifPresent(
+          est -> {
+            var rightCamEstPose = est.estimatedPose.toPose2d();
+            var rightCamEstStdDevs = Vision.getRightEstimationStdDevs(rightCamEstPose);
+            m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds, rightCamEstStdDevs);
+          });
+    }
+
   }
 
 }
