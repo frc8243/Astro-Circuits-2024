@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
             new PIDConstants(5, 0, 0), // Translation
             new PIDConstants(0.975, 0, 0), // Rotation
             AutoConstants.kMaxModuleSpeedMetersPerSecond,
-            0.385, /* Distance from furthest module to robot center in meters */
+            Units.inchesToMeters(18.42), /* Distance from furthest module to robot center in meters */
             new ReplanningConfig()),
 
         () -> {
