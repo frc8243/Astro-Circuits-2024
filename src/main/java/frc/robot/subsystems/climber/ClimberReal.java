@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.NeoMotorConstants;
 import frc.utils.MotorUtil;
 
 public class ClimberReal implements ClimberIO {
@@ -15,8 +16,8 @@ public class ClimberReal implements ClimberIO {
     public static RelativeEncoder climberEncoder;
 
     public ClimberReal() {
-        climberMotorController = MotorUtil.createSparkMAX(ClimberConstants.CLIMBER_MOTOR_ID, MotorType.kBrushless,
-                Constants.NeoMotorConstants.NEO_CURRENT_LIMIT, false, true, 0.1);
+        climberMotorController = MotorUtil.createSparkMAX(ClimberConstants.kClimbMotorID, MotorType.kBrushless,
+                NeoMotorConstants.kNeoCurrentLimit, false, true, 0.1);
 
         climberEncoder = climberMotorController.getEncoder();
         climberEncoder.setPositionConversionFactor(ClimberConstants.METERS_PER_REVOLUTION);
