@@ -98,11 +98,17 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kSpeakerCenter));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
-    // operatorController.b().whileTrue(m_shooter.getIntakeCommand());
-    operatorController.povUp().whileTrue(m_rollerClaw.getDumpCommand());
-    operatorController.povDown().whileTrue(m_rollerClaw.getGrabCommand());
-    operatorController.y().whileTrue(m_climber.getClimberCommand(0.05));
+    operatorController.b().whileTrue(m_shooter.getIntakeCommand());
+    operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.rightBumper().whileTrue(m_rollerClaw.getGrabCommand());
 
+    operatorController.leftTrigger(0.1)
+        .whileTrue(m_climber.getClimberCommand(-0.25));
+    operatorController.rightTrigger(0.1)
+        .whileTrue(m_climber.getClimberCommand(0.25));
+
+    operatorController.povUp().onTrue(new InstantCommand(() -> m_leds.askForNote(1)));
+    operatorController.povRight().onTrue(new InstantCommand(() -> m_leds.askForNote(2)));
   }
 
   public static RobotContainer getInstance() {

@@ -152,7 +152,7 @@ public class Constants {
 
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
-        public static final int NEO_CURRENT_LIMIT = 60;
+        public static final int kNeoCurrentLimit = 60;
     }
 
     public static final class ShooterConstants {
@@ -165,7 +165,7 @@ public class Constants {
     }
 
     public static final class ClimberConstants {
-        public static final int kClimbMotorID = 50; // TODO set to the real climber motor id
+        public static final int kClimbMotorID = 10; // TODO set to the real climber motor id
         public static final double kpPos = 10.0;
         public static final double kiPos = 0.0;
         public static final double kdPos = 1.0;
@@ -174,7 +174,6 @@ public class Constants {
         public static final double max_vel = 0.25;
         public static final double max_accel = 2.50;
         public static final double simMeasurementStdDev = 0.0;
-        public static final int CLIMBER_MOTOR_ID = 7;
         public static final double MIN_CLIMBER_HEIGHT = 0.0;
         public static final double MAX_CLIMBER_HEIGHT = 0.75;
         public static final double METERS_PER_REVOLUTION = Units.inchesToMeters(27) / 41.951946;

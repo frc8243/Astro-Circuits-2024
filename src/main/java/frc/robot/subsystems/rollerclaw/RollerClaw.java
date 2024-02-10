@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.LEDs;
 
 public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
+  private DigitalInput rollerClawSwitch;
 
   // Limit switch on DIO 2
   // DigitalInput photoSensor = new DigitalInput(0);
@@ -19,11 +21,18 @@ public class RollerClaw extends SubsystemBase {
   /** Creates a new RollerClaw. */
   public RollerClaw(RollerClawIO io) {
     this.rollerClawIO = io;
+    rollerClawSwitch = new DigitalInput(0);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("RollerClaw/Speed", rollerClawIO.getRollerClawSpeed());
+    if (rollerClawSwitch.get()) {
+      LEDs.noteReady();
+    } else {
+      LEDs.returnToIdle();
+    }
+
     // if (photoSensor.get() == true) {
     // System.out.println("Sensor Sensing Periodically");
     // }
@@ -37,7 +46,6 @@ public class RollerClaw extends SubsystemBase {
           // Runs the motor forwards while the photosensor sees nothing, stops otherwise
           // if (photoSensor.get() == true) {
           rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
-          System.out.println("Sensor sensing");
           // } else {
           rollerClawIO.stop();
           // }
