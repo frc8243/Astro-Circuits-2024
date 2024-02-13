@@ -20,9 +20,9 @@ public class ClimberReal implements ClimberIO {
                 NeoMotorConstants.kNeoCurrentLimit, false, true, 0.1);
 
         climberEncoder = climberMotorController.getEncoder();
-        climberEncoder.setPositionConversionFactor(ClimberConstants.METERS_PER_REVOLUTION);
+        climberEncoder.setPositionConversionFactor(ClimberConstants.kMetersPerRevolution);
         // dividng by 60 to convert meters per miniute to meters per seconds
-        climberEncoder.setVelocityConversionFactor(ClimberConstants.METERS_PER_REVOLUTION / 60);
+        climberEncoder.setVelocityConversionFactor(ClimberConstants.kMetersPerRevolution / 60);
     }
 
     @Override

@@ -15,8 +15,8 @@ public class Climber extends ProfiledPIDSubsystem {
 
     private ClimberIO climberIO;
 
-    private static final Constraints constraints = new Constraints(ClimberConstants.max_vel,
-            ClimberConstants.max_accel);
+    private static final Constraints constraints = new Constraints(ClimberConstants.kMaxVel,
+            ClimberConstants.kMaxAccel);
 
     private final ClimberVisualizer climberVisualizer = new ClimberVisualizer();
 
@@ -25,7 +25,7 @@ public class Climber extends ProfiledPIDSubsystem {
                 constraints));
 
         getController()
-                .setTolerance(ClimberConstants.HEIGHT_TOLERANCE, ClimberConstants.VELOCITY_TOLERANCE);
+                .setTolerance(ClimberConstants.kHeightTolerance, ClimberConstants.kVelocityTolerance);
 
         climberIO = io;
         climberIO.setEncoderPosition(0.0);
@@ -59,6 +59,7 @@ public class Climber extends ProfiledPIDSubsystem {
         SmartDashboard.putBoolean("Climber/Profiled PID position at set point", getController().atSetpoint());
 
         climberVisualizer.update(currentPos);
+        setGoal(0.0);
     }
 
     // returns height the climber is at. Required to override this
@@ -78,7 +79,7 @@ public class Climber extends ProfiledPIDSubsystem {
     }
 
     public void setMotorSpeedGravityCompensation(double speed) {
-        climberIO.setMotorSpeed(speed + ClimberConstants.gravityCompensation);
+        climberIO.setMotorSpeed(speed + ClimberConstants.kGravityCompensation);
     }
 
     public double getClimberCurrent() {
@@ -98,9 +99,9 @@ public class Climber extends ProfiledPIDSubsystem {
         // not doing anything with the position error ??
 
         // Calculate the feedforward from the setpoint
-        double speed = ClimberConstants.feedForward * setpoint.velocity;
+        double speed = ClimberConstants.kFeedForward * setpoint.velocity;
         // accounts for gravity in speed
-        speed += ClimberConstants.gravityCompensation;
+        speed += ClimberConstants.kGravityCompensation;
 
         speed += output;
 
@@ -118,11 +119,16 @@ public class Climber extends ProfiledPIDSubsystem {
 
     // Checks to see if climbers are within range of the setpoints
     public boolean atGoal() {
-        return (PIDUtil.checkWithinRange(getGoal(), getMeasurement(), ClimberConstants.HEIGHT_TOLERANCE));
+        return (PIDUtil.checkWithinRange(getGoal(), getMeasurement(), ClimberConstants.kHeightTolerance));
     }
 
     public void setEncoderPosition(double position) {
         climberIO.setEncoderPosition(position);
+    }
+
+    public void setClimberGoal(double targetHeight) {
+        m_controller.setGoal(targetHeight);
+
     }
 
     // factory method to make a PIDCommand for setting the climber height

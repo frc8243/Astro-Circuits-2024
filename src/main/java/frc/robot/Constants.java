@@ -169,16 +169,16 @@ public class Constants {
         public static final double kpPos = 5;
         public static final double kiPos = 0.0;
         public static final double kdPos = 0.5;
-        public static final double feedForward = 0.617753;
-        public static final double gravityCompensation = 0.059;
-        public static final double max_vel = 0.25;
-        public static final double max_accel = 2.50;
-        public static final double simMeasurementStdDev = 0.0;
-        public static final double MIN_CLIMBER_HEIGHT = 0.0;
-        public static final double MAX_CLIMBER_HEIGHT = 0.75;
-        public static final double METERS_PER_REVOLUTION = Units.inchesToMeters(28) / 41.951946;
-        public static final double HEIGHT_TOLERANCE = Units.inchesToMeters(0.5);
-        public static final double VELOCITY_TOLERANCE = max_vel / 50.0;
+        public static final double kFeedForward = 0.617753;
+        public static final double kGravityCompensation = 0.059;
+        public static final double kMaxVel = 0.25;
+        public static final double kMaxAccel = 2.50;
+        public static final double kSimMeasurementStdDev = 0.0;
+        public static final double kMinClimberHeight = 0.0;
+        public static final double kMaxClimberHeight = 0.75;
+        public static final double kMetersPerRevolution = Units.inchesToMeters(27) / 41.951946;
+        public static final double kHeightTolerance = Units.inchesToMeters(0.5);
+        public static final double kVelocityTolerance = kMaxVel / 50.0;
     }
 
     public static final class VisionConstants {
@@ -214,33 +214,6 @@ public class Constants {
         public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.degreesToRadians(-60)));
         public static final Pose2d kSpeakerCenter = new Pose2d(1.67, 5.3, new Rotation2d(Units.degreesToRadians(180)));
     }
-
-    public static final int kMotorPort = 0;
-    public static final int kEncoderAChannel = 0;
-    public static final int kEncoderBChannel = 1;
-    public static final int kJoystickPort = 0;
-
-    public static final double kElevatorKp = 5;
-    public static final double kElevatorKi = 0;
-    public static final double kElevatorKd = 0;
-
-    public static final double kElevatorkS = 0.0; // volts (V)
-    public static final double kElevatorkG = 0.762; // volts (V)
-    public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
-    public static final double kElevatorkA = 0.0; // volt per acceleration (V/(m/s²))
-
-    public static final double kElevatorGearing = 10.0;
-    public static final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
-    public static final double kCarriageMass = 4.0; // kg
-
-    public static final double kSetpointMeters = 0.75;
-    // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-    public static final double kMinElevatorHeightMeters = 0.0;
-    public static final double kMaxElevatorHeightMeters = 1.25;
-
-    // distance per pulse = (distance per revolution) / (pulses per revolution)
-    // = (Pi * D) / ppr
-    public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 
     public static final class LEDConstants {
         public static final int kOutLimitSwitch = 1;

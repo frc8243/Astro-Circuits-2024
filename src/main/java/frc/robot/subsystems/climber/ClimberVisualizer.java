@@ -16,13 +16,13 @@ public class ClimberVisualizer {
         mech = new Mechanism2d(1, 1);
         root = mech.getRoot("root", 0.3, 0);
         climberMechanism = root
-                .append(new MechanismLigament2d("climber", Constants.ClimberConstants.MIN_CLIMBER_HEIGHT, 50));
+                .append(new MechanismLigament2d("climber", Constants.ClimberConstants.kMinClimberHeight, 50));
         climberMechanism.setColor(new Color8Bit(0, 204, 255));
         climberMechanism.setLineWeight(20);
         SmartDashboard.putData("Mech2d", mech);
     }
 
     public void update(double currentPos) {
-        climberMechanism.setLength(Constants.ClimberConstants.MIN_CLIMBER_HEIGHT + currentPos);
+        climberMechanism.setLength(Constants.ClimberConstants.kMinClimberHeight + currentPos);
     }
 }

@@ -31,10 +31,10 @@ public class ClimberSim implements ClimberIO {
                 climberGearRatio,
                 climberCarriageMass,
                 climberDrumRadius,
-                Constants.ClimberConstants.MIN_CLIMBER_HEIGHT,
-                Constants.ClimberConstants.MAX_CLIMBER_HEIGHT,
+                Constants.ClimberConstants.kMinClimberHeight,
+                Constants.ClimberConstants.kMaxClimberHeight,
                 true, 0, // whether to use gravity
-                VecBuilder.fill(Constants.ClimberConstants.simMeasurementStdDev));
+                VecBuilder.fill(Constants.ClimberConstants.kSimMeasurementStdDev));
 
     }
 
