@@ -15,7 +15,7 @@ public class Climber extends ProfiledPIDSubsystem {
 
     private ClimberIO climberIO;
 
-    private static final Constraints constraints = new Constraints(ClimberConstants.kMaxVel,
+    private static final Constraints constraints = new Constraints(ClimberConstants.kMaxAccel,
             ClimberConstants.kMaxAccel);
 
     private final ClimberVisualizer climberVisualizer = new ClimberVisualizer();
@@ -59,7 +59,6 @@ public class Climber extends ProfiledPIDSubsystem {
         SmartDashboard.putBoolean("Climber/Profiled PID position at set point", getController().atSetpoint());
 
         climberVisualizer.update(currentPos);
-        setGoal(0.0);
     }
 
     // returns height the climber is at. Required to override this
@@ -126,11 +125,6 @@ public class Climber extends ProfiledPIDSubsystem {
         climberIO.setEncoderPosition(position);
     }
 
-    public void setClimberGoal(double targetHeight) {
-        m_controller.setGoal(targetHeight);
-
-    }
-
     // factory method to make a PIDCommand for setting the climber height
     public Command setClimberHeight(double heightMeters) {
         this.disable();
@@ -163,6 +157,17 @@ public class Climber extends ProfiledPIDSubsystem {
 
                 () -> {
                     climberIO.setMotorSpeed(0);
+                });
+    }
+
+    public Command setGoals() {
+        return this.startEnd(
+                () -> {
+                    setGoal(getGoal());
+                    setGoal(getGoal());
+                },
+                () -> {
+                    setGoal(getGoal());
                 });
     }
 

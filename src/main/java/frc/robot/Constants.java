@@ -29,15 +29,15 @@ public class Constants {
             Pigeon2,
         }
 
-        public static final GyroType kRobotGyro = GyroType.Pigeon2;
+        public static final GyroType kRobotGyro = GyroType.NavX;
     }
 
     public static final class DriveConstants {
         /**
          * Constants that effect how the robot drives - chassis size, offsets & CAN IDs
          */
-        public static final double kMaxSpeedMetersPerSecond = 4;
-        public static final double kMaxAngularSpeed = 2 * Math.PI; // Radians per Second
+        public static final double kMaxSpeedMetersPerSecond = 2.25;
+        public static final double kMaxAngularSpeed = 1.5 * Math.PI; // Radians per Second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
@@ -132,7 +132,7 @@ public class Constants {
     }
 
     public static final class OIConstants {
-        public static final double kDriveDeadband = 0.05;
+        public static final double kDriveDeadband = 0.1;
     }
 
     public static final class AutoConstants {
