@@ -100,7 +100,7 @@ public class RobotContainer {
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
-    operatorController.rightBumper().whileTrue(m_rollerClaw.getGrabCommand());
+    operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());
     operatorController.povUp().whileTrue(m_climber.setClimberHeight(0.02));
     operatorController.povDown().whileTrue(m_climber.setClimberHeight(1.3));
 

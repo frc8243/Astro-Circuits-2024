@@ -41,15 +41,17 @@ public class RollerClaw extends SubsystemBase {
 
   public Command getGrabCommand() {
     System.out.println("Grabbing Note");
-    return this.run(
+    return this.startEnd(
         () -> {
           // Runs the motor forwards while the photosensor sees nothing, stops otherwise
           // if (photoSensor.get() == true) {
           rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
           // } else {
-          rollerClawIO.stop();
+
           // }
 
+        }, () -> {
+          rollerClawIO.stop();
         });
 
   }

@@ -157,8 +157,8 @@ public class Constants {
 
     public static final class ShooterConstants {
         public static final int kShootMotorID = 2;
-        public static final int kFeedMotorID = 3;
-        public static final int kRollerClawMotorID = 4;
+        public static final int kFeedMotorID = 4;
+        public static final int kRollerClawMotorID = 3;
         public static final double kFeedSpeed = 1;
         public static final double kShootSpeed = 1;
         public static final double kRollerClawSpeed = 0.5;
