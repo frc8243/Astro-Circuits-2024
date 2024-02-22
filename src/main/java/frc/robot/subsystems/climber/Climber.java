@@ -29,6 +29,7 @@ public class Climber extends ProfiledPIDSubsystem {
 
         climberIO = io;
         climberIO.setEncoderPosition(0.0);
+        this.setGoal(0.0);
     }
 
     @Override
