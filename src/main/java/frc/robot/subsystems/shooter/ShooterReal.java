@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
@@ -13,7 +14,8 @@ public class ShooterReal implements ShooterIO {
     private static RelativeEncoder feedEncoder = feedMotor.getEncoder();
 
     public ShooterReal() {
-
+        shootMotor.setIdleMode(IdleMode.kCoast);
+        feedMotor.setIdleMode(IdleMode.kCoast);
     }
 
     @Override

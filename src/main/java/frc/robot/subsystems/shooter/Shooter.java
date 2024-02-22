@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.LEDs;
 
 public class Shooter extends SubsystemBase {
   private ShooterIO shooterIO;
+  private DigitalInput shooterSwitch = new DigitalInput(1);
+  private Boolean shooterLEDsReady = false;
 
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
@@ -22,6 +25,16 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Feed Speed", shooterIO.getFeedSpeed());
     SmartDashboard.putNumber("Shooter/Shoot Speed", shooterIO.getShootSpeed());
+    SmartDashboard.putBoolean("Shooter/Shoot LEDs", shooterLEDsReady);
+    if (shooterSwitch.get()) {
+      LEDs.noteReady();
+      shooterLEDsReady = true;
+
+    } else {
+      LEDs.returnToIdle();
+      shooterLEDsReady = false;
+    }
+
   }
 
   public Command getShooterCommand() {
@@ -52,9 +65,12 @@ public class Shooter extends SubsystemBase {
     return this.startEnd(
         () -> {
           System.out.println("intake intakingInside");
-          shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
-          shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
-
+          if (shooterSwitch.get()) {
+            shooterIO.stop();
+          } else {
+            shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
+            shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+          }
         },
 
         () -> {

@@ -29,7 +29,7 @@ public class Constants {
             Pigeon2,
         }
 
-        public static final GyroType kRobotGyro = GyroType.NavX;
+        public static final GyroType kRobotGyro = GyroType.Pigeon2;
     }
 
     public static final class DriveConstants {
@@ -191,11 +191,11 @@ public class Constants {
                 new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(0.0), Units.inchesToMeters(20.75)),
                 new Rotation3d(0.0, 0.0, 0.0));
         public static final Transform3d kLeftCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(12.5), Units.inchesToMeters(20.75)),
+                new Translation3d(Units.inchesToMeters(3.), Units.inchesToMeters(9.), Units.inchesToMeters(6)),
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(90)));
         public static final Transform3d kRightCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(-2.75), Units.inchesToMeters(-12.5),
-                        Units.inchesToMeters(20.75)),
+                new Translation3d(Units.inchesToMeters(-3.), Units.inchesToMeters(9.),
+                        Units.inchesToMeters(6)),
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
         public static final Matrix<N3, N1> kLeftCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kLeftCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
