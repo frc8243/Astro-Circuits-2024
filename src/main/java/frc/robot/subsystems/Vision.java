@@ -170,4 +170,16 @@ public class Vision extends SubsystemBase {
   public static boolean checkConnection() {
     return allCamsConnected;
   }
+
+  public static boolean atSpeaker() {
+    var targets = frontCamera.getLatestResult().getTargets();
+    for (var target : targets) {
+      if (target.getFiducialId() == 7) {
+        return true;
+      } else {
+        continue;
+      }
+    }
+    return false;
+  }
 }
