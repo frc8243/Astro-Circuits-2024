@@ -29,7 +29,8 @@ public class Constants {
             Pigeon2,
         }
 
-        public static final GyroType kRobotGyro = GyroType.Pigeon2;
+        public static final GyroType kRobotGyro = GyroType.NavX;
+        // public static final GyroType kRobotGyro = GyroType.Pigeon2;
     }
 
     public static final class DriveConstants {

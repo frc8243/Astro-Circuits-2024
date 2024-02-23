@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Feed Speed", shooterIO.getFeedSpeed());
     SmartDashboard.putNumber("Shooter/Shoot Speed", shooterIO.getShootSpeed());
-    SmartDashboard.putBoolean("Shooter/Shoot LEDs", shooterLEDsReady);
+    SmartDashboard.putBoolean("Shooter/Note Present", shooterLEDsReady);
     if (shooterSwitch.get()) {
       LEDs.noteReady();
       shooterLEDsReady = true;
@@ -38,10 +38,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getShooterCommand() {
-    System.out.println("Shooter shooting");
+    // System.out.println("Shooter shooting");
     return this.startEnd(
         () -> {
-          System.out.println("Shooter shootingInside");
+          // System.out.println("Shooter shootingInside");
           shooterIO.setShootMotor(Constants.ShooterConstants.kShootSpeed);
 
           try {
@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
             e.printStackTrace();
           }
-          System.out.println("Past the wait point");
+          // System.out.println("Past the wait point");
           shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
 
         },
