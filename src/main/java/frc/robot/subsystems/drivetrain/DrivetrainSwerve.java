@@ -258,7 +258,8 @@ public class DrivetrainSwerve implements DrivetrainIO {
         m_rearLeft.getState(),
         m_rearRight.getState()
     });
-    m_poseEstimator.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(Gyro.getYaw()),
+    double currentTime = WPIUtilJNI.now() * 1e-6;
+    m_poseEstimator.updateWithTime(currentTime, Rotation2d.fromDegrees(Gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
