@@ -174,8 +174,10 @@ public class Vision extends SubsystemBase {
   public static boolean atSpeaker() {
     var targets = frontCamera.getLatestResult().getTargets();
     for (var target : targets) {
-      if (target.getFiducialId() == 7) {
-        return true;
+      if (target.getFiducialId() == 1) {
+        if (target.getBestCameraToTarget().getX() <= 18.0) {
+          return true;
+        }
       } else {
         continue;
       }

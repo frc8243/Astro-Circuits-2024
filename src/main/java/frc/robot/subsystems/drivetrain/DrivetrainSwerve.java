@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -258,8 +259,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
         m_rearLeft.getState(),
         m_rearRight.getState()
     });
-    double currentTime = WPIUtilJNI.now() * 1e-6;
-    m_poseEstimator.updateWithTime(currentTime, Rotation2d.fromDegrees(Gyro.getYaw()),
+    m_poseEstimator.updateWithTime(MathSharedStore.getTimestamp(), Rotation2d.fromDegrees(Gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
