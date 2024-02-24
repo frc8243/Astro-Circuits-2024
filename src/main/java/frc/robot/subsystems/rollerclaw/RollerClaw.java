@@ -14,7 +14,7 @@ import frc.robot.subsystems.LEDs;
 public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
   private DigitalInput rollerClawSwitch = new DigitalInput(0);
-  private boolean rollerClawReady = false;
+  public static boolean notePresent = false;
 
   // Limit switch on DIO 2
   // DigitalInput photoSensor = new DigitalInput(0);
@@ -27,13 +27,11 @@ public class RollerClaw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("RollerClaw/Speed", rollerClawIO.getRollerClawSpeed());
-    SmartDashboard.putBoolean("RollerClaw/Ready", rollerClawReady);
+    SmartDashboard.putBoolean("RollerClaw/Ready", notePresent);
     if (rollerClawSwitch.get()) {
-      LEDs.noteReady();
-      rollerClawReady = true;
+      notePresent = true;
     } else {
-      LEDs.returnToIdle();
-      rollerClawReady = false;
+      notePresent = false;
     }
 
     // if (photoSensor.get() == true) {

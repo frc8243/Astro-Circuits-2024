@@ -10,17 +10,21 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.subsystems.rollerclaw.RollerClaw;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class LEDs extends SubsystemBase {
   // private final static AddressableLED LED = new AddressableLED(1);
   // private final static AddressableLEDBuffer LEDBuffer = new
   // AddressableLEDBuffer(60);
-  private Spark m_blinkin = new Spark(2);
+  private Spark m_blinkin = new Spark(0);
+  private Spark m_blinkin2 = new Spark(1);
   private static double color;
   private static double idleColor;
 
   /** Creates a new LEDs. */
   public LEDs() {
+    m_blinkin.addFollower(m_blinkin2);
     /*
      * This section of code sets the LED color to the current alliance color, if we
      * are not connected to field, or there is no alliance, it is purple.
@@ -41,6 +45,14 @@ public class LEDs extends SubsystemBase {
   @Override
   public void periodic() {
     m_blinkin.set(color);
+    if (RollerClaw.notePresent || Shooter.notePresent) {
+      noteReady();
+      if (Shooter.getShooterSpeed() >= 5900) {
+        readyToShoot();
+      }
+    } else {
+      // returnToIdle();
+    }
     // LED.setData(LEDBuffer);
   }
 
@@ -66,6 +78,11 @@ public class LEDs extends SubsystemBase {
 
   public static void returnToIdle() {
     color = idleColor;
+  }
+
+  public static void readyToShoot() {
+
+    color = -0.09;
   }
 
 }
