@@ -1,32 +1,26 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.4242897057222692,
-      "y": 5.570593998330854
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Start to Amp"
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Leave from Amp"
+            "pathName": "Leave from Center Speaker"
           }
         }
       ]

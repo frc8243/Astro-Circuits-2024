@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -68,13 +69,19 @@ public class RobotContainer {
   public RobotContainer() {
 
     createSubsystems();
+
+    NamedCommands.registerCommand("shoot", m_shooter.getShooterCommand());
+    NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand());
+    NamedCommands.registerCommand("turnToTarget", new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
+
+    configureBindings();
+
     m_autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Robot/PDH", m_pdp);
     SmartDashboard.putData("Drivetrain/Drivetrain", m_drivetrain);
     SmartDashboard.putData("Autos/Selector", m_autoChooser);
 
-    configureBindings();
     m_drivetrain.setDefaultCommand(new RunCommand(
         () -> m_drivetrain.drive(
             -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
