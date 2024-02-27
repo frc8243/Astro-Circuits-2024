@@ -70,7 +70,7 @@ public class RobotContainer {
 
     createSubsystems();
 
-    NamedCommands.registerCommand("shoot", m_shooter.getShooterCommand());
+    NamedCommands.registerCommand("shoot", m_shooter.getShooterCommand().withTimeout(2));
     NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand());
     NamedCommands.registerCommand("turnToTarget", new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
 

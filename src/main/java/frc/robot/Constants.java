@@ -189,8 +189,8 @@ public class Constants {
          * the lens on the camera.
          */
         public static final Transform3d kFrontCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(0.0), Units.inchesToMeters(20.75)),
-                new Rotation3d(0.0, 0.0, 0.0));
+                new Translation3d(Units.inchesToMeters(13.5), Units.inchesToMeters(0.5), Units.inchesToMeters(22.5)),
+                new Rotation3d(0.0, 0, 0.0));
         public static final Transform3d kLeftCamtoRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(3.), Units.inchesToMeters(9.), Units.inchesToMeters(6)),
                 new Rotation3d(0.0, 0.0, Units.degreesToRadians(90)));
