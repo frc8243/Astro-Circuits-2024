@@ -178,7 +178,7 @@ public class Constants {
         public static final double kMinClimberHeight = 0.0;
         public static final double kMaxClimberHeight = 0.75;
         public static final double kMetersPerRevolution = Units.inchesToMeters(27) / 238.77;
-        public static final double kHeightTolerance = Units.inchesToMeters(0.5);
+        public static final double kHeightTolerance = Units.inchesToMeters(1);
         public static final double kVelocityTolerance = kMaxVel / 50.0;
         public static final double kClimberGearRatio = 48.0 / 1.0;
     }
