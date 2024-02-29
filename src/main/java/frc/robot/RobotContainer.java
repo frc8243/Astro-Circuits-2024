@@ -50,6 +50,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterReal;
 import frc.robot.subsystems.shooter.ShooterSim;
+import frc.utils.Normalization;
 
 public class RobotContainer {
   private static final RobotContainer m_robotContainer = new RobotContainer();
@@ -84,9 +85,9 @@ public class RobotContainer {
 
     m_drivetrain.setDefaultCommand(new RunCommand(
         () -> m_drivetrain.drive(
-            -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband)),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband)),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband)),
             fieldOrientedDrive, true),
         m_drivetrain));
 
@@ -108,8 +109,8 @@ public class RobotContainer {
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());
-    operatorController.povUp().whileTrue(m_climber.setClimberHeight(0.02));
-    operatorController.povDown().whileTrue(m_climber.setClimberHeight(1.3));
+    operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimberHeight(-0.65)));
+    operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimberHeight(0)));
 
     operatorController.leftTrigger(0.1)
         .whileTrue(m_climber.getClimberCommand(-0.25));

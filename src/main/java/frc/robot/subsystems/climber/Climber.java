@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ClimberConstants;
 import frc.utils.PIDUtil;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
@@ -155,21 +156,8 @@ public class Climber extends ProfiledPIDSubsystem {
                     climberIO.setMotorSpeed(speed);
 
                 },
-
                 () -> {
                     climberIO.setMotorSpeed(0);
                 });
     }
-
-    public Command setGoals() {
-        return this.startEnd(
-                () -> {
-                    setGoal(getGoal());
-                    setGoal(getGoal());
-                },
-                () -> {
-                    setGoal(getGoal());
-                });
-    }
-
 }
