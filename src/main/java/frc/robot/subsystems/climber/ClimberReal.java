@@ -53,7 +53,8 @@ public class ClimberReal implements ClimberIO {
     @Override
     public void periodicUpdate() {
         // Only code in here that relates a physical subsystem
-        SmartDashboard.putNumber("climber/Real motor temp (C)", climberMotorController.getMotorTemperature());
+        SmartDashboard.putNumber("Climber/Real motor temp (C)", climberMotorController.getMotorTemperature());
+        SmartDashboard.putNumber("Climber/Motor Speed (-1 <-> 1)", climberMotorController.get());
     }
 
 }

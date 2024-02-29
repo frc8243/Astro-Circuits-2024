@@ -40,9 +40,9 @@ public class Constants {
         public static final double kMaxSpeedMetersPerSecond = 3.5;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // Radians per Second
 
-        public static final double kDirectionSlewRate = 1.2; // radians per second
+        public static final double kDirectionSlewRate = 1.5; // radians per second
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-        public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+        public static final double kRotationalSlewRate = 2.5; // percent per second (1 = 100%)
 
         /* Chassis Configuration */
         public static final double kTrackWidth = Units.inchesToMeters(26); /* Distance Between right & left wheels */
@@ -178,7 +178,7 @@ public class Constants {
         public static final double kMinClimberHeight = 0.0;
         public static final double kMaxClimberHeight = 0.75;
         public static final double kMetersPerRevolution = Units.inchesToMeters(27) / 238.77;
-        public static final double kHeightTolerance = Units.inchesToMeters(0.5);
+        public static final double kHeightTolerance = Units.inchesToMeters(1);
         public static final double kVelocityTolerance = kMaxVel / 50.0;
         public static final double kClimberGearRatio = 48.0 / 1.0;
     }

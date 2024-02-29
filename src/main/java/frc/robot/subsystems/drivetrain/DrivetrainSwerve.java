@@ -253,6 +253,10 @@ public class DrivetrainSwerve implements DrivetrainIO {
     SmartDashboard.putNumber("Drivetrain/Encoders/Rear Right Drive Encoder",
         m_rearRight.getDriveEncoderReading() % 360);
     SmartDashboard.putNumber("Drivetrain/Encoders/Rear Left Drive Encoder", m_rearLeft.getDriveEncoderReading() % 360);
+
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Left Desired Rotation",
+        m_frontLeft.getDesiredState().angle.getDegrees());
+    SmartDashboard.putNumber("Drivetrain/Modules/Front Left Rotation", m_frontLeft.getState().angle.getDegrees() % 360);
     publisher.set(new SwerveModuleState[] {
         m_frontLeft.getState(),
         m_frontRight.getState(),

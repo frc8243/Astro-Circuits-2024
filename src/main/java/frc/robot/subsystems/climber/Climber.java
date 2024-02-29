@@ -16,7 +16,7 @@ public class Climber extends ProfiledPIDSubsystem {
 
     private ClimberIO climberIO;
 
-    private static final Constraints constraints = new Constraints(ClimberConstants.kMaxAccel,
+    private static final Constraints constraints = new Constraints(ClimberConstants.kMaxVel,
             ClimberConstants.kMaxAccel);
 
     private final ClimberVisualizer climberVisualizer = new ClimberVisualizer();
@@ -31,6 +31,7 @@ public class Climber extends ProfiledPIDSubsystem {
         climberIO = io;
         climberIO.setEncoderPosition(0.0);
         this.setGoal(0.0);
+        this.enable();
     }
 
     @Override
@@ -151,8 +152,10 @@ public class Climber extends ProfiledPIDSubsystem {
     }
 
     public Command getClimberCommand(double speed) {
+
         return this.startEnd(
                 () -> {
+                    this.disable();
                     climberIO.setMotorSpeed(speed);
 
                 },

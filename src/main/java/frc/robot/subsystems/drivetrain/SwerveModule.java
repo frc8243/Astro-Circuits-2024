@@ -166,6 +166,10 @@ public class SwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
+  public SwerveModuleState getDesiredState() {
+    return m_desiredState;
+  }
+
   public double getDriveEncoderReading() {
     return m_drivingEncoder.getPosition();
   }

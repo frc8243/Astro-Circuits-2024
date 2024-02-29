@@ -109,8 +109,14 @@ public class RobotContainer {
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());
-    operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimberHeight(-0.65)));
-    operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimberHeight(0)));
+    operatorController.povUp().onTrue(new InstantCommand(() -> {
+      m_climber.setGoal(-0.65);
+      m_climber.enable();
+    }));
+    operatorController.povDown().onTrue(new InstantCommand(() -> {
+      m_climber.setGoal(0);
+      m_climber.enable();
+    }));
 
     operatorController.leftTrigger(0.1)
         .whileTrue(m_climber.getClimberCommand(-0.25));
