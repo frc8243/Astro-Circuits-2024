@@ -5,7 +5,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -59,7 +58,7 @@ public class Constants {
         public static final double kRearLeftChassisAngularOffset = Math.PI;
         public static final double kRearRightChassisAngularOffset = Math.PI / 2;
 
-        /* SparkMAX CAN IDs */ // TODO: CHANGE TO REAL CAN IDs
+        /* SparkMAX CAN IDs */
         public static final int kFrontLeftDrivingCanId = 11;
         public static final int kRearLeftDrivingCanId = 31;
         public static final int kFrontRightDrivingCanId = 21;
@@ -163,10 +162,11 @@ public class Constants {
         public static final double kFeedSpeed = 1;
         public static final double kShootSpeed = 1;
         public static final double kRollerClawSpeed = 0.5;
+        public static final double kShooterReadySpeed = 5900;
     }
 
     public static final class ClimberConstants {
-        public static final int kClimbMotorID = 10; // TODO set to the real climber motor id
+        public static final int kClimbMotorID = 10;
         public static final double kpPos = 10;
         public static final double kiPos = 0.0;
         public static final double kdPos = 0.5;

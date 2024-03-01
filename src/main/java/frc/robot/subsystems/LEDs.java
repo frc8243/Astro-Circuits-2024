@@ -45,7 +45,7 @@ public class LEDs extends SubsystemBase {
   @Override
   public void periodic() {
     m_blinkin.set(color);
-    if (RollerClaw.notePresent || Shooter.notePresent) {
+    if (RollerClaw.getNoteStatus() || Shooter.getNoteStatus()) {
       noteReady();
       if (Shooter.getShooterSpeed() >= 5900) {
         readyToShoot();
@@ -64,7 +64,7 @@ public class LEDs extends SubsystemBase {
    * 
    * @param location Where do we want the piece, 1 for claw, 2 for shooter
    */
-  public static void askForNote(int location) {
+  public void askForNote(int location) {
     if (location == 1) {
       color = 0.65;
     } else if (location == 2) {
@@ -81,7 +81,6 @@ public class LEDs extends SubsystemBase {
   }
 
   public static void readyToShoot() {
-
     color = -0.09;
   }
 

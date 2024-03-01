@@ -51,7 +51,6 @@ public class Climber extends ProfiledPIDSubsystem {
         SmartDashboard.putNumber("Climber/position (m)", currentPos);
         SmartDashboard.putNumber("Climber/velocity (m per s)", currentVel);
         SmartDashboard.putBoolean("Climber/Profiled subsytem enabled", this.isEnabled());
-
         SmartDashboard.putNumber("Climber/Profiled PID setpoint pos", getController().getSetpoint().position);
         SmartDashboard.putNumber("Climber/Profiled PID position error", getController().getPositionError());
         SmartDashboard.putNumber("Climber/Profiled PID velocity error", getController().getVelocityError());
@@ -142,7 +141,6 @@ public class Climber extends ProfiledPIDSubsystem {
                 // Pipe the output to the turning controls
                 output -> {
                     this.setMotorSpeed(output);
-                    System.out.println("y button pressed" + output);
                 },
                 // Require the robot drive
 
