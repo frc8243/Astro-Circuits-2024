@@ -166,13 +166,13 @@ public class Constants {
     }
 
     public static final class ClimberConstants {
-        public static final int kClimbMotorID = 10; // TODO set to the real climber motor id
+        public static final int kClimbMotorID = 10;
         public static final double kpPos = 10;
         public static final double kiPos = 0.0;
         public static final double kdPos = 0.5;
         public static final double kFeedForward = 0.617753;
         public static final double kGravityCompensation = 0.059;
-        public static final double kMaxVel = 0.25;
+        public static final double kMaxVel = 1;
         public static final double kMaxAccel = 2.50;
         public static final double kSimMeasurementStdDev = 0.0;
         public static final double kMinClimberHeight = 0.0;
