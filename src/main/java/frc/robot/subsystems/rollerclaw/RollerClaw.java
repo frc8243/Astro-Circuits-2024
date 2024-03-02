@@ -9,12 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.LEDs;
 
 public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
   private DigitalInput rollerClawSwitch = new DigitalInput(0);
-  public static boolean notePresent = false;
+  private static boolean notePresent = false;
 
   // Limit switch on DIO 2
   // DigitalInput photoSensor = new DigitalInput(0);
@@ -27,30 +26,18 @@ public class RollerClaw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("RollerClaw/Speed", rollerClawIO.getRollerClawSpeed());
-    SmartDashboard.putBoolean("RollerClaw/Ready", notePresent);
+    SmartDashboard.putBoolean("RollerClaw/Note Present", notePresent);
     if (rollerClawSwitch.get()) {
       notePresent = true;
     } else {
       notePresent = false;
     }
-
-    // if (photoSensor.get() == true) {
-    // System.out.println("Sensor Sensing Periodically");
-    // }
-    // This method will be called once per scheduler run
   }
 
   public Command getGrabCommand() {
-    System.out.println("Grabbing Note");
     return this.startEnd(
         () -> {
-          // Runs the motor forwards while the photosensor sees nothing, stops otherwise
-          // if (photoSensor.get() == true) {
           rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
-          // } else
-
-          // }
-
         }, () -> {
           rollerClawIO.stop();
         });
@@ -58,7 +45,6 @@ public class RollerClaw extends SubsystemBase {
   }
 
   public Command getDumpCommand() {
-    System.out.println("Dumping Note");
     return this.startEnd(
         () -> {
           rollerClawIO.setRollerClawMotor(ShooterConstants.kRollerClawSpeed);
@@ -67,5 +53,9 @@ public class RollerClaw extends SubsystemBase {
         () -> {
           rollerClawIO.stop();
         });
+  }
+
+  public static boolean getNoteStatus() {
+    return notePresent;
   }
 }

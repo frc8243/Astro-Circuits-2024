@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
@@ -13,8 +12,6 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.EstimatedRobotPose;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;

@@ -10,13 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Vision;
 
 public class Shooter extends SubsystemBase {
   private static ShooterIO shooterIO;
   private DigitalInput shooterSwitch = new DigitalInput(1);
-  public static Boolean notePresent = false;
+  private static Boolean notePresent = false;
 
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
@@ -25,8 +24,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter/Feed Speed", shooterIO.getFeedSpeed());
-    SmartDashboard.putNumber("Shooter/Shoot Speed", shooterIO.getShootSpeed());
+    SmartDashboard.putNumber("Shooter/Feed Wheel Speed", shooterIO.getFeedSpeed());
+    SmartDashboard.putNumber("Shooter/Shoot Wheel Speed", shooterIO.getShootSpeed());
     SmartDashboard.putBoolean("Shooter/Note Present", notePresent);
     if (shooterSwitch.get()) {
       notePresent = true;
@@ -59,6 +58,10 @@ public class Shooter extends SubsystemBase {
 
   public static double getShooterSpeed() {
     return shooterIO.getShootSpeed();
+  }
+
+  public static boolean getNoteStatus() {
+    return notePresent;
   }
 
   public Command getIntakeCommand() {
