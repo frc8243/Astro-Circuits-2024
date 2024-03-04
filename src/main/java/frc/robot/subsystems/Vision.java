@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -17,8 +18,11 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ConfigConstants;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
@@ -29,9 +33,13 @@ public class Vision extends SubsystemBase {
   private static PhotonPoseEstimator leftCamEstimator;
   private static PhotonPoseEstimator rightCamEstimator;
   private static boolean allCamsConnected;
+  private static int speakerTag;
+  private static int leftSourceTag;
+  private static int rightSourceTag;
+  private static int ampTag;
 
   /** Creates a new Vision. */
-  public Vision() {
+  public Vision(Alliance alliance) {
     frontCamera = new PhotonCamera("frontCamera");
     leftCamera = new PhotonCamera("leftCamera");
     rightCamera = new PhotonCamera("rightCamera");
@@ -44,7 +52,7 @@ public class Vision extends SubsystemBase {
     rightCamEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
         rightCamera,
         VisionConstants.kRightCamtoRobot);
-
+    setTags(alliance);
   }
 
   @Override
@@ -164,6 +172,20 @@ public class Vision extends SubsystemBase {
     return estStdDevs;
   }
 
+  public void setTags(Alliance alliance) {
+    if (alliance == Alliance.Red) {
+      speakerTag = VisionConstants.kRedSpeakerTag;
+      leftSourceTag = VisionConstants.kRedLeftSourceTag;
+      rightSourceTag = VisionConstants.kRedLeftSourceTag;
+      ampTag = VisionConstants.kRedAmpTag;
+    } else {
+      speakerTag = VisionConstants.kBlueSpeakerTag;
+      leftSourceTag = VisionConstants.kBlueLeftSourceTag;
+      rightSourceTag = VisionConstants.kBlueRightSourceTag;
+      ampTag = VisionConstants.kBlueAmpTag;
+    }
+  }
+
   public static boolean checkConnection() {
     return allCamsConnected;
   }
@@ -180,5 +202,21 @@ public class Vision extends SubsystemBase {
       }
     }
     return false;
+  }
+
+  public int getSpeakerTarget() {
+    return speakerTag;
+  }
+
+  public int getLeftSourceTarget() {
+    return leftSourceTag;
+  }
+
+  public int getRightSourceTarget() {
+    return rightSourceTag;
+  }
+
+  public int getAmpTarget() {
+    return ampTag;
   }
 }

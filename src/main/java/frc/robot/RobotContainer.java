@@ -8,10 +8,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RuntimeType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -63,17 +65,25 @@ public class RobotContainer {
   private static Vision m_vision;
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
-  public LEDs m_leds;
+  public static LEDs m_leds;
   private static Climber m_climber;
   private static SendableChooser<Command> m_autoChooser;
+  private static Alliance m_alliance;
 
   public RobotContainer() {
+
+    if (DriverStation.getAlliance().isPresent()) {
+      m_alliance = DriverStation.getAlliance().get();
+    } else {
+      m_alliance = Alliance.Blue;
+    }
 
     createSubsystems();
 
     NamedCommands.registerCommand("shoot", m_shooter.getShooterCommand().withTimeout(2));
     NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand());
-    NamedCommands.registerCommand("turnToTarget", new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
+    NamedCommands.registerCommand("turnToTarget",
+        new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
 
     configureBindings();
 
@@ -82,6 +92,7 @@ public class RobotContainer {
     SmartDashboard.putData("Robot/PDH", m_pdp);
     SmartDashboard.putData("Drivetrain/Drivetrain", m_drivetrain);
     SmartDashboard.putData("Autos/Selector", m_autoChooser);
+    SmartDashboard.putString("Robot/Alliance", m_alliance.toString());
 
     m_drivetrain.setDefaultCommand(new RunCommand(
         () -> m_drivetrain.drive(
@@ -103,7 +114,7 @@ public class RobotContainer {
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
     driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
-    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kSpeakerCenter));
+    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kBlueSpeakerCenter));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
@@ -158,15 +169,13 @@ public class RobotContainer {
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();
-
     }
     m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
-    m_vision = new Vision();
+    m_vision = new Vision(m_alliance);
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_leds = new LEDs();
-
   }
 }

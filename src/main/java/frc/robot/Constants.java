@@ -20,7 +20,7 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
     /**
      * This class contains constants that regard the robot's configuration, such as
-     * the hardware in it.
+     * the hardware in it, and its current alliance.
      */
     public static final class ConfigConstants {
         enum GyroType {
@@ -208,13 +208,23 @@ public class Constants {
         public static final double kRotateP = 0.005;
         public static final double kXTranslateP = 0.5;
         public static final double kYTranslateP = 0.25;
+        public static final int kBlueAmpTag = 6;
+        public static final int kBlueLeftSourceTag = 2;
+        public static final int kBlueRightSourceTag = 1;
+        public static final int kBlueSpeakerTag = 7;
+        public static final int kRedSpeakerTag = 4;
+        public static final int kRedLeftSourceTag = 10;
+        public static final int kRedRightSourceTag = 9;
+        public static final int kRedAmpTag = 5;
 
     }
 
     public static final class ScoringConstants {
         public static final Pose2d kTestingPose = new Pose2d(5, 5, new Rotation2d(Units.degreesToRadians(180)));
-        public static final Pose2d kLeftSource = new Pose2d(15.88, 1.44, new Rotation2d(Units.degreesToRadians(-60)));
-        public static final Pose2d kSpeakerCenter = new Pose2d(1.67, 5.3, new Rotation2d(Units.degreesToRadians(180)));
+        public static final Pose2d kBlueLeftSource = new Pose2d(15.88, 1.44,
+                new Rotation2d(Units.degreesToRadians(-60)));
+        public static final Pose2d kBlueSpeakerCenter = new Pose2d(1.67, 5.3,
+                new Rotation2d(Units.degreesToRadians(180)));
     }
 
     public static final class LEDConstants {
