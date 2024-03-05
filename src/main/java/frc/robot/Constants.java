@@ -190,15 +190,15 @@ public class Constants {
          * the lens on the camera.
          */
         public static final Transform3d kFrontCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(13.5), Units.inchesToMeters(0.5), Units.inchesToMeters(22.5)),
-                new Rotation3d(0.0, 0, 0.0));
+                new Translation3d(Units.inchesToMeters(14.25), Units.inchesToMeters(0), Units.inchesToMeters(28.375)),
+                new Rotation3d(0.0, -20.0, 0.0));
         public static final Transform3d kLeftCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(3.), Units.inchesToMeters(9.), Units.inchesToMeters(6)),
-                new Rotation3d(0.0, 0.0, Units.degreesToRadians(90)));
+                new Translation3d(Units.inchesToMeters(1.875), Units.inchesToMeters(9.75), Units.inchesToMeters(8.75)),
+                new Rotation3d(0.0, -20.0, Units.degreesToRadians(90)));
         public static final Transform3d kRightCamtoRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(-3.), Units.inchesToMeters(9.),
-                        Units.inchesToMeters(6)),
-                new Rotation3d(0.0, 0.0, Units.degreesToRadians(-90)));
+                new Translation3d(Units.inchesToMeters(1.9375), Units.inchesToMeters(-9.75),
+                        Units.inchesToMeters(8.75)),
+                new Rotation3d(0.0, -20.0, Units.degreesToRadians(-90)));
         public static final Matrix<N3, N1> kLeftCamSingleStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kLeftCamMultiStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         public static final Matrix<N3, N1> kFrontCamSingleStdDevs = VecBuilder.fill(4, 4, 8);

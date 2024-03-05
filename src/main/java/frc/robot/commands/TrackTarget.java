@@ -40,7 +40,7 @@ public class TrackTarget extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    m_leds.trackingTag();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -76,6 +76,7 @@ public class TrackTarget extends Command {
   @Override
   public void end(boolean interrupted) {
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    m_leds.returnToIdle();
     // m_leds.allLEDS(0, 0, 255);
   }
 
