@@ -42,7 +42,7 @@ public class Pigeon implements GyroIO {
 
     @Override
     public double getZAccel() {
-        return pigeon.getAccelerationY().getValue();
+        return pigeon.getAccelerationZ().getValue();
     }
 
 }
