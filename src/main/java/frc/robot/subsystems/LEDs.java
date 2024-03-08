@@ -89,7 +89,7 @@ public class LEDs extends SubsystemBase {
     color = -0.57;
   }
 
-  public static void returnToIdle() {
+  public void returnToIdle() {
     color = idleColor;
   }
 

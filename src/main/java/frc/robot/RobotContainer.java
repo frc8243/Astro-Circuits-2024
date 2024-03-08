@@ -62,7 +62,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private static Shooter m_shooter;
-  private static Vision m_vision;
+  public static Vision m_vision;
   private static RollerClaw m_rollerClaw;
   private boolean fieldOrientedDrive = true;
   public static LEDs m_leds;
@@ -71,12 +71,6 @@ public class RobotContainer {
   private static Alliance m_alliance;
 
   public RobotContainer() {
-
-    if (DriverStation.getAlliance().isPresent()) {
-      m_alliance = DriverStation.getAlliance().get();
-    } else {
-      m_alliance = Alliance.Blue;
-    }
 
     createSubsystems();
 
@@ -113,7 +107,8 @@ public class RobotContainer {
     driverController.back().onTrue(
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
-    driverController.leftBumper().whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, 7));
+    driverController.leftBumper()
+        .whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
     driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kBlueSpeakerCenter));
 
     operatorController.a().whileTrue(m_shooter.getShooterCommand());
@@ -174,7 +169,7 @@ public class RobotContainer {
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
-    m_vision = new Vision(m_alliance);
+    m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_leds = new LEDs();
   }

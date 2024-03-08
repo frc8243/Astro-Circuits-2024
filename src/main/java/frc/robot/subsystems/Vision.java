@@ -39,7 +39,7 @@ public class Vision extends SubsystemBase {
   private static int ampTag;
 
   /** Creates a new Vision. */
-  public Vision(Alliance alliance) {
+  public Vision() {
     frontCamera = new PhotonCamera("frontCamera");
     leftCamera = new PhotonCamera("leftCamera");
     rightCamera = new PhotonCamera("rightCamera");
@@ -52,7 +52,6 @@ public class Vision extends SubsystemBase {
     rightCamEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
         rightCamera,
         VisionConstants.kRightCamtoRobot);
-    setTags(alliance);
   }
 
   @Override
@@ -60,6 +59,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putBoolean("Vision/FrontCam Connected", frontCamera.isConnected());
     SmartDashboard.putBoolean("Vision/LeftCam Connected", leftCamera.isConnected());
     SmartDashboard.putBoolean("Vision/RightCam Connected", rightCamera.isConnected());
+    SmartDashboard.putBoolean("Vision/Speaker in Sight", atSpeaker());
     allCamsConnected = (frontCamera.isConnected() && leftCamera.isConnected() && rightCamera.isConnected());
   }
 
@@ -172,8 +172,8 @@ public class Vision extends SubsystemBase {
     return estStdDevs;
   }
 
-  public void setTags(Alliance alliance) {
-    if (alliance == Alliance.Red) {
+  public void setTags(Optional<Alliance> alliance) {
+    if (alliance.get() == Alliance.Red) {
       speakerTag = VisionConstants.kRedSpeakerTag;
       leftSourceTag = VisionConstants.kRedLeftSourceTag;
       rightSourceTag = VisionConstants.kRedLeftSourceTag;
