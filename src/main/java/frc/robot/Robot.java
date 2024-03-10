@@ -21,7 +21,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    m_robotContainer.m_vision.setTags(ally);
     m_robotContainer = RobotContainer.getInstance();
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
@@ -63,8 +64,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    m_robotContainer.m_vision.setTags(ally);
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

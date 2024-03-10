@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -68,9 +70,15 @@ public class RobotContainer {
   public static LEDs m_leds;
   private static Climber m_climber;
   private static SendableChooser<Command> m_autoChooser;
-  private static Alliance m_alliance;
+  public static Alliance m_alliance;
 
   public RobotContainer() {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      m_alliance = ally.get();
+    } else {
+      m_alliance = Alliance.Blue;
+    }
 
     createSubsystems();
 

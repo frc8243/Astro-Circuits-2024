@@ -173,7 +173,7 @@ public class Vision extends SubsystemBase {
   }
 
   public void setTags(Optional<Alliance> alliance) {
-    if (alliance.get() == Alliance.Red) {
+    if (alliance.get() == Alliance.Red && alliance.isPresent()) {
       speakerTag = VisionConstants.kRedSpeakerTag;
       leftSourceTag = VisionConstants.kRedLeftSourceTag;
       rightSourceTag = VisionConstants.kRedLeftSourceTag;
