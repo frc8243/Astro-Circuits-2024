@@ -16,13 +16,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  private boolean allianceFound = false;
   private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    m_robotContainer.m_vision.setTags(ally);
     m_robotContainer = RobotContainer.getInstance();
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
@@ -31,6 +29,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    if (allianceFound == false) {
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        m_robotContainer.setAlliance(ally.get());
+      }
+    }
   }
 
   @Override

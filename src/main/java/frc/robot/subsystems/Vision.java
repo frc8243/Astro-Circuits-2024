@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -22,7 +21,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ConfigConstants;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
@@ -172,8 +170,8 @@ public class Vision extends SubsystemBase {
     return estStdDevs;
   }
 
-  public void setTags(Optional<Alliance> alliance) {
-    if (alliance.get() == Alliance.Red && alliance.isPresent()) {
+  public void setTags(Alliance ally) {
+    if (ally == Alliance.Red) {
       speakerTag = VisionConstants.kRedSpeakerTag;
       leftSourceTag = VisionConstants.kRedLeftSourceTag;
       rightSourceTag = VisionConstants.kRedLeftSourceTag;
