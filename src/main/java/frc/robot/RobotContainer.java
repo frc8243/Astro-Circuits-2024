@@ -181,4 +181,10 @@ public class RobotContainer {
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
     m_leds = new LEDs();
   }
+
+  public void setAlliance(Alliance ally) {
+    m_alliance = ally;
+    m_vision.setTags(ally);
+    m_leds.updateIdle(ally);
+  }
 }
