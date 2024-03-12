@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
         this::getRobotRelativeSpeeds,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(5, 0, 0), // Translation
+            new PIDConstants(5, 0, 0.1), // Translation
             new PIDConstants(0.975, 0, 0), // Rotation
             AutoConstants.kMaxModuleSpeedMetersPerSecond,
             Units.inchesToMeters(18.42), /* Distance from furthest module to robot center in meters */
