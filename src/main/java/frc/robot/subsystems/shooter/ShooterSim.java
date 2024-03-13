@@ -17,4 +17,12 @@ public class ShooterSim implements ShooterIO {
     public double getShootSpeed() {
         return 0;
     }
+
+    public void spinShootMotor(double rpm) {
+
+    }
+
+    public void spinFeedMotor(double rpm) {
+
+    }
 }
