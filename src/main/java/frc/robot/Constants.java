@@ -163,10 +163,11 @@ public class Constants {
         public static final double kShootSpeed = 1;
         public static final double kRollerClawSpeed = 0.5;
         public static final double kShooterReadySpeed = 5900;
-        public static final double kP = 1;
+        public static final double kP = 0.00025;
         public static final double kI = 0;
-        public static final double kD = 0;
-        public static final double kRPMTolerance = 50;
+        public static final double kD = 0.002;
+        public static final double kFF = 1 / NeoMotorConstants.kFreeSpeedRpm;
+        public static final double kRPMTolerance = 150;
     }
 
     public static final class ClimberConstants {

@@ -29,16 +29,19 @@ public class ShooterReal implements ShooterIO {
         shootController.setP(ShooterConstants.kP);
         shootController.setI(ShooterConstants.kI);
         shootController.setD(ShooterConstants.kD);
+        shootController.setFF(ShooterConstants.kFF);
 
         feedController.setP(ShooterConstants.kP);
         feedController.setI(ShooterConstants.kI);
         feedController.setD(ShooterConstants.kD);
+        feedController.setFF(ShooterConstants.kFF);
 
     }
 
     @Override
     public void setFeedMotor(double speed) {
         feedMotor.set(speed);
+        shootController.toString();
     }
 
     @Override
