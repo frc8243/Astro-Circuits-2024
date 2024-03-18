@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import frc.robot.Constants.NeoMotorConstants;
@@ -10,7 +12,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;;
 
 public class ShooterReal implements ShooterIO {
     private static CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShootMotorID, MotorType.kBrushless);
+    private static SparkPIDController shootController = shootMotor.getPIDController();
     private static CANSparkMax feedMotor = new CANSparkMax(ShooterConstants.kFeedMotorID, MotorType.kBrushless);
+    private static SparkPIDController feedController = feedMotor.getPIDController();
     private static RelativeEncoder shootEncoder = shootMotor.getEncoder();
     private static RelativeEncoder feedEncoder = feedMotor.getEncoder();
 
@@ -22,11 +26,22 @@ public class ShooterReal implements ShooterIO {
         shootMotor.setSmartCurrentLimit(NeoMotorConstants.kNeoCurrentLimit);
         feedMotor.setSmartCurrentLimit(NeoMotorConstants.kNeoCurrentLimit);
 
+        shootController.setP(ShooterConstants.kP);
+        shootController.setI(ShooterConstants.kI);
+        shootController.setD(ShooterConstants.kD);
+        shootController.setFF(ShooterConstants.kFF);
+
+        feedController.setP(ShooterConstants.kP);
+        feedController.setI(ShooterConstants.kI);
+        feedController.setD(ShooterConstants.kD);
+        feedController.setFF(ShooterConstants.kFF);
+
     }
 
     @Override
     public void setFeedMotor(double speed) {
         feedMotor.set(speed);
+        shootController.toString();
     }
 
     @Override
@@ -41,6 +56,16 @@ public class ShooterReal implements ShooterIO {
     }
 
     @Override
+    public void spinShootMotor(double rpm) {
+        shootController.setReference(rpm, ControlType.kVelocity);
+    }
+
+    @Override
+    public void spinFeedMotor(double rpm) {
+        feedController.setReference(rpm, ControlType.kVelocity);
+    }
+
+    @Override
     public double getFeedSpeed() {
         return feedEncoder.getVelocity();
     }
@@ -49,4 +74,5 @@ public class ShooterReal implements ShooterIO {
     public double getShootSpeed() {
         return shootEncoder.getVelocity();
     }
+
 }

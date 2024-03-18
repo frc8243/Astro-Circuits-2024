@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 

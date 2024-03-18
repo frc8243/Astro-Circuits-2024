@@ -7,6 +7,10 @@ public interface ShooterIO {
 
     public void stop();
 
+    public void spinShootMotor(double rpm);
+
+    public void spinFeedMotor(double rpm);
+
     public double getFeedSpeed();
 
     public double getShootSpeed();

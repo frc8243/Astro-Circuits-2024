@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
         m_robotContainer.setAlliance(ally.get());
+        allianceFound = true;
       }
     }
   }

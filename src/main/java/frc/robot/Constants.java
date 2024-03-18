@@ -20,7 +20,7 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
     /**
      * This class contains constants that regard the robot's configuration, such as
-     * the hardware in it, and its current alliance.
+     * the hardware in it
      */
     public static final class ConfigConstants {
         enum GyroType {
@@ -28,8 +28,15 @@ public class Constants {
             Pigeon2,
         }
 
+        enum LEDType {
+            Blinkin,
+            Addressable,
+        }
+
         // public static final GyroType kRobotGyro = GyroType.NavX;
         public static final GyroType kRobotGyro = GyroType.Pigeon2;
+        public static final LEDType kRobotLEDs = LEDType.Addressable;
+        // public static final LEDType kRobotLEDs = LEDType.Addressable;
     }
 
     public static final class DriveConstants {
@@ -163,6 +170,11 @@ public class Constants {
         public static final double kShootSpeed = 1;
         public static final double kRollerClawSpeed = 0.5;
         public static final double kShooterReadySpeed = 5900;
+        public static final double kP = 0.00025;
+        public static final double kI = 0;
+        public static final double kD = 0.002;
+        public static final double kFF = 1 / NeoMotorConstants.kFreeSpeedRpm;
+        public static final double kRPMTolerance = 150;
     }
 
     public static final class ClimberConstants {
@@ -229,5 +241,6 @@ public class Constants {
 
     public static final class LEDConstants {
         public static final int kOutLimitSwitch = 1;
+        public static final int kStripLength = 60;
     }
 }
