@@ -29,9 +29,13 @@ import frc.robot.Constants.ConfigConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ConfigConstants.GyroType;
+import frc.robot.Constants.ConfigConstants.LEDType;
 import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
-import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.LEDIO;
+import frc.robot.subsystems.leds.AddrLEDs;
+import frc.robot.subsystems.leds.BlinkinLEDs;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
@@ -155,6 +159,7 @@ public class RobotContainer {
     RollerClawIO rollerClawIO;
     ClimberIO climberIO;
     GyroIO gyroIO;
+    LEDIO ledIO;
     if (ConfigConstants.kRobotGyro == GyroType.Pigeon2) {
       gyroIO = new Pigeon();
     } else {
@@ -173,13 +178,19 @@ public class RobotContainer {
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();
     }
+    if (ConfigConstants.kRobotLEDs == LEDType.Blinkin) {
+      ledIO = new BlinkinLEDs();
+    } else {
+      ledIO = new AddrLEDs();
+    }
     m_climber = new Climber(climberIO);
     m_shooter = new Shooter(shooterIO);
     m_drivetrain = new Drivetrain(drivetrainIO);
     m_rollerClaw = new RollerClaw(rollerClawIO);
     m_vision = new Vision();
     m_pdp = new PowerDistribution(1, ModuleType.kRev);
-    m_leds = new LEDs();
+    m_leds = new LEDs(ledIO);
+
   }
 
   public void setAlliance(Alliance ally) {
