@@ -75,7 +75,7 @@ public class LEDs extends SubsystemBase {
    * 
    * @param location Where do we want the piece, 1 for claw, 2 for shooter
    */
-  public void askForNote(int location) {
+  public static void askForNote(int location) {
     ledsActioned = true;
     if (location == 1) {
       color = 0.65;
@@ -90,7 +90,7 @@ public class LEDs extends SubsystemBase {
   }
 
   public void returnToIdle() {
-    color = idleColor;
+    // color = idleColor;
   }
 
   public static void readyToShoot() {
