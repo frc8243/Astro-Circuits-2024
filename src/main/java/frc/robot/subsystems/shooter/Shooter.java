@@ -31,9 +31,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (timer.hasElapsed(30)) {
-      targetRPM = NeoMotorConstants.kFreeSpeedRpm * (RobotController.getBatteryVoltage() / 12);
-    }
     SmartDashboard.putNumber("Shooter/Feed Wheel Speed", shooterIO.getFeedSpeed());
     SmartDashboard.putNumber("Shooter/Shoot Wheel Speed", shooterIO.getShootSpeed());
     SmartDashboard.putBoolean("Shooter/Note Present", notePresent);
@@ -46,7 +43,7 @@ public class Shooter extends SubsystemBase {
     }
 
     if (Vision.atSpeaker() && notePresent) {
-      shooterIO.setShootMotor(ShooterConstants.kShootSpeed);
+      shooterIO.spinShootMotor(targetRPM);
     } else if (notePresent) {
       shooterIO.stop();
     }
@@ -54,10 +51,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getAdvancedShooterCommand() {
-    return this.startEnd(
+    return this.runEnd(
         () -> {
           shooterIO.spinShootMotor(targetRPM);
-          if (MathUtil.isNear(targetRPM, shooterIO.getShootSpeed(), ShooterConstants.kRPMTolerance) == true) {
+          if (MathUtil.isNear(targetRPM, shooterIO.getShootSpeed(), 100)) {
             shooterIO.spinFeedMotor(targetRPM);
           }
         },

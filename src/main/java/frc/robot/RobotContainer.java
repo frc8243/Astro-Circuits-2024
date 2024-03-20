@@ -123,7 +123,7 @@ public class RobotContainer {
         .whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
     driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kBlueSpeakerCenter));
 
-    operatorController.a().whileTrue(m_shooter.getShooterCommand());
+    operatorController.a().whileTrue(m_shooter.getAdvancedShooterCommand());
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());

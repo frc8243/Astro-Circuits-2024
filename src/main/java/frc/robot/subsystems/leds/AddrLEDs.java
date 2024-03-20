@@ -31,8 +31,13 @@ public class AddrLEDs implements LEDIO {
     }
 
     public void blinkLEDs(Color color, double blinkPeriod) {
-        boolean blinkOn = ((Timer.getFPGATimestamp() % blinkPeriod) / blinkPeriod) == 0;
+        boolean blinkOn = ((Timer.getFPGATimestamp() % blinkPeriod) / blinkPeriod) > 0.5;
         setLEDs(blinkOn ? color : Color.kBlack);
+    }
+
+    public void blinkLEDs(Color color1, Color color2, double blinkPeriod) {
+        boolean blinkOn = ((Timer.getFPGATimestamp() % blinkPeriod) / blinkPeriod) > 0.5;
+        setLEDs(blinkOn ? color1 : color2);
     }
 
     @Override
@@ -76,6 +81,11 @@ public class AddrLEDs implements LEDIO {
 
     @Override
     public void readyToShoot() {
-        blinkLEDs(Color.kAzure, 0.25);
+        blinkLEDs(Color.kBlue, 0.25);
+    }
+
+    @Override
+    public void disabledIdle() {
+        blinkLEDs(Color.kRed, Color.kWhite, 1.5);
     }
 }

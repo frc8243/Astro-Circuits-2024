@@ -15,5 +15,7 @@ public interface LEDIO {
 
     public void readyToShoot();
 
+    public void disabledIdle();
+
     public void periodicLoop();
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.subsystems.rollerclaw.RollerClaw;
 import frc.robot.subsystems.shooter.Shooter;
 
@@ -29,11 +30,14 @@ public class LEDs extends SubsystemBase {
     if (RollerClaw.getNoteStatus() || Shooter.getNoteStatus()) {
       noteReady();
       ledsActioned = false;
-      if (Shooter.getShooterSpeed() >= 5900) {
+      if (Shooter.getShooterSpeed() >= NeoMotorConstants.kFreeSpeedRpm) {
         readyToShoot();
       }
     } else if (ledsActioned == false) {
       returnToIdle();
+    }
+    if (DriverStation.isDisabled()) {
+      disabledIdle();
     }
   }
 
@@ -65,6 +69,10 @@ public class LEDs extends SubsystemBase {
 
   public void readyToShoot() {
     ledIO.readyToShoot();
+  }
+
+  public void disabledIdle() {
+    ledIO.disabledIdle();
   }
 
 }

@@ -61,4 +61,9 @@ public class BlinkinLEDs implements LEDIO {
     public void readyToShoot() {
         color = -0.09;
     }
+
+    @Override
+    public void disabledIdle() {
+        color = idleColor;
+    }
 }
