@@ -239,6 +239,8 @@ public class Constants {
                 new Rotation2d(Units.degreesToRadians(-60)));
         public static final Pose2d kBlueSpeakerCenter = new Pose2d(1.67, 5.3,
                 new Rotation2d(Units.degreesToRadians(180)));
+        public static final double kBlueSourceAngle = 120;
+        public static final double kRedSourceAngle = -120;
     }
 
     public static final class LEDConstants {

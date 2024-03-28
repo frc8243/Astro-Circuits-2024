@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
     return this.runEnd(
         () -> {
           shooterIO.spinShootMotor(targetRPM);
-          if (MathUtil.isNear(targetRPM, shooterIO.getShootSpeed(), 150)) {
+          if (getShooterSpeed() <= (targetRPM - 50)) {
             shooterIO.spinFeedMotor(targetRPM);
           }
         },
