@@ -6,7 +6,6 @@ package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import frc.robot.subsystems.leds.LEDIO;
 
 /** Add your docs here. */
 public class BlinkinLEDs implements LEDIO {

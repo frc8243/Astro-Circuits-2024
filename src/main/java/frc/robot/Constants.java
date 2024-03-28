@@ -224,7 +224,9 @@ public class Constants {
         public static final int kBlueLeftSourceTag = 2;
         public static final int kBlueRightSourceTag = 1;
         public static final int kBlueSpeakerTag = 7;
+        public static final int kBlueSideSpeakerTag = 8;
         public static final int kRedSpeakerTag = 4;
+        public static final int kRedSideSpeakerTag = 3;
         public static final int kRedLeftSourceTag = 10;
         public static final int kRedRightSourceTag = 9;
         public static final int kRedAmpTag = 5;
@@ -237,6 +239,8 @@ public class Constants {
                 new Rotation2d(Units.degreesToRadians(-60)));
         public static final Pose2d kBlueSpeakerCenter = new Pose2d(1.67, 5.3,
                 new Rotation2d(Units.degreesToRadians(180)));
+        public static final double kBlueSourceAngle = 120;
+        public static final double kRedSourceAngle = -120;
     }
 
     public static final class LEDConstants {

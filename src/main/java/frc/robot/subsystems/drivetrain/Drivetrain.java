@@ -14,11 +14,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ScoringConstants;
 
 public class Drivetrain extends SubsystemBase {
   private DrivetrainIO drivetrainIO;
@@ -95,5 +98,23 @@ public class Drivetrain extends SubsystemBase {
 
   public Command pathFindtoPose(Pose2d targetPose) {
     return AutoBuilder.pathfindToPose(targetPose, constraints);
+  }
+
+  public Command turnToSource() {
+    Alliance ally = RobotContainer.getAlliance();
+    double targetAngle;
+    if (ally == Alliance.Red) {
+      targetAngle = ScoringConstants.kRedSourceAngle;
+    } else {
+      targetAngle = ScoringConstants.kBlueSourceAngle;
+    }
+    return this.runEnd(
+        () -> {
+          double currentAngle = getPose().getRotation().getDegrees();
+          double rotSpeed = (targetAngle - currentAngle);
+        },
+        () -> {
+
+        });
   }
 }

@@ -199,4 +199,8 @@ public class RobotContainer {
     m_vision.setTags(ally);
     m_leds.updateIdle(ally);
   }
+
+  public static Alliance getAlliance() {
+    return m_alliance;
+  }
 }
