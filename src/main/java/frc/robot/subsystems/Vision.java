@@ -32,6 +32,7 @@ public class Vision extends SubsystemBase {
   private static PhotonPoseEstimator rightCamEstimator;
   private static boolean allCamsConnected;
   private static int speakerTag;
+  private static int sideSpeakerTag;
   private static int leftSourceTag;
   private static int rightSourceTag;
   private static int ampTag;
@@ -173,11 +174,13 @@ public class Vision extends SubsystemBase {
   public void setTags(Alliance ally) {
     if (ally == Alliance.Red) {
       speakerTag = VisionConstants.kRedSpeakerTag;
+      sideSpeakerTag = VisionConstants.kRedSideSpeakerTag;
       leftSourceTag = VisionConstants.kRedLeftSourceTag;
       rightSourceTag = VisionConstants.kRedLeftSourceTag;
       ampTag = VisionConstants.kRedAmpTag;
     } else {
       speakerTag = VisionConstants.kBlueSpeakerTag;
+      sideSpeakerTag = VisionConstants.kBlueSideSpeakerTag;
       leftSourceTag = VisionConstants.kBlueLeftSourceTag;
       rightSourceTag = VisionConstants.kBlueRightSourceTag;
       ampTag = VisionConstants.kBlueAmpTag;
@@ -191,7 +194,7 @@ public class Vision extends SubsystemBase {
   public static boolean atSpeaker() {
     var targets = frontCamera.getLatestResult().getTargets();
     for (var target : targets) {
-      if (target.getFiducialId() == 7) {
+      if (target.getFiducialId() == getSpeakerTarget() || target.getFiducialId() == getSideSpeakerTarget()) {
         if (target.getBestCameraToTarget().getX() <= 36.0) {
           return true;
         }
@@ -202,19 +205,23 @@ public class Vision extends SubsystemBase {
     return false;
   }
 
-  public int getSpeakerTarget() {
+  public static int getSpeakerTarget() {
     return speakerTag;
   }
 
-  public int getLeftSourceTarget() {
+  public static int getSideSpeakerTarget() {
+    return sideSpeakerTag;
+  }
+
+  public static int getLeftSourceTarget() {
     return leftSourceTag;
   }
 
-  public int getRightSourceTarget() {
+  public static int getRightSourceTarget() {
     return rightSourceTag;
   }
 
-  public int getAmpTarget() {
+  public static int getAmpTarget() {
     return ampTag;
   }
 }

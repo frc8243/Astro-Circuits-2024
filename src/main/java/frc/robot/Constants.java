@@ -224,7 +224,9 @@ public class Constants {
         public static final int kBlueLeftSourceTag = 2;
         public static final int kBlueRightSourceTag = 1;
         public static final int kBlueSpeakerTag = 7;
+        public static final int kBlueSideSpeakerTag = 8;
         public static final int kRedSpeakerTag = 4;
+        public static final int kRedSideSpeakerTag = 3;
         public static final int kRedLeftSourceTag = 10;
         public static final int kRedRightSourceTag = 9;
         public static final int kRedAmpTag = 5;
