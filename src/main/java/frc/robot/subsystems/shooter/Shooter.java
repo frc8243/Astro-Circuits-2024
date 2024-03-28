@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
     shooterIO = io;
-    targetRPM = 5912.5;
+    targetRPM = 6000;
   }
 
   @Override
@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
     return this.runEnd(
         () -> {
           shooterIO.spinShootMotor(targetRPM);
-          if (MathUtil.isNear(targetRPM, shooterIO.getShootSpeed(), 150)) {
+          if (MathUtil.isNear(targetRPM, shooterIO.getShootSpeed(), 25)) {
             shooterIO.spinFeedMotor(targetRPM);
           }
         },
