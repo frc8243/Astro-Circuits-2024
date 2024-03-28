@@ -8,7 +8,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.5
           }
         },
         {
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Leave from Right Speaker"
+            "pathName": "Leave from Center Speaker"
           }
         }
       ]
