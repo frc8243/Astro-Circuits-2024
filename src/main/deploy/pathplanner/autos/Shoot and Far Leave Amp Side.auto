@@ -8,7 +8,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.5
           }
         },
         {
@@ -18,15 +18,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Far Leave from Speaker"
+            "pathName": "Far Leave from Left Speaker"
           }
         }
       ]

@@ -86,7 +86,7 @@ public class RobotContainer {
 
     createSubsystems();
 
-    NamedCommands.registerCommand("shoot", m_shooter.getShooterCommand().withTimeout(2));
+    NamedCommands.registerCommand("shoot", m_shooter.getAdvancedShooterCommand().withTimeout(5));
     NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand());
     NamedCommands.registerCommand("turnToTarget",
         new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
@@ -127,6 +127,7 @@ public class RobotContainer {
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());
+    operatorController.start().whileTrue(m_rollerClaw.getShuffleCommand());
     operatorController.povUp().onTrue(new InstantCommand(() -> {
       m_climber.setGoal(-0.65);
       m_climber.enable();

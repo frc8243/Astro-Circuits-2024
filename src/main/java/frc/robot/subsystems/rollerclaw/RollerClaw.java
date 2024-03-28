@@ -41,7 +41,15 @@ public class RollerClaw extends SubsystemBase {
         }, () -> {
           rollerClawIO.stop();
         });
+  }
 
+  public Command getShuffleCommand() {
+    return this.startEnd(
+        () -> {
+          rollerClawIO.setRollerClawMotor(0.125);
+        }, () -> {
+          rollerClawIO.stop();
+        });
   }
 
   public Command getDumpCommand() {
