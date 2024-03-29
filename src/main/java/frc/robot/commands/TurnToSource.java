@@ -36,6 +36,7 @@ public class TurnToSource extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_leds.trackingTarget();
     if (ally == Alliance.Red) {
       targetAngle = ScoringConstants.kRedSourceAngle;
     } else {
@@ -54,17 +55,21 @@ public class TurnToSource extends Command {
         rotSpeed,
         true, true);
     currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
+    if (MathUtil.isNear(targetAngle, currentAngle, ScoringConstants.kSourceAlignmentTolerance)) {
+      m_leds.linedUp();
+    }
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_leds.returnToIdle();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return MathUtil.isNear(targetAngle, currentAngle, ScoringConstants.kSourceAlignmentTolerance);
   }
 }

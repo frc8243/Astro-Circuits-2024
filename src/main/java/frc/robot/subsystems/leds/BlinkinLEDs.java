@@ -47,7 +47,7 @@ public class BlinkinLEDs implements LEDIO {
     }
 
     @Override
-    public void trackingTag() {
+    public void trackingTarget() {
         color = -0.57;
     }
 
@@ -64,5 +64,10 @@ public class BlinkinLEDs implements LEDIO {
     @Override
     public void disabledIdle() {
         color = idleColor;
+    }
+
+    @Override
+    public void linedUp() {
+        color = 0.10;
     }
 }

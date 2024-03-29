@@ -70,8 +70,13 @@ public class AddrLEDs implements LEDIO {
     }
 
     @Override
-    public void trackingTag() {
-        blinkLEDs(Color.kPink, 0.5);
+    public void trackingTarget() {
+        blinkLEDs(Color.kPink, 0.25);
+    }
+
+    @Override
+    public void linedUp() {
+        blinkLEDs(Color.kGreen, 0.25);
     }
 
     @Override

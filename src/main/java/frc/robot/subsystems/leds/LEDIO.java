@@ -9,7 +9,9 @@ public interface LEDIO {
 
     public void askForNote(int location);
 
-    public void trackingTag();
+    public void trackingTarget();
+
+    public void linedUp();
 
     public void returnToIdle();
 

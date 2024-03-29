@@ -32,6 +32,7 @@ import frc.robot.Constants.ConfigConstants.GyroType;
 import frc.robot.Constants.ConfigConstants.LEDType;
 import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
+import frc.robot.commands.TurnToSource;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.leds.LEDIO;
 import frc.robot.subsystems.leds.AddrLEDs;
@@ -121,13 +122,12 @@ public class RobotContainer {
 
     driverController.leftBumper()
         .whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
-    driverController.rightBumper().whileTrue(m_drivetrain.pathFindtoPose(ScoringConstants.kBlueSpeakerCenter));
+    driverController.rightBumper().onTrue(new TurnToSource(m_drivetrain, m_leds, driverController, m_alliance));
 
     operatorController.a().whileTrue(m_shooter.getAdvancedShooterCommand());
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
     operatorController.leftBumper().whileTrue(m_rollerClaw.getGrabCommand());
     operatorController.rightBumper().whileTrue(m_rollerClaw.getDumpCommand());
-    operatorController.start().whileTrue(m_rollerClaw.getShuffleCommand());
     operatorController.povUp().onTrue(new InstantCommand(() -> {
       m_climber.setGoal(-0.65);
       m_climber.enable();

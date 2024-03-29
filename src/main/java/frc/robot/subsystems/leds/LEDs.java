@@ -58,9 +58,14 @@ public class LEDs extends SubsystemBase {
     ledIO.askForNote(location);
   }
 
-  public static void trackingTag() {
+  public void trackingTarget() {
     ledsActioned = true;
-    ledIO.trackingTag();
+    ledIO.trackingTarget();
+  }
+
+  public void linedUp() {
+    ledsActioned = true;
+    ledIO.linedUp();
   }
 
   public void returnToIdle() {

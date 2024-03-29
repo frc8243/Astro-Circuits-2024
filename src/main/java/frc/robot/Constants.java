@@ -241,6 +241,7 @@ public class Constants {
                 new Rotation2d(Units.degreesToRadians(180)));
         public static final double kBlueSourceAngle = 120;
         public static final double kRedSourceAngle = -120;
+        public static final double kSourceAlignmentTolerance = 2.5;
     }
 
     public static final class LEDConstants {
