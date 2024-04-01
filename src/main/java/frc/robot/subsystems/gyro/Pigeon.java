@@ -10,6 +10,10 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 public class Pigeon implements GyroIO {
     private final Pigeon2 pigeon = new Pigeon2(2, "rio");
 
+    public Pigeon() {
+
+    }
+
     @Override
     public void resetYaw() {
         pigeon.setYaw(0);

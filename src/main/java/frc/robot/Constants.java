@@ -134,7 +134,7 @@ public class Constants {
         public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
         public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-        public static final int kDrivingMotorCurrentLimit = 50; // amps
+        public static final int kDrivingMotorCurrentLimit = 60; // amps
         public static final int kTurningMotorCurrentLimit = 20; // amps
     }
 
@@ -160,6 +160,7 @@ public class Constants {
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
         public static final int kNeoCurrentLimit = 60;
+        public static final int kNeo550CurrentLimit = 20;
     }
 
     public static final class ShooterConstants {

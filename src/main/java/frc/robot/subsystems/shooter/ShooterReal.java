@@ -21,10 +21,13 @@ public class ShooterReal implements ShooterIO {
     public ShooterReal() {
         shootMotor.restoreFactoryDefaults();
         feedMotor.restoreFactoryDefaults();
+
         shootMotor.enableVoltageCompensation(12.5);
         feedMotor.enableVoltageCompensation(12.5);
+
         shootMotor.setIdleMode(IdleMode.kCoast);
         feedMotor.setIdleMode(IdleMode.kCoast);
+
         shootMotor.setSmartCurrentLimit(NeoMotorConstants.kNeoCurrentLimit);
         feedMotor.setSmartCurrentLimit(NeoMotorConstants.kNeoCurrentLimit);
 
@@ -37,6 +40,9 @@ public class ShooterReal implements ShooterIO {
         feedController.setI(ShooterConstants.kI);
         feedController.setD(ShooterConstants.kD);
         feedController.setFF(ShooterConstants.kFF);
+
+        shootMotor.burnFlash();
+        feedMotor.burnFlash();
 
     }
 

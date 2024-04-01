@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class RollerClawReal implements RollerClawIO {
@@ -16,7 +17,8 @@ public class RollerClawReal implements RollerClawIO {
         rollerClawEncoder = rollerClawMotor.getEncoder();
         rollerClawMotor.restoreFactoryDefaults();
         rollerClawMotor.setIdleMode(IdleMode.kBrake);
-        rollerClawMotor.setSmartCurrentLimit(25);
+        rollerClawMotor.setSmartCurrentLimit(NeoMotorConstants.kNeo550CurrentLimit);
+        rollerClawMotor.burnFlash();
     }
 
     @Override
