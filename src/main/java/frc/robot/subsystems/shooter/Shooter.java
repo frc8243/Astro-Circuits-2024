@@ -15,13 +15,15 @@ import frc.robot.Constants;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 
 public class Shooter extends SubsystemBase {
   private static ShooterIO shooterIO;
   private DigitalInput shooterSwitch = new DigitalInput(1);
   private static Boolean notePresent = false;
-  private Timer timer = new Timer();
+  private static Boolean shouldPreSpin = true;
   private double targetRPM;
+  private double startTime;
 
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
@@ -35,35 +37,48 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Shoot Wheel Speed", shooterIO.getShootSpeed());
     SmartDashboard.putBoolean("Shooter/Note Present", notePresent);
     SmartDashboard.putNumber("Shooter/Target RPM", targetRPM);
+    SmartDashboard.putBoolean("Shooter/Should Pre Spin", shouldPreSpin);
     if (shooterSwitch.get()) {
       notePresent = true;
 
     } else {
       notePresent = false;
+      
     }
 
-    if (Vision.atSpeaker() && notePresent) {
-      shooterIO.spinShootMotor(targetRPM);
-    } else if (notePresent) {
-      shooterIO.stop();
-    }
+    // if (Drivetrain.getWingStatus() && notePresent && shouldPreSpin) {
+    // shooterIO.setShootMotor(1);
+    // } else if (notePresent && shouldPreSpin) {
+    // shooterIO.stop();
+    // }
+
+    // if (Vision.atSpeaker() && notePresent && shouldPreSpin) {
+    // shooterIO.spinShootMotor(targetRPM);
+    // } else if (notePresent && shouldPreSpin) {
+    // shooterIO.stop();
+    // }
 
   }
 
   public Command getAdvancedShooterCommand() {
+    startTime = Timer.getFPGATimestamp();
+    shouldPreSpin = false;
     return this.runEnd(
         () -> {
-          shooterIO.spinShootMotor(targetRPM);
-          if (getShooterSpeed() <= (targetRPM - 50)) {
-            shooterIO.spinFeedMotor(targetRPM);
+          double currentTime = Timer.getFPGATimestamp();
+          shooterIO.setShootMotor(1);
+          if ((getShooterSpeed() >= (targetRPM - 100))) {
+            shooterIO.setFeedMotor(1);
           }
         },
         () -> {
+          shouldPreSpin = true;
           shooterIO.stop();
         });
   }
 
   public Command getAdvancedIntakeCommand() {
+
     return this.startEnd(
         () -> {
           shooterIO.spinShootMotor(-targetRPM);

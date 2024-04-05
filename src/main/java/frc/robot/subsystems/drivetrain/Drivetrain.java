@@ -21,12 +21,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ScoringConstants;
 
 public class Drivetrain extends SubsystemBase {
   private DrivetrainIO drivetrainIO;
   private Field2d m_field;
   private PathConstraints constraints;
+  private static boolean inWing = false;
+  private Alliance ally;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(DrivetrainIO io) {
@@ -63,8 +66,22 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putData("Robot/Field", m_field);
+    SmartDashboard.putBoolean("Robot/In Wing", inWing);
     m_field.setRobotPose(getPose());
     drivetrainIO.updateTelemetry();
+    if (ally == Alliance.Red) {
+      if (getPose().getX() >= FieldConstants.kRedWingBorder) {
+        inWing = true;
+      } else {
+        inWing = false;
+      }
+    } else {
+      if (getPose().getX() >= FieldConstants.kBlueWingBorder) {
+        inWing = true;
+      } else {
+        inWing = false;
+      }
+    }
 
   }
 
@@ -100,21 +117,11 @@ public class Drivetrain extends SubsystemBase {
     return AutoBuilder.pathfindToPose(targetPose, constraints);
   }
 
-  public Command turnToSource() {
-    Alliance ally = RobotContainer.getAlliance();
-    double targetAngle;
-    if (ally == Alliance.Red) {
-      targetAngle = ScoringConstants.kRedSourceAngle;
-    } else {
-      targetAngle = ScoringConstants.kBlueSourceAngle;
-    }
-    return this.runEnd(
-        () -> {
-          double currentAngle = getPose().getRotation().getDegrees();
-          double rotSpeed = (targetAngle - currentAngle);
-        },
-        () -> {
+  public void setAlliance(Alliance ally) {
+    this.ally = ally;
+  }
 
-        });
+  public static boolean getWingStatus() {
+    return inWing;
   }
 }

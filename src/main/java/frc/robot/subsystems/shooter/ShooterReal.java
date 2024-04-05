@@ -22,8 +22,8 @@ public class ShooterReal implements ShooterIO {
         shootMotor.restoreFactoryDefaults();
         feedMotor.restoreFactoryDefaults();
 
-        shootMotor.enableVoltageCompensation(12.5);
-        feedMotor.enableVoltageCompensation(12.5);
+        // shootMotor.enableVoltageCompensation(12.5);
+        // feedMotor.enableVoltageCompensation(12.5);
 
         shootMotor.setIdleMode(IdleMode.kCoast);
         feedMotor.setIdleMode(IdleMode.kCoast);

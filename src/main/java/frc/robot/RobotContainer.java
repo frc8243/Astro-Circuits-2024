@@ -198,6 +198,7 @@ public class RobotContainer {
     m_alliance = ally;
     m_vision.setTags(ally);
     m_leds.updateIdle(ally);
+    m_drivetrain.setAlliance(ally);
   }
 
   public static Alliance getAlliance() {

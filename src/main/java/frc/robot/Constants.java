@@ -249,4 +249,9 @@ public class Constants {
         public static final int kOutLimitSwitch = 1;
         public static final int kStripLength = 120;
     }
+
+    public static final class FieldConstants {
+        public static final double kBlueWingBorder = Units.inchesToMeters(231.20);
+        public static final double kRedWingBorder = Units.inchesToMeters(422.04);
+    }
 }
