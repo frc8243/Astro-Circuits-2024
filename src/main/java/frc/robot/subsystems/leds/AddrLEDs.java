@@ -13,7 +13,7 @@ import frc.robot.Constants.LEDConstants;
 
 /** Add your docs here. */
 public class AddrLEDs implements LEDIO {
-    private static AddressableLED m_leds = new AddressableLED(0);
+    private static AddressableLED m_leds = new AddressableLED(1);
     private static AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LEDConstants.kStripLength);
     private static Color idleColor = Color.kBlue;
 

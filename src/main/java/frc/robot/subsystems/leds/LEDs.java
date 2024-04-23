@@ -17,6 +17,7 @@ import frc.robot.subsystems.shooter.Shooter;
 @SuppressWarnings("unused")
 public class LEDs extends SubsystemBase {
   private static LEDIO ledIO;
+
   private static boolean ledsActioned;
 
   /** Creates a new LEDs. */
