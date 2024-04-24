@@ -30,6 +30,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ConfigConstants.GyroType;
 import frc.robot.Constants.ConfigConstants.LEDType;
+import frc.robot.Constants.ConfigConstants.ShooterMotorType;
 import frc.robot.commands.GoToTarget;
 import frc.robot.commands.TrackTarget;
 import frc.robot.commands.TurnToSource;
@@ -57,7 +58,8 @@ import frc.robot.subsystems.rollerclaw.RollerClawReal;
 import frc.robot.subsystems.rollerclaw.RollerClawSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterReal;
+import frc.robot.subsystems.shooter.ShooterKraken;
+import frc.robot.subsystems.shooter.ShooterNEO;
 import frc.robot.subsystems.shooter.ShooterSim;
 import frc.utils.Normalization;
 
@@ -174,7 +176,11 @@ public class RobotContainer {
       climberIO = new ClimberSim();
       gyroIO = new GyroSim();
     } else {
-      shooterIO = new ShooterReal();
+      if (ConfigConstants.kShooterMotors == ShooterMotorType.Krakens) {
+        shooterIO = new ShooterKraken();
+      } else {
+        shooterIO = new ShooterNEO();
+      }
       drivetrainIO = new DrivetrainSwerve();
       rollerClawIO = new RollerClawReal();
       climberIO = new ClimberReal();

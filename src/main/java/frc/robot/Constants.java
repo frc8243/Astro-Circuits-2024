@@ -33,10 +33,18 @@ public class Constants {
             Addressable,
         }
 
+        enum ShooterMotorType {
+            Krakens,
+            NEOs
+        }
+
         // public static final GyroType kRobotGyro = GyroType.NavX;
         public static final GyroType kRobotGyro = GyroType.Pigeon2;
         public static final LEDType kRobotLEDs = LEDType.Addressable;
-        // public static final LEDType kRobotLEDs = LEDType.Addressable;
+        public static final ShooterMotorType kShooterMotors = ShooterMotorType.Krakens;
+        // public static final LEDType kRobotLEDs = LEDType.Blinkin;
+        // public static final ShooterMotorType = ShooterMotorType.NEOs;
+
     }
 
     public static final class DriveConstants {
