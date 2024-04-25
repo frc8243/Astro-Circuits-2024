@@ -11,19 +11,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.NeoMotorConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.vision.Vision;
 
 public class Shooter extends SubsystemBase {
   private static ShooterIO shooterIO;
   private DigitalInput shooterSwitch = new DigitalInput(1);
   private static Boolean notePresent = false;
-  private static Boolean shouldPreSpin = true;
-  private double targetRPM;
-  private double startTime;
+  private static Boolean preSpin = false;
+  private static double targetRPM;
+  private static double startTime;
 
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
@@ -37,7 +34,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Shoot Wheel Speed", shooterIO.getShootSpeed());
     SmartDashboard.putBoolean("Shooter/Note Present", notePresent);
     SmartDashboard.putNumber("Shooter/Target RPM", targetRPM);
-    SmartDashboard.putBoolean("Shooter/Should Pre Spin", shouldPreSpin);
+    SmartDashboard.putBoolean("DriverAssists/preSpin", preSpin);
     if (shooterSwitch.get()) {
       notePresent = true;
 
@@ -62,7 +59,7 @@ public class Shooter extends SubsystemBase {
 
   public Command getAdvancedShooterCommand() {
     startTime = Timer.getFPGATimestamp();
-    shouldPreSpin = false;
+    preSpin = false;
     return this.runEnd(
         () -> {
           double currentTime = Timer.getFPGATimestamp();
@@ -72,7 +69,7 @@ public class Shooter extends SubsystemBase {
           }
         },
         () -> {
-          shouldPreSpin = true;
+          preSpin = true;
           shooterIO.stop();
         });
   }
@@ -91,13 +88,13 @@ public class Shooter extends SubsystemBase {
 
   public Command getShooterCommand() {
     // System.out.println("Shooter shooting");
-    return this.startEnd(
+    return this.runEnd(
         () -> {
           shooterIO.setShootMotor(ShooterConstants.kShootSpeed);
-          shooterIO.setFeedMotor(Constants.ShooterConstants.kFeedSpeed);
-
+          if (getShooterSpeed() >= (targetRPM - 100)) {
+            shooterIO.setFeedMotor(ShooterConstants.kShootSpeed);
+          }
         },
-
         () -> {
           shooterIO.stop();
         });
@@ -105,6 +102,10 @@ public class Shooter extends SubsystemBase {
 
   public static double getShooterSpeed() {
     return shooterIO.getShootSpeed();
+  }
+
+  public static double getTargetRPM() {
+    return targetRPM;
   }
 
   public static boolean getNoteStatus() {
@@ -119,8 +120,8 @@ public class Shooter extends SubsystemBase {
           if (shooterSwitch.get()) {
             shooterIO.stop();
           } else {
-            shooterIO.setFeedMotor(-Constants.ShooterConstants.kFeedSpeed);
-            shooterIO.setShootMotor(-Constants.ShooterConstants.kShootSpeed);
+            shooterIO.setFeedMotor(-ShooterConstants.kFeedSpeed);
+            shooterIO.setShootMotor(-ShooterConstants.kShootSpeed);
           }
         },
 

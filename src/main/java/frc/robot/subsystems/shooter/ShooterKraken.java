@@ -7,8 +7,6 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import frc.robot.Constants.ShooterConstants;
-
 public class ShooterKraken implements ShooterIO {
     private static TalonFX shootMotor = new TalonFX(ShooterConstants.kShootMotorID, "rio");
     private static TalonFX feedMotor = new TalonFX(ShooterConstants.kFeedMotorID, "rio");

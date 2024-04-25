@@ -33,8 +33,9 @@ Looking at this, one would think that when `rightBumper()` returns true, a *new*
 Compare this to what it could look like using a Factory in a `driveCommands` file.
 
 ```
-example goes here
+driverController.rightBumper().onTrue(DriveCommands.TurnToSource());
 ```
+Much simpler, right? `DriveCommands`, when created in `RobotContainer`, already is given the parameters used for every command used for the drivetrain, which allows for much simpler code to be written. This should allow easier collaboration between drivers and programmers, since they can more easily understand the `configureButtonBindings()` method in `RobotContainer`
 
 ### SparkMAXs
 Where do I even begin?\
@@ -53,4 +54,35 @@ public RollerClawReal() {
         rollerClawMotor.burnFlash();
     }
 ```
-And only *once*, we use the (in my opinion) best way to create these motors, which enforces a current limit. `MotorUtil.createSparkMAX`
+And only *once*, we use the (in my opinion) best way to create these motors, which enforces a current limit. `MotorUtil.createSparkMAX` Every SparkMAX created on this branch will use this function, which I have adjusted just a tad to make using it simpler.
+
+### Vision Commands
+Vision is ***hard***.\
+Relying on solely the camera output is not reliable, as seen at Miami Valley, where glare cost us many many shots and the LED strip on the left side of the robot.
+
+Instead of relying on the direct camera output, we should rely on *odometry*, which is reliable even if camera output is lost for momentary amounts of time. I'll go more into this in a seperate document, but this requires some new thinking for commands.
+
+Using our `SwerveDrivePoseEstimator`, all of the data from the wheels and the cameras on the robot is fed into an estimated robot pose. If this pose is accurate (it should be barring a wheel falling off and throwing off the wheel odometry, which in theory should cause the pose estimator to reject that module's odometry since its far out of line of the others), we can use the Robot's pose to trigger the shooter prespin or the `inRange` boolean, as well as giving us a ***constant*** angle to turn to *relative to the field*, not losing tracking when the motion blur of the camera causes the target to be lost.
+
+The new `TurnToSpeaker` and `TurnToAmp` commands will use this strategy.
+
+### Logging
+Logging is arguably the most important function of our code. It allows us to see exactly what was inputted, what the robot did, and how long it took. Since we're not at the required programming experience for AdvantageKit, there's only a some minor improvements we can do.
+
+We should log when the robot is doing something autonomously, whether its moving or turning or shooting. There's a clear lack of data regarding what the driver is commanding aside from the speeds of the robot, which is unfortunate.
+
+Any driver assistance function, such as the `TurnTo(X)` commands, the `preSpinShooter` command, or anything else will put a boolean in the `DriverAssists` tree in SmartDashboard. an example would be
+```
+SmartDashboard.putBoolean("DriverAssists/PreSpinning", preSpinning);
+```
+
+The state of the LEDs should be logged as well to aid the human player in defending themselves for a mistaken drop, this can also be used to display which call is active in Elastic to compare against actual LED color.
+
+### Prespin.
+Our haphazard implementation of a prespin gave us many headaches, relying on the direct camera output is a bad idea, as previously stated, so what should we do? 
+
+1. Use our Estimated Pose to determine if the Robot is in our alliance's wing
+2. Give the driver a manual button to hold to prespin the shooter
+3. Make sure the operator knows the shooter is spun up using LEDS *and* controller vibration
+
+This should use a boolean in `Shooter`, called `preSpin`, when `preSpin` is true, the *front wheel* on the shooter should spin as hard as it can, or in other words run at `1` speed. There is a case for using specific RPMs for our shooter, but since we have a simple shooter design, there's really no point.

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ShooterConstants;
 
 public class RollerClaw extends SubsystemBase {
   private RollerClawIO rollerClawIO;
@@ -37,7 +36,7 @@ public class RollerClaw extends SubsystemBase {
   public Command getGrabCommand() {
     return this.startEnd(
         () -> {
-          rollerClawIO.setRollerClawMotor(-ShooterConstants.kRollerClawSpeed);
+          rollerClawIO.setRollerClawMotor(-RollerClawConstants.kRollerClawSpeed);
         }, () -> {
           rollerClawIO.stop();
         });
@@ -55,7 +54,7 @@ public class RollerClaw extends SubsystemBase {
   public Command getDumpCommand() {
     return this.startEnd(
         () -> {
-          rollerClawIO.setRollerClawMotor(ShooterConstants.kRollerClawSpeed);
+          rollerClawIO.setRollerClawMotor(RollerClawConstants.kRollerClawSpeed);
         },
 
         () -> {

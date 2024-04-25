@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 //import edu.wpi.first.wpilibj.simulation.ClimberSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.utils.SimEncoder;
 
 public class ClimberSim implements ClimberIO {
@@ -31,10 +30,10 @@ public class ClimberSim implements ClimberIO {
                 climberGearRatio,
                 climberCarriageMass,
                 climberDrumRadius,
-                Constants.ClimberConstants.kMinClimberHeight,
-                Constants.ClimberConstants.kMaxClimberHeight,
+                ClimberConstants.kMinClimberHeight,
+                ClimberConstants.kMaxClimberHeight,
                 true, 0, // whether to use gravity
-                VecBuilder.fill(Constants.ClimberConstants.kSimMeasurementStdDev));
+                VecBuilder.fill(ClimberConstants.kSimMeasurementStdDev));
 
     }
 

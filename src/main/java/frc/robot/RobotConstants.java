@@ -39,8 +39,12 @@ public class RobotConstants {
     public static final double kDriveDeadband = 0.1;
 
     public static final class MotorConstants {
+        /* Suggested current limit for various motors, in amps (A) */
         public static final int kNEOCurrentLimit = 60;
         public static final int kKrakenCurrentLimit = 80;
         public static final int kNEO550CurrentLimit = 20;
+
+        /* Free speeds of various motors, in rotations per minute (rpm) */
+        public static final int kNEOFreeSpeed = 5676;
     }
 }

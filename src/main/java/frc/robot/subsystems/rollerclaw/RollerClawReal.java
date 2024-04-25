@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.RobotConstants.MotorConstants;
-import frc.robot.Constants.ShooterConstants;
 
 public class RollerClawReal implements RollerClawIO {
     private static CANSparkMax rollerClawMotor;

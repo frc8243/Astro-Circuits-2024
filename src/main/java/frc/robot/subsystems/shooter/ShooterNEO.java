@@ -6,8 +6,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-import frc.robot.Constants.NeoMotorConstants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.RobotConstants.MotorConstants;
 import frc.utils.MotorUtil;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;;
@@ -21,7 +20,8 @@ public class ShooterNEO implements ShooterIO {
     private static RelativeEncoder feedEncoder = feedMotor.getEncoder();
 
     public ShooterNEO() {
-        shootMotor = MotorUtil.createSparkMAX(, null, 0)
+        shootMotor = MotorUtil.createSparkMAX(ShooterConstants.kShootMotorID, MotorType.kBrushless,
+                MotorConstants.kNEOCurrentLimit);
 
     }
 

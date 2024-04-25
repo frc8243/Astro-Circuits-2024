@@ -6,7 +6,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants.ClimberConstants;
 import frc.utils.PIDUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;

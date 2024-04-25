@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 import frc.utils.SwerveUtils;
 import frc.robot.RobotConstants;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.gyro.Gyro;
+import frc.robot.subsystems.vision.Vision;
 
 public class DrivetrainSwerve implements DrivetrainIO {
   private final SwerveModule m_frontLeft = new SwerveModule(
