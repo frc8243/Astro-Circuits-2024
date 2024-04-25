@@ -141,4 +141,19 @@ public class Shooter extends SubsystemBase {
         });
   }
 
+  public Command playSong() {
+    return this.runOnce(() -> {
+      shooterIO.loadCHRPfile("mario.chrp");
+      shooterIO.play();
+    });
+
+  }
+
+  public Command pause() {
+    return this.runOnce(
+        () -> {
+          shooterIO.pause();
+        });
+  }
+
 }

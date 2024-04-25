@@ -10,7 +10,7 @@ import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
 
-public class ShooterReal implements ShooterIO {
+public class ShooterNEO implements ShooterIO {
     private static CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShootMotorID, MotorType.kBrushless);
     private static SparkPIDController shootController = shootMotor.getPIDController();
     private static CANSparkMax feedMotor = new CANSparkMax(ShooterConstants.kFeedMotorID, MotorType.kBrushless);
@@ -18,7 +18,7 @@ public class ShooterReal implements ShooterIO {
     private static RelativeEncoder shootEncoder = shootMotor.getEncoder();
     private static RelativeEncoder feedEncoder = feedMotor.getEncoder();
 
-    public ShooterReal() {
+    public ShooterNEO() {
         shootMotor.restoreFactoryDefaults();
         feedMotor.restoreFactoryDefaults();
 
@@ -80,6 +80,21 @@ public class ShooterReal implements ShooterIO {
     @Override
     public double getShootSpeed() {
         return shootEncoder.getVelocity();
+    }
+
+    @Override
+    public void loadCHRPfile(String file) {
+        System.out.println("Not Valid for NEO Motors");
+    }
+
+    @Override
+    public void play() {
+        System.out.println("Not Valid for NEO Motors");
+    }
+
+    @Override
+    public void pause() {
+        System.out.println("Not Valid for NEO Motors");
     }
 
 }

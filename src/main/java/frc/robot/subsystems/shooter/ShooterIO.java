@@ -14,4 +14,10 @@ public interface ShooterIO {
     public double getFeedSpeed();
 
     public double getShootSpeed();
+
+    public void loadCHRPfile(String file);
+
+    public void play();
+
+    public void pause();
 }
