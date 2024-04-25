@@ -82,4 +82,19 @@ public class ShooterNEO implements ShooterIO {
         return shootEncoder.getVelocity();
     }
 
+    @Override
+    public void loadCHRPfile(String file) {
+        System.out.println("Not Valid for NEO Motors");
+    }
+
+    @Override
+    public void play() {
+        System.out.println("Not Valid for NEO Motors");
+    }
+
+    @Override
+    public void pause() {
+        System.out.println("Not Valid for NEO Motors");
+    }
+
 }

@@ -25,4 +25,22 @@ public class ShooterSim implements ShooterIO {
     public void spinFeedMotor(double rpm) {
 
     }
+
+    @Override
+    public void loadCHRPfile(String file) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loadCHRPfile'");
+    }
+
+    @Override
+    public void play() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'play'");
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pause'");
+    }
 }

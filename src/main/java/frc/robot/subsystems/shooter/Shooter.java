@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
 
     } else {
       notePresent = false;
-      
+
     }
 
     // if (Drivetrain.getWingStatus() && notePresent && shouldPreSpin) {
@@ -126,6 +126,21 @@ public class Shooter extends SubsystemBase {
 
         () -> {
           shooterIO.stop();
+        });
+  }
+
+  public Command playSong() {
+    return this.runOnce(() -> {
+      shooterIO.loadCHRPfile("mario.chrp");
+      shooterIO.play();
+    });
+
+  }
+
+  public Command pause() {
+    return this.runOnce(
+        () -> {
+          shooterIO.pause();
         });
   }
 

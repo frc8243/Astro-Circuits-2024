@@ -122,6 +122,9 @@ public class RobotContainer {
     driverController.back().onTrue(
         new InstantCommand(() -> fieldOrientedDrive = !fieldOrientedDrive));
 
+    driverController.povUp().onTrue(m_shooter.playSong());
+    driverController.povDown().onTrue(m_shooter.pause());
+
     driverController.leftBumper()
         .whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
     driverController.rightBumper().onTrue(new TurnToSource(m_drivetrain, m_leds, driverController, m_alliance));
