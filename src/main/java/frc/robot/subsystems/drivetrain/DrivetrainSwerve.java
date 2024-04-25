@@ -13,9 +13,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
 import frc.utils.SwerveUtils;
+import frc.robot.RobotConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.gyro.Gyro;
 
@@ -175,9 +175,9 @@ public class DrivetrainSwerve implements DrivetrainIO {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+    double xSpeedDelivered = xSpeedCommanded * RobotConstants.kMaxSpeed;
+    double ySpeedDelivered = ySpeedCommanded * RobotConstants.kMaxSpeed;
+    double rotDelivered = m_currentRotation * RobotConstants.kMaxRotationSpeed;
 
     ChassisSpeeds commandedSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered,
         rotDelivered,
@@ -190,7 +190,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
             ? discretizedCommandedSpeeds
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, RobotConstants.kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -218,7 +218,7 @@ public class DrivetrainSwerve implements DrivetrainIO {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, RobotConstants.kMaxSpeed);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);

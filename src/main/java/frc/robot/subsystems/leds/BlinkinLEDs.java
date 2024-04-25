@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 /** Add your docs here. */
 public class BlinkinLEDs implements LEDIO {
-    private Spark m_blinkin = new Spark(0);
-    private Spark m_blinkin2 = new Spark(1);
+    private Spark m_blinkin = new Spark(LEDConstants.kLEDPort);
+    private Spark m_blinkin2 = new Spark(LEDConstants.kAltLEDPort);
     private static double color;
     private static double idleColor;
 

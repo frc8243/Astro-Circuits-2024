@@ -20,9 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.ScoringConstants;
+import frc.robot.subsystems.drivetrain.DrivetrainConstants.DriveConstants;
+import frc.robot.FieldConstants;
 
 public class Drivetrain extends SubsystemBase {
   private DrivetrainIO drivetrainIO;
@@ -43,7 +42,7 @@ public class Drivetrain extends SubsystemBase {
         new HolonomicPathFollowerConfig(
             new PIDConstants(5, 0, 0.1), // Translation
             new PIDConstants(0.975, 0, 0), // Rotation
-            AutoConstants.kMaxModuleSpeedMetersPerSecond,
+            DriveConstants.kMaxModuleSpeed,
             Units.inchesToMeters(18.42), /* Distance from furthest module to robot center in meters */
             new ReplanningConfig()),
 

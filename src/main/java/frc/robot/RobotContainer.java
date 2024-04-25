@@ -105,9 +105,9 @@ public class RobotContainer {
 
     m_drivetrain.setDefaultCommand(new RunCommand(
         () -> m_drivetrain.drive(
-            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband)),
-            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband)),
-            Normalization.cube(-MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband)),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftY(), RobotConstants.kDriveDeadband)),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getLeftX(), RobotConstants.kDriveDeadband)),
+            Normalization.cube(-MathUtil.applyDeadband(driverController.getRightX(), RobotConstants.kDriveDeadband)),
             fieldOrientedDrive, true),
         m_drivetrain));
 

@@ -9,18 +9,30 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class MotorUtil {
 
-    public static CANSparkMax createSparkMAX(int id, MotorType motortype, int stallLimit, boolean isInverted,
+    public static CANSparkMax createSparkMAX(int id, MotorType motorType, int currentLimit) {
+        CANSparkMax sparkMAX = new CANSparkMax(id, motorType);
+        sparkMAX.restoreFactoryDefaults();
+        sparkMAX.setSmartCurrentLimit(currentLimit);
+
+        sparkMAX.burnFlash();
+
+        return sparkMAX;
+
+    }
+
+    public static CANSparkMax createSparkMAX(int id, MotorType motortype, int currentLimit, boolean isInverted,
             boolean isIdleBreak, double slewRate) {
-        CANSparkMax sparkMAX = createSparkMAX(id, motortype, stallLimit, isIdleBreak, slewRate);
+        CANSparkMax sparkMAX = createSparkMAX(id, motortype, currentLimit, isIdleBreak, slewRate);
         sparkMAX.setInverted(isInverted);
+
+        sparkMAX.burnFlash();
+
         return sparkMAX;
     }
 
-    public static CANSparkMax createSparkMAX(int id, MotorType motortype, int stallLimit, boolean isIdleBreak,
+    public static CANSparkMax createSparkMAX(int id, MotorType motortype, int currentLimit, boolean isIdleBreak,
             double slewRate) {
-        CANSparkMax sparkMAX = new CANSparkMax(id, motortype);
-        sparkMAX.restoreFactoryDefaults();
-        sparkMAX.setSmartCurrentLimit(stallLimit);
+        CANSparkMax sparkMAX = createSparkMAX(id, motortype, currentLimit);
 
         if (isIdleBreak) {
             sparkMAX.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -30,6 +42,8 @@ public class MotorUtil {
 
         // built in slew rate for spark max
         sparkMAX.setOpenLoopRampRate(slewRate);
+
+        sparkMAX.burnFlash();
 
         return sparkMAX;
     }

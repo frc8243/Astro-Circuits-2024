@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.NeoMotorConstants;
 import frc.robot.subsystems.rollerclaw.RollerClaw;
 import frc.robot.subsystems.shooter.Shooter;

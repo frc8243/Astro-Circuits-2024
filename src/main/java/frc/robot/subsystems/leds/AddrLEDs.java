@@ -9,11 +9,10 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants.LEDConstants;
 
 /** Add your docs here. */
 public class AddrLEDs implements LEDIO {
-    private static AddressableLED m_leds = new AddressableLED(1);
+    private static AddressableLED m_leds = new AddressableLED(LEDConstants.kLEDPort);
     private static AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LEDConstants.kStripLength);
     private static Color idleColor = Color.kBlue;
 
