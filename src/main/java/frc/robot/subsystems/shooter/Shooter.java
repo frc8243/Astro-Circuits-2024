@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
 
     } else {
       notePresent = false;
-      
+
     }
 
     // if (Drivetrain.getWingStatus() && notePresent && shouldPreSpin) {
@@ -75,6 +75,18 @@ public class Shooter extends SubsystemBase {
           shouldPreSpin = true;
           shooterIO.stop();
         });
+  }
+
+  public Command getRampUpCommand() {
+    return this.startEnd(
+        () -> {
+          shooterIO.setShootMotor(1);
+
+        },
+        () -> {
+          shooterIO.setShootMotor(0);
+        });
+
   }
 
   public Command getAdvancedIntakeCommand() {

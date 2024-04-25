@@ -88,7 +88,7 @@ public class RobotContainer {
     createSubsystems();
 
     NamedCommands.registerCommand("shoot", m_shooter.getAdvancedShooterCommand().withTimeout(5));
-    NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand());
+    NamedCommands.registerCommand("dump", m_rollerClaw.getDumpCommand().withTimeout(5));
     NamedCommands.registerCommand("turnToTarget",
         new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
 
@@ -123,6 +123,8 @@ public class RobotContainer {
     driverController.leftBumper()
         .whileTrue(new TrackTarget(m_vision, m_drivetrain, driverController, m_leds, m_vision.getSpeakerTarget()));
     driverController.rightBumper().onTrue(new TurnToSource(m_drivetrain, m_leds, driverController, m_alliance));
+
+    driverController.rightTrigger().whileTrue(m_shooter.getRampUpCommand());
 
     operatorController.a().whileTrue(m_shooter.getAdvancedShooterCommand());
     operatorController.b().whileTrue(m_shooter.getIntakeCommand());
