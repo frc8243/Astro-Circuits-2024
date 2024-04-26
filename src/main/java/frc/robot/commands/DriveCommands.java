@@ -19,6 +19,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.utils.Normalization;
+import frc.robot.commands.CommandConstants;
 
 /** Add your docs here. */
 @SuppressWarnings("unused")
