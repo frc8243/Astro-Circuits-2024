@@ -1,47 +1,54 @@
 package frc.robot.subsystems.gyro;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.sim.Pigeon2SimState;
+
 public class GyroSim implements GyroIO {
+    private Pigeon2 pigeon = new Pigeon2(2, "rio");
+    private Pigeon2SimState pigeon2SimState;
+
+    public GyroSim() {
+        pigeon2SimState = pigeon.getSimState();
+    }
 
     @Override
     public void resetYaw() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'resetYaw'");
+        pigeon.setYaw(0);
     }
 
     @Override
     public double getYaw() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getYaw'");
+        return pigeon.getYaw().getValue();
     }
 
     @Override
     public double getPitch() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPitch'");
+        return pigeon.getPitch().getValue();
     }
 
     @Override
     public double getRoll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoll'");
+        return pigeon.getRoll().getValue();
     }
 
     @Override
     public double getXAccel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getXAccel'");
+        return pigeon.getAccelerationX().getValue();
     }
 
     @Override
     public double getYAccel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getYAccel'");
+        return pigeon.getAccelerationY().getValue();
     }
 
     @Override
     public double getZAccel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getZAccel'");
+        return pigeon.getAccelerationZ().getValue();
+    }
+
+    @Override
+    public void setYaw(double yaw) {
+        pigeon.setYaw(yaw);
     }
 
 }

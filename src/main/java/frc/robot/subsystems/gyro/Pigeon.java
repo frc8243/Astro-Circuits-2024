@@ -49,4 +49,9 @@ public class Pigeon implements GyroIO {
         return pigeon.getAccelerationZ().getValue();
     }
 
+    @Override
+    public void setYaw(double yaw) {
+        pigeon.setYaw(yaw);
+    }
+
 }

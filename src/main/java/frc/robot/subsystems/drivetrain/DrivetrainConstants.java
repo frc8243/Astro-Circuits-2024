@@ -77,6 +77,7 @@ public class DrivetrainConstants {
                 // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
                 // teeth on the bevel pinion
                 public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+                public static final double kTurningMotorReduction = 9424d / 203;
                 /* Math to figure out speed and position of wheel */
                 public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps
                                 * kWheelCircumferenceMeters)

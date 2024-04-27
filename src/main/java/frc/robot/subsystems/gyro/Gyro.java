@@ -49,4 +49,8 @@ public class Gyro extends SubsystemBase {
     return gyroIO.getYAccel();
   }
 
+  public static void setYaw(double yaw) {
+    gyroIO.setYaw(yaw);
+  }
+
 }

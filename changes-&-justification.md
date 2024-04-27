@@ -16,6 +16,16 @@ Julien
 - `@SupressWarnings('unused')` in ***every*** file. Unused imports aren't a source of robot issues, these warnings just serve as an annoyance
 - `TODO` comments left around for additional potential minor QoL changes. 
 
+### Simulation.
+The worst thing about our switch to swerve was the new inability to simulate at least the *minor* functions of the robot. 2399 figured out swerve simulation, so that will be borrowed while trying to maintain the  current functionality of our robot. This requires a restructuring of the `Drivetrain` subsystem and folder, with `Drivetrain` not changing based on whether the robot is running in sim or not, but `SwerveModule` changing. 
+
+
+### Pose Estimation & Pose Handling
+
+The `Drivetrain` subsystem should handle the robot pose and reporting where it is on the field, not the `Vision` subsystem. `Vision` should report to `Drivetrain`, where `Drivetrain` will report to the other subsystems and logs.
+
+Additionally, the code currently relies on *all three* cameras being connected to the robot, so when one is disconnected or malfunctioning we have **no** vision based pose estimation. That's not great. 
+
 
 ### Splitting Constants into Multiple Files
 Mananging the many different classes in [Constants](src\main\java\frc\robot\Constants.java) has been a source of about 30 different headaches of ours, from finding random values to solving merge conflicts. I saw (somewhere) that some teams split their constants into seperate files, as you would most classses. My approach is similar, with grouping each subsystems' constants into one file, such as `ModuleConstants` and `DriveConstants` being in `DrivetrainConstants` This should allow editing of multiple subsystems' constants on ***the same branch*** without merge conflicts.

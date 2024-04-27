@@ -47,4 +47,9 @@ public class NavX implements GyroIO {
         return navx.getRawAccelZ();
     }
 
+    @Override
+    public void setYaw(double yaw) {
+        // idk lol
+    }
+
 }

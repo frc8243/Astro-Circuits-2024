@@ -38,6 +38,10 @@ public class DriveCommands {
         DriveCommands.ally = ally;
     }
 
+    public void setAlliance(Alliance ally) {
+        DriveCommands.ally = ally;
+    }
+
     public static final Command TurnToSource() {
         return new FunctionalCommand(
                 () -> {
@@ -57,7 +61,7 @@ public class DriveCommands {
                                     -MathUtil.applyDeadband(driverController.getLeftX(),
                                             RobotConstants.kDriveDeadband)),
                             rotSpeed,
-                            true, true);
+                            true);
                     currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
                     if (MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance)) {
                         m_leds.linedUp();
@@ -89,7 +93,7 @@ public class DriveCommands {
                                     -MathUtil.applyDeadband(driverController.getLeftX(),
                                             RobotConstants.kDriveDeadband)),
                             rotSpeed,
-                            true, true);
+                            true);
                     currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
                     if (MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance)) {
                         m_leds.linedUp();

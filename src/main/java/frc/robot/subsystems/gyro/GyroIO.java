@@ -16,4 +16,6 @@ public interface GyroIO {
 
     public double getZAccel();
 
+    public void setYaw(double yaw);
+
 }

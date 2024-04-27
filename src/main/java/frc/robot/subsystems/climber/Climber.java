@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.utils.PIDUtil;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
@@ -60,6 +59,21 @@ public class Climber extends ProfiledPIDSubsystem {
         SmartDashboard.putBoolean("Climber/Profiled PID position at set point", getController().atSetpoint());
 
         climberVisualizer.update(currentPos);
+    }
+
+    /**
+     * Method to wrap the enabling/goal setting to simplify
+     * RobotContainer.configureBindings()
+     * 
+     * @param goalHeight Height in meters to set the climber to
+     * @return Command for use with a button press
+     */
+    public Command setClimberHeight(double goalHeight) {
+        return this.runOnce(
+                () -> {
+                    this.enable();
+                    this.setGoal(goalHeight);
+                });
     }
 
     // returns height the climber is at. Required to override this
@@ -126,30 +140,13 @@ public class Climber extends ProfiledPIDSubsystem {
         climberIO.setEncoderPosition(position);
     }
 
-    // factory method to make a PIDCommand for setting the climber height
-    public Command setClimberHeight(double heightMeters) {
-        this.disable();
-        final Command command = new PIDCommand(
-                new PIDController(
-                        ClimberConstants.kpPos,
-                        ClimberConstants.kiPos,
-                        ClimberConstants.kdPos),
-                this::getMeasurement,
-                // Setpoint
-                heightMeters,
-                // Pipe the output to the turning controls
-                output -> {
-                    this.setMotorSpeed(output);
-                },
-                // Require the robot drive
-
-                this);
-
-        return command;
-    }
-
+    /**
+     * Factory Method to return a command for manual climber control
+     * 
+     * @param speed Percent to run the motor with
+     * @return Command to be called with a Trigger
+     */
     public Command getClimberCommand(double speed) {
-
         return this.startEnd(
                 () -> {
                     this.disable();

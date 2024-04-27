@@ -10,117 +10,295 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathSharedStore;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.drivetrain.DrivetrainConstants.DriveConstants;
+import frc.robot.subsystems.drivetrain.DrivetrainConstants.*;
+import frc.robot.subsystems.gyro.Gyro;
+import frc.robot.subsystems.vision.Vision;
+import frc.utils.SwerveUtils;
 import frc.robot.FieldConstants;
+import frc.robot.Robot;
+import frc.robot.RobotConstants;
 
 public class Drivetrain extends SubsystemBase {
-  private DrivetrainIO drivetrainIO;
-  private Field2d m_field;
-  private PathConstraints constraints;
-  private static boolean inWing = false;
-  private Alliance ally;
+    private Field2d m_field;
+    private PathConstraints constraints;
+    private Alliance ally;
 
-  /** Creates a new Drivetrain. */
-  public Drivetrain(DrivetrainIO io) {
-    drivetrainIO = io;
-    m_field = new Field2d();
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::resetOdometry,
-        this::getRobotRelativeSpeeds,
-        this::driveRobotRelative,
-        new HolonomicPathFollowerConfig(
-            new PIDConstants(5, 0, 0.1), // Translation
-            new PIDConstants(0.975, 0, 0), // Rotation
-            DriveConstants.kMaxModuleSpeed,
-            Units.inchesToMeters(18.42), /* Distance from furthest module to robot center in meters */
-            new ReplanningConfig()),
+    private SwerveModule m_frontLeft;
+    private SwerveModule m_frontRight;
+    private SwerveModule m_rearLeft;
+    private SwerveModule m_rearRight;
 
-        () -> {
-          // Basically flips the path for path planner depending on alliance(Origin is
-          // Blue Alliance)
+    private SwerveDrivePoseEstimator m_poseEstimator;
 
-          var alliance = DriverStation.getAlliance();
+    private final StructArrayPublisher<SwerveModuleState> publisher;
 
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+    private double m_currentRotationRate = 0.0;
+    private double desiredAngle = 0;
 
-        this);
-    constraints = new PathConstraints(2.5, 5, 540, 720);
-  }
+    private Rotation2d lastAngle = new Rotation2d();
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putData("Robot/Field", m_field);
-    SmartDashboard.putBoolean("Robot/In Wing", inWing);
-    m_field.setRobotPose(getPose());
-    drivetrainIO.updateTelemetry();
-    if (ally == Alliance.Red) {
-      if (getPose().getX() >= FieldConstants.kRedWingBorder) {
-        inWing = true;
-      } else {
-        inWing = false;
-      }
-    } else {
-      if (getPose().getX() >= FieldConstants.kBlueWingBorder) {
-        inWing = true;
-      } else {
-        inWing = false;
-      }
+    private ChassisSpeeds relativeRobotSpeeds;
+
+    /** Creates a new Drivetrain. */
+    public Drivetrain(SwerveModule m_frontLeft, SwerveModule m_frontRight, SwerveModule m_rearLeft,
+            SwerveModule m_rearRight) {
+        this.m_frontLeft = m_frontLeft;
+        this.m_frontRight = m_frontRight;
+        this.m_rearLeft = m_rearLeft;
+        this.m_rearRight = m_rearRight;
+
+        m_field = new Field2d();
+        m_poseEstimator = new SwerveDrivePoseEstimator(
+                DriveConstants.kDriveKinematics,
+                Rotation2d.fromDegrees(Gyro.getYaw()),
+                new SwerveModulePosition[] {
+                        m_frontLeft.getPosition(),
+                        m_frontRight.getPosition(),
+                        m_rearLeft.getPosition(),
+                        m_rearRight.getPosition()
+                }, new Pose2d());
+        AutoBuilder.configureHolonomic(
+                this::getPose,
+                this::resetOdometry,
+                this::getRobotRelativeSpeeds,
+                this::driveRobotRelative,
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(5, 0, 0.1), // Translation
+                        new PIDConstants(0.975, 0, 0), // Rotation
+                        DriveConstants.kMaxModuleSpeed,
+                        Units.inchesToMeters(18.42), /* Distance from furthest module to robot center in meters */
+                        new ReplanningConfig()),
+
+                () -> {
+                    // Basically flips the path for path planner depending on alliance(Origin is
+                    // Blue Alliance)
+                    var alliance = DriverStation.getAlliance();
+
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+
+                this);
+        constraints = new PathConstraints(2.5, 5, 540, 720);
+
+        publisher = NetworkTableInstance.getDefault()
+                .getStructArrayTopic("Drivetrain/SwerveStates", SwerveModuleState.struct)
+                .publish();
     }
 
-  }
+    @Override
+    public void periodic() {
+        SmartDashboard.putData("Robot/Field", m_field);
+        m_field.setRobotPose(getPose());
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[] {
+                m_frontLeft.getState(),
+                m_frontRight.getState(),
+                m_rearLeft.getState(),
+                m_rearRight.getState()
+        };
+        publisher.set(swerveModuleStates);
+        m_poseEstimator.updateWithTime(MathSharedStore.getTimestamp(), Rotation2d.fromDegrees(Gyro.getYaw()),
+                new SwerveModulePosition[] {
+                        m_frontLeft.getPosition(),
+                        m_frontRight.getPosition(),
+                        m_rearLeft.getPosition(),
+                        m_rearRight.getPosition()
+                });
+        updateVisionEstPose();
+        if (Robot.isSimulation()) {
+            double angleChange = DriveConstants.kDriveKinematics
+                    .toChassisSpeeds(swerveModuleStates).omegaRadiansPerSecond
+                    * (0.02);
+            lastAngle = lastAngle.plus(Rotation2d.fromRadians(angleChange));
+            Gyro.setYaw(lastAngle.getDegrees());
+        }
+        updateModules();
 
-  public void drive(double x, double y, double rot, boolean fieldOriented, boolean rateLimit) {
-    drivetrainIO.drive(x, y, rot, fieldOriented, rateLimit);
-  }
+    }
 
-  public void setX() {
-    drivetrainIO.setX();
-  }
+    public void drive(double x, double y, double rot, boolean fieldOriented) {
 
-  public Pose2d getPose() {
-    return drivetrainIO.getPose();
-  }
+        double newRotRate = 0;
+        double xSpeedCommanded;
+        double ySpeedCommanded;
+        double currentAngle = (Gyro.getYaw());
 
-  public void driveRobotRelative(ChassisSpeeds speeds) {
-    drivetrainIO.driveRobotRelative(speeds);
-  }
+        if (currentAngle == 0) {
+            desiredAngle = 0;
+        }
 
-  public ChassisSpeeds getRobotRelativeSpeeds() {
-    return drivetrainIO.getRobotRelativeSpeeds();
-  }
+        if (rot == 0 && (x != 0 | y != 0)) {
+            newRotRate = 0;
+            if (Math.abs(desiredAngle - currentAngle) > 1) {
+                newRotRate = (2.0 * (desiredAngle - currentAngle)) % 360 / 360;
+            }
+        } else {
+            newRotRate = rot;
+            desiredAngle = currentAngle;
+        }
 
-  public void resetOdometry(Pose2d pose) {
-    drivetrainIO.resetOdometry(pose);
-  }
+        xSpeedCommanded = x;
+        ySpeedCommanded = y;
+        m_currentRotationRate = newRotRate;
 
-  public void resetEncoders() {
-    drivetrainIO.resetEncoders();
-  }
+        double xSpeedDelivered = xSpeedCommanded * RobotConstants.kMaxSpeed;
+        double ySpeedDelivered = ySpeedCommanded * RobotConstants.kMaxSpeed;
+        double rotRateDelivered = m_currentRotationRate * RobotConstants.kMaxRotationSpeed;
 
-  public Command pathFindtoPose(Pose2d targetPose) {
-    return AutoBuilder.pathfindToPose(targetPose, constraints);
-  }
+        relativeRobotSpeeds = fieldOriented
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotRateDelivered,
+                        Rotation2d.fromDegrees(Gyro.getYaw()))
+                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotRateDelivered);
 
-  public void setAlliance(Alliance ally) {
-    this.ally = ally;
-  }
+        relativeRobotSpeeds = ChassisSpeeds.discretize(relativeRobotSpeeds, 0.02);
 
-  public static boolean getWingStatus() {
-    return inWing;
-  }
+        SmartDashboard.putNumber("Drivetrain/X Velocity", relativeRobotSpeeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("Drivetrain/Y Velocity", relativeRobotSpeeds.vyMetersPerSecond);
+
+        var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(relativeRobotSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, RobotConstants.kMaxSpeed);
+        m_frontLeft.setDesiredState(swerveModuleStates[0]);
+        m_frontRight.setDesiredState(swerveModuleStates[1]);
+        m_rearLeft.setDesiredState(swerveModuleStates[2]);
+        m_rearRight.setDesiredState(swerveModuleStates[3]);
+    }
+
+    public void setX() {
+        m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    }
+
+    public void setZero() {
+        m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+        m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+        m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+        m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+                desiredStates, RobotConstants.kMaxSpeed);
+        m_frontLeft.setDesiredState(desiredStates[0]);
+        m_frontRight.setDesiredState(desiredStates[1]);
+        m_rearLeft.setDesiredState(desiredStates[2]);
+        m_rearRight.setDesiredState(desiredStates[3]);
+    }
+
+    public Pose2d getPose() {
+        return m_poseEstimator.getEstimatedPosition();
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        this.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
+                m_rearLeft.getState(), m_rearRight.getState());
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        m_poseEstimator.resetPosition(
+                Rotation2d.fromDegrees(Gyro.getYaw()),
+                new SwerveModulePosition[] {
+                        m_frontLeft.getPosition(),
+                        m_frontRight.getPosition(),
+                        m_rearLeft.getPosition(),
+                        m_rearRight.getPosition()
+                },
+                pose);
+    }
+
+    public void resetEncoders() {
+        m_frontLeft.resetEncoders();
+        m_rearLeft.resetEncoders();
+        m_frontRight.resetEncoders();
+        m_rearRight.resetEncoders();
+        System.out.println("Encoders Reset");
+    }
+
+    public Command pathFindtoPose(Pose2d targetPose) {
+        return AutoBuilder.pathfindToPose(targetPose, constraints);
+    }
+
+    public void setAlliance(Alliance ally) {
+        this.ally = ally;
+    }
+
+    public boolean getWingStatus() {
+        if (ally == Alliance.Red) {
+            if (getPose().getX() >= FieldConstants.kRedWingBorder) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (getPose().getX() >= FieldConstants.kBlueWingBorder) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public void updateModules() {
+        m_frontLeft.updateInputs();
+        m_frontRight.updateInputs();
+        m_rearLeft.updateInputs();
+        m_rearRight.updateInputs();
+    }
+
+    public void updateVisionEstPose() {
+        if (Vision.getFrontCamConnected()) {
+            var frontCamEst = Vision.getFrontCamPose();
+            frontCamEst.ifPresent(
+                    est -> {
+                        var frontCamEstPose = est.estimatedPose.toPose2d();
+                        var frontCamEstStdDevs = Vision.getFrontEstStdDevs(frontCamEstPose);
+                        m_poseEstimator.addVisionMeasurement(frontCamEstPose, est.timestampSeconds, frontCamEstStdDevs);
+                    });
+        }
+
+        if (Vision.getLeftCamConnected()) {
+            var leftCamEst = Vision.getLeftCamPose();
+            leftCamEst.ifPresent(
+                    est -> {
+                        var leftCamEstPose = est.estimatedPose.toPose2d();
+                        var leftCamEstStdDevs = Vision.getLeftEstStdDevs(leftCamEstPose);
+                        m_poseEstimator.addVisionMeasurement(leftCamEstPose, est.timestampSeconds, leftCamEstStdDevs);
+                    });
+        }
+
+        if (Vision.getRightCamConnected()) {
+            var rightCamEst = Vision.getRightCamPose();
+            rightCamEst.ifPresent(
+                    est -> {
+                        var rightCamEstPose = est.estimatedPose.toPose2d();
+                        var rightCamEstStdDevs = Vision.getRightEstStdDevs(rightCamEstPose);
+                        m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds, rightCamEstStdDevs);
+                    });
+        }
+    }
 }

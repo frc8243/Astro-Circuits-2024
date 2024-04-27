@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 //import edu.wpi.first.wpilibj.simulation.ClimberSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.utils.SimEncoder;
+import frc.utils.SimEncoderOld;
 
 public class ClimberSim implements ClimberIO {
-    public static SimEncoder climberSimEncoder; // Our own class. Just a dumb class that gets and sets values
-                                                // representing an encoder
+    public static SimEncoderOld climberSimEncoder; // Our own class. Just a dumb class that gets and sets values
+                                                   // representing an encoder
     public static ElevatorSim climberSim; // from WPILib
     public double climberSpeed;
     public final static DCMotor climberGearbox = DCMotor.getNEO(1);
@@ -24,7 +24,7 @@ public class ClimberSim implements ClimberIO {
     public static final double climberEncoderDistPerPulse = 2.0 * Math.PI * climberDrumRadius / 4096;
 
     public ClimberSim() {
-        climberSimEncoder = new SimEncoder("climber");
+        climberSimEncoder = new SimEncoderOld("climber");
         climberSim = new ElevatorSim(
                 climberGearbox,
                 climberGearRatio,
@@ -78,7 +78,7 @@ public class ClimberSim implements ClimberIO {
         SmartDashboard.putNumber("Climber/Sim encoder position (m)", climberSimEncoder.getDistance());
 
         // sets our simulated encoder speeds
-        climberSimEncoder.setMotorSpeed(climberSim.getVelocityMetersPerSecond());
+        climberSimEncoder.setSpeed(climberSim.getVelocityMetersPerSecond());
 
         // BatterySim estimates loaded battery voltages
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(climberSim.getCurrentDrawAmps()));
