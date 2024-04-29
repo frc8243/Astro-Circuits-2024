@@ -133,6 +133,7 @@ public class Drivetrain extends SubsystemBase {
             Gyro.setYaw(lastAngle.getDegrees());
         }
         updateModules();
+        updateSwerveModuleTelemetry();
 
     }
 
@@ -300,5 +301,12 @@ public class Drivetrain extends SubsystemBase {
                         m_poseEstimator.addVisionMeasurement(rightCamEstPose, est.timestampSeconds, rightCamEstStdDevs);
                     });
         }
+    }
+
+    public void updateSwerveModuleTelemetry() {
+        SmartDashboard.putNumber("Swerve/Module 1/Drive Output", m_frontLeft.getDriveOutput());
+        SmartDashboard.putNumber("Swerve/Module 2/Drive Output", m_frontRight.getDriveOutput());
+        SmartDashboard.putNumber("Swerve/Module 3/Drive Output", m_rearLeft.getDriveOutput());
+        SmartDashboard.putNumber("Swerve/Module 4/Drive Output", m_rearRight.getDriveOutput());
     }
 }

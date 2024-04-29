@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.gyro;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,6 +20,7 @@ public class Gyro extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Drivetrain/Yaw", getYaw() % 360);
+    SmartDashboard.putNumber("Drivetrain/Yaw (Radians)", Units.degreesToRadians(getYaw()));
     SmartDashboard.putNumber("Drivetrain/Pitch", getPitch());
     SmartDashboard.putNumber("Drivetrain/Roll", getRoll());
 

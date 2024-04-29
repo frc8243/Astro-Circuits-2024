@@ -4,8 +4,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterSim implements ShooterIO {
-    private FlywheelSim shooterWheel;
-    private FlywheelSim feedWheel;
 
     public ShooterSim() {
 

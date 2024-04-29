@@ -34,27 +34,30 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Shoot Wheel Speed", shooterIO.getShootSpeed());
     SmartDashboard.putBoolean("Shooter/Note Present", notePresent);
     SmartDashboard.putNumber("Shooter/Target RPM", targetRPM);
-    SmartDashboard.putBoolean("DriverAssists/preSpin", preSpin);
+    SmartDashboard.putBoolean("DriverAssists/Prespin Active", preSpin);
     if (shooterSwitch.get()) {
       notePresent = true;
 
     } else {
       notePresent = false;
-
     }
 
-    // if (Drivetrain.getWingStatus() && notePresent && shouldPreSpin) {
-    // shooterIO.setShootMotor(1);
-    // } else if (notePresent && shouldPreSpin) {
-    // shooterIO.stop();
-    // }
+    if (preSpin & notePresent) {
+      shooterIO.setShootMotor(1);
+    } else if (notePresent) {
+      shooterIO.setShootMotor(0);
+    }
 
-    // if (Vision.atSpeaker() && notePresent && shouldPreSpin) {
-    // shooterIO.spinShootMotor(targetRPM);
-    // } else if (notePresent && shouldPreSpin) {
-    // shooterIO.stop();
-    // }
+  }
 
+  public Command getPreSpinCommand() {
+    return this.startEnd(
+        () -> {
+          shooterIO.setShootMotor(1);
+        },
+        () -> {
+          shooterIO.setShootMotor(0);
+        });
   }
 
   public Command getAdvancedShooterCommand() {
@@ -143,6 +146,10 @@ public class Shooter extends SubsystemBase {
         () -> {
           shooterIO.pause();
         });
+  }
+
+  public static void setPreSpin(boolean active) {
+    preSpin = active;
   }
 
 }
