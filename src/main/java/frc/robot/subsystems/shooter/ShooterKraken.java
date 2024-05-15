@@ -59,12 +59,12 @@ public class ShooterKraken implements ShooterIO {
 
     @Override
     public double getFeedSpeed() {
-        return feedMotor.getVelocity().refresh().getValueAsDouble();
+        return feedMotor.getVelocity().refresh().getValueAsDouble() * 60;
     }
 
     @Override
     public double getShootSpeed() {
-        return shootMotor.getVelocity().refresh().getValueAsDouble();
+        return shootMotor.getVelocity().refresh().getValueAsDouble() * 60;
     }
 
     public void loadCHRPfile(String file) {

@@ -20,7 +20,6 @@ public class Shooter extends SubsystemBase {
   private static Boolean notePresent = false;
   private static Boolean preSpin = false;
   private static double targetRPM;
-  private static double startTime;
 
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
@@ -61,11 +60,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getAdvancedShooterCommand() {
-    startTime = Timer.getFPGATimestamp();
     preSpin = false;
     return this.runEnd(
         () -> {
-          double currentTime = Timer.getFPGATimestamp();
           shooterIO.setShootMotor(1);
           if ((getShooterSpeed() >= (targetRPM - 100))) {
             shooterIO.setFeedMotor(1);

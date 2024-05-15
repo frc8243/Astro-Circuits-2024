@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.Optional;
 
-
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -18,11 +17,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private boolean allianceFound = false;
-  private RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer = RobotContainer.getInstance();
 
   @Override
   public void robotInit() {
-    m_robotContainer = RobotContainer.getInstance();
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
   }
