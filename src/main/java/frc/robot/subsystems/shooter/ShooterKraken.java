@@ -68,10 +68,6 @@ public class ShooterKraken implements ShooterIO {
     @Override
     public double getShootSpeed() {
         return shootMotor.getVelocity().refresh().getValueAsDouble() * 60;
-        /*
-         * Krakens return velocity as RPS (Rotations per Second), we want RPM (Rotations
-         * per Minute)
-         */
     }
 
     public void loadCHRPfile(String file) {
