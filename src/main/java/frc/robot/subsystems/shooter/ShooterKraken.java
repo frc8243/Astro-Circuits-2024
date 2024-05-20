@@ -4,6 +4,7 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -12,6 +13,8 @@ public class ShooterKraken implements ShooterIO {
     private static TalonFX feedMotor = new TalonFX(ShooterConstants.kFeedMotorID, "rio");
     private DutyCycleOut shootRequest = new DutyCycleOut(0.0);
     private DutyCycleOut feedRequest = new DutyCycleOut(0.0);
+    private VelocityVoltage shootVelRequest = new VelocityVoltage(0.0);
+    private VelocityVoltage feedVelRequest = new VelocityVoltage(0.0);
 
     private Orchestra musicPlayer = new Orchestra();
 
@@ -59,12 +62,16 @@ public class ShooterKraken implements ShooterIO {
 
     @Override
     public double getFeedSpeed() {
-        return feedMotor.getVelocity().refresh().getValueAsDouble();
+        return feedMotor.getVelocity().refresh().getValueAsDouble() * 60;
     }
 
     @Override
     public double getShootSpeed() {
-        return shootMotor.getVelocity().refresh().getValueAsDouble();
+        return shootMotor.getVelocity().refresh().getValueAsDouble() * 60;
+        /*
+         * Krakens return velocity as RPS (Rotations per Second), we want RPM (Rotations
+         * per Minute)
+         */
     }
 
     public void loadCHRPfile(String file) {

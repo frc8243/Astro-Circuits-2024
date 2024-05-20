@@ -21,7 +21,10 @@ public class ShooterNEO implements ShooterIO {
 
     public ShooterNEO() {
         shootMotor = MotorUtil.createSparkMAX(ShooterConstants.kShootMotorID, MotorType.kBrushless,
-                MotorConstants.kNEOCurrentLimit);
+                MotorConstants.kNEOCurrentLimit, false);
+
+        feedMotor = MotorUtil.createSparkMAX(ShooterConstants.kFeedMotorID, MotorType.kBrushless,
+                MotorConstants.kNEOCurrentLimit, false);
 
     }
 

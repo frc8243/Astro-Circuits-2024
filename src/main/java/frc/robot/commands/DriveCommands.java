@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
@@ -63,7 +64,8 @@ public class DriveCommands {
                             rotSpeed,
                             true);
                     currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
-                    if (MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance)) {
+                    if (MathUtil.isNear(targetAngle, currentAngle,
+                            CommandConstants.kSourceAlignmentTolerance)) {
                         m_leds.linedUp();
                     }
                 },
@@ -71,8 +73,10 @@ public class DriveCommands {
                     m_leds.returnToIdle();
                     SmartDashboard.putBoolean("DriverAssists/TurningToSource", false);
                 },
-                () -> MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance),
+                () -> MathUtil.isNear(targetAngle, currentAngle,
+                        CommandConstants.kSourceAlignmentTolerance),
                 m_drivetrain);
+
     }
 
     public static final Command TurnToSpeaker() {
@@ -95,7 +99,8 @@ public class DriveCommands {
                             rotSpeed,
                             true);
                     currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
-                    if (MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance)) {
+                    if (MathUtil.isNear(targetAngle, currentAngle,
+                            CommandConstants.kSourceAlignmentTolerance)) {
                         m_leds.linedUp();
                     }
                 },
@@ -103,7 +108,8 @@ public class DriveCommands {
                     m_leds.returnToIdle();
                     SmartDashboard.putBoolean("DriverAssists/TurningToSource", true);
                 },
-                () -> MathUtil.isNear(targetAngle, currentAngle, CommandConstants.kSourceAlignmentTolerance),
+                () -> MathUtil.isNear(targetAngle, currentAngle,
+                        CommandConstants.kSourceAlignmentTolerance),
                 m_drivetrain);
     }
 

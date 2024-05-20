@@ -6,17 +6,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.RobotConstants.MotorConstants;
+import frc.utils.MotorUtil;
 
 public class RollerClawReal implements RollerClawIO {
     private static CANSparkMax rollerClawMotor;
     private static RelativeEncoder rollerClawEncoder;
 
     public RollerClawReal() {
-        rollerClawMotor = new CANSparkMax(RollerClawConstants.kRollerClawMotorID, MotorType.kBrushless);
+        rollerClawMotor = MotorUtil.createSparkMAX(RollerClawConstants.kRollerClawMotorID, MotorType.kBrushless,
+                MotorConstants.kNEO550CurrentLimit, true);
         rollerClawEncoder = rollerClawMotor.getEncoder();
-        rollerClawMotor.restoreFactoryDefaults();
-        rollerClawMotor.setIdleMode(IdleMode.kBrake);
-        rollerClawMotor.setSmartCurrentLimit(MotorConstants.kNEO550CurrentLimit);
         rollerClawMotor.burnFlash();
     }
 

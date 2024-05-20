@@ -17,7 +17,7 @@ Julien
 - `TODO` comments left around for additional potential minor QoL changes. 
 
 ### Simulation.
-The worst thing about our switch to swerve was the new inability to simulate at least the *minor* functions of the robot. 2399 figured out swerve simulation, so that will be borrowed while trying to maintain the  current functionality of our robot. This requires a restructuring of the `Drivetrain` subsystem and folder, with `Drivetrain` not changing based on whether the robot is running in sim or not, but `SwerveModule` changing. 
+The worst thing about our switch to swerve was the new inability to simulate at least the *minor* functions of the robot. 2399 figured out swerve simulation, so that will be borrowed while trying to maintain the  current functionality of our robot. This requires a restructuring of the `Drivetrain` subsystem and folder, with `Drivetrain` not changing based on whether the robot is running in sim or not, but `SwerveModule` changing. The `updateInputs()` method of `SwerveModuleIO` will be called periodically. 
 
 
 ### Pose Estimation & Pose Handling

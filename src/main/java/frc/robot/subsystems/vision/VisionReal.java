@@ -21,7 +21,7 @@ public class VisionReal implements VisionIO {
     private PhotonPoseEstimator frontCamEstimator;
     private PhotonPoseEstimator leftCamEstimator;
     private PhotonPoseEstimator rightCamEstimator;
-    private boolean[] camStatuses = new boolean[2];
+    private boolean[] camStatuses = new boolean[3];
 
     public VisionReal() {
         frontCam = new PhotonCamera("frontCamera");

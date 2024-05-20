@@ -5,15 +5,20 @@
 package frc.utils;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class MotorUtil {
 
-    public static CANSparkMax createSparkMAX(int id, MotorType motorType, int currentLimit) {
+    public static CANSparkMax createSparkMAX(int id, MotorType motorType, int currentLimit, boolean isIdleBreak) {
         CANSparkMax sparkMAX = new CANSparkMax(id, motorType);
         sparkMAX.restoreFactoryDefaults();
         sparkMAX.setSmartCurrentLimit(currentLimit);
-
+        if (isIdleBreak) {
+            sparkMAX.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        } else {
+            sparkMAX.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        }
         sparkMAX.burnFlash();
 
         return sparkMAX;
@@ -32,13 +37,7 @@ public class MotorUtil {
 
     public static CANSparkMax createSparkMAX(int id, MotorType motortype, int currentLimit, boolean isIdleBreak,
             double slewRate) {
-        CANSparkMax sparkMAX = createSparkMAX(id, motortype, currentLimit);
-
-        if (isIdleBreak) {
-            sparkMAX.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        } else {
-            sparkMAX.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        }
+        CANSparkMax sparkMAX = createSparkMAX(id, motortype, currentLimit, isIdleBreak);
 
         // built in slew rate for spark max
         sparkMAX.setOpenLoopRampRate(slewRate);
