@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   public Shooter(ShooterIO io) {
     shooterIO = io;
-    targetRPM = 6000;
+    targetRPM = 100;
   }
 
   @Override
@@ -61,14 +61,17 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getAdvancedShooterCommand() {
+    // System.out.println("outake outqking");
     startTime = Timer.getFPGATimestamp();
     shouldPreSpin = false;
     return this.runEnd(
         () -> {
+          System.out.println("RPM: " + getShooterSpeed() + "/" + (targetRPM));
           double currentTime = Timer.getFPGATimestamp();
           shooterIO.setShootMotor(1);
-          if ((getShooterSpeed() >= (targetRPM - 100))) {
+          if ((getShooterSpeed() >= (targetRPM))) {
             shooterIO.setFeedMotor(1);
+            System.out.println("Feed motor feeding");
           }
         },
         () -> {
